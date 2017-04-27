@@ -1,0 +1,18 @@
+Package: batwintor
+Type: Package
+Title: Tool for mammalian hibernation energetics
+Version: 0.1.0
+Author: C. Reed Hranac
+Maintainer: C. Reed Hranac <crh244@gmail.com>
+Description: This pacakge combines mammalian hibernation energetics modeling 
+with a species distribution to provide estimations for the resources required
+for over winter survival. The package also includes methods for accessing
+potential disease outcomes for bat species affected by White-nose Syndrome
+in North America.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+
+Authors@R: person("C. Reed", "Hranac", email = "crh244@gmail.com", role = c("aut", "cre"))
+Imports:
+  
