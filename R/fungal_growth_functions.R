@@ -1,37 +1,51 @@
-#' How Q varries with ambient temperature
+#' Load parameter sets for fungal growth
 #'
+#' \code{FungLoad} Loads fungal growth parameters and sets to selected option.
 #'
-#' \code{CalcQ} Returns the the constant Q for the given ambient temperature.
+#' @param path.to.params file path to the parameter files (with "//")
+#' @param growth.option fungal growth parameters see \strong(bold){Details}
 #'
-#' @param amb.temp ambient temperature in degrees C
-#' @param kQ1 Q constant 1 = 1.6
-#' @param kQ2 Q constant 2 = 0.26
-#' @param kQ3 Q constant 3 = 0.006
-#' @return Returns the value of Q for the given ambient temperature
+#' @details Growth parameters are either: "Chaturvedi" (faster growth) from
+#' chatruvedi et al. PLoS One, ot "Verant" (slower growth rate), from Verent et
+#' al. PLoS One.
+#' \emph{italics}{mu1}: scaling parameter for Michaelis-Menton function
+#' \emph{italics}{mu2}: scaling parameter for Michaelis-Menton function
+#' \emph{italics}{beta1}: temperature dependant hourly rate shape parameter
+#' \emph{italics}{beta2}: temperature dependant hourly rate shape parameter
+#' \emph{italics}{beta3}: temperature dependant hourly rate shape parameter
 #'
-#' @examples
-#' CalcQ(4)
-#' CalcQ(6, 1.6, 0.26, 0.006)
-CalcQ <- function( amb.temp, kQ1 = 1.6, kQ2 = 0.26, kQ3 = 0.006){
-  kQ1 + kQ2*amb.temp - kQ3*amb.temp^2
+#' @return Returns a names list of fungal growth scaling parameters
+#'
+FungLoad <- function(path.to.params, growth.option){
+  rate.pars <- read.csv(paste0(path.to.params,"rate.parms.csv"))
+  if(growth.option%in%names(rate.pars)){
+    r.pset <- subset(rate.pars, select = c("pars", growth.option))
+  }else{
+    warning("Unknown option selected for growth option")
+  }
+  scale.par <- read.csv(paste0(path.to.params,"humid.parms.csv"))
+  colnames(scale.par) <- colnames(r.pset)
+  pars <- rbind(r.pset,scale.par)
+  growth.params <- as.list(pars[,2])
+  names(growth.params) <- pars[,1]
+  return(growth.params)
 }
-
 
 #' How fungal growth rate varries with body temperature
 #'
 #'
 #' \code{FungalGrowthRate} TODO : Need what actually occures
 #'
-#' @param params list of parameters passed through TODO NameFunction
-#' @param body.temp body temperature of the animal in degrees C
+#' @param fung.params list of parameters passed through TODO NameFunction
+#' @param t.body body temperature of the animal in degrees C
 #' @param t.min temperature minimum (= 0 degrees)
 #' @return returns temperature determinate growth rate
 #'
 #' @example TODO
-FungalGrowthRate <- function(body.temp, params, t.min = 0){
-  with(params,{
-    ifelse(body.temp > kBeta3|body.temp<=t.min,0,kBeta1*(body.temp-t.min)*
-        (1-exp(kBeta2*(body.temp-kBeta3))))
+FungalGrowthRate <- function(t.body, fung.params, t.min = 0){
+  with(fung.params,{
+    ifelse(t.body > beta3|t.body<=t.min,0,beta1*(t.body-t.min)*
+        (1-exp(beta2*(t.body-beta3))))
   })
 }
 
@@ -42,13 +56,13 @@ FungalGrowthRate <- function(body.temp, params, t.min = 0){
 #' \code{ScaleFungalGrowthRate} Scales fungal growth rate with relative humidi
 #' ty.
 #'
-#' @param params list of parameters passed through TODO NameFunction
+#' @param fung.params list of parameters passed through TODO NameFunction
 #' @param pct.rh precent relative humidity
 #' @return returns scaled humidity scaled fungal growth rate
 #'
 #' @example TODO
-ScaleFungalGrowthRate <- function(params, pct.rh){
-  with(params,{
-    kMu1*pct.rh/(1+(kMu2*pct.rh))
+ScaleFungalGrowthRate <- function(fung.params, pct.rh){
+  with(fung.params,{
+    mu1*pct.rh/(1+(mu2*pct.rh))
   })
 }
