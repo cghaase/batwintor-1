@@ -1,0 +1,17 @@
+#' Calculate enegry needed during an arousal from torpor
+#'
+#' \code{CalcEnegryArousal} Calculate the enegry required to maintain
+#'  eurthermic temperatures during an arousal from torpor.
+#'
+#' @param Ttor temperature of torpor
+#' @param bat.params list of bat parameters output from \code{\link{BatLoad}}
+#'
+#' @return returns enegry required to arouse
+#'
+#' @example ExampleScripts/CalcEnegryArousal_ex.R
+#'
+CalcEnegryArousal <- function(Ttor, bat.params){
+  with(bat.params,{
+    (Teu - Ttor) * S
+  })
+}
