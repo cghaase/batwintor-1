@@ -1,0 +1,15 @@
+#' Scale fungal growth rate with relative humidity.
+#'
+#' \code{ScaleFungalGrowthRate} scales fungal growth rate with relative
+#' humidity.
+#'
+#' @param fung.params list of parameters passed through \code{\link{LoadFung}}
+#' @param pct.rh precent relative humidity
+#' @return returns scaled humidity scaled fungal growth rate
+#'
+#' @example ExampleScripts/ScaleFungalGrowthRate_ex.R
+ScaleFungalGrowthRate <- function(pct.rh, fung.params){
+  with(fung.params,{
+    mu1*pct.rh/(1+(mu2*pct.rh))
+  })
+}
