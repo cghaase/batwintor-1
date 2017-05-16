@@ -8,7 +8,7 @@
 #'
 #' @return returns enegry required to arouse
 #'
-#' @example ExampleScripts/CalcEnegryArousal_ex.R
+#' @example ExampleScripts/CalcEnergyArousal_ex.R
 #'
 CalcEnegryArousal <- function(Ttor, bat.params){
   with(bat.params,{

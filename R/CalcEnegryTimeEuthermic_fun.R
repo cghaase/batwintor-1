@@ -1,6 +1,6 @@
 #' Calculate engegry per time euthermic with ambient temperature
 #'
-#' \code{CalcEnergyTimeEuthermic} Function calculating the enegry required to
+#' \code{CalcEnergyTimeEuthermic} Function calculating the energy required to
 #' maintain euthermia for a given time and ambient temperature.
 #'
 #' @param Ta ambient temperature
@@ -8,7 +8,7 @@
 #'
 #' @return TODO find units accociated with it
 #'
-#' @example ExampleScripts/CalEnegryTimeEuthermic_ex.R
+#' @example ExampleScripts/CalEnergyTimeEuthermic_ex.R
 CalcEnergyTimeEuthermic <- function(Ta, bat.params){
   with(bat.params,{
     RMR+ (Tlc-Ta)*Ceu
