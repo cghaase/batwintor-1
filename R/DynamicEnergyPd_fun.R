@@ -1,18 +1,18 @@
-#' Dynamic enegry cost calculation
+#' Dynamic energy cost calculation
 #'
-#' \code{DynamicEnegryPd} determines the growth area of Pd and the sums the
-#' enegry consumed under specified environmental conditions.
+#' \code{DynamicEnergyPd} determines the growth area of Pd and the sums the
+#' energy consumed under specified environmental conditions.
 #'
 #' @param env.df dataframe conataing range of env conditions
 #' @param inf infection status (\code{TRUE} or \code{FALSE})
-#' @param bat.params parameters returned by \code{bat.params}
-#' @param fung.params parameters returned by \code{fung.params})
+#' @param bat.params parameters returned by \code{\link{BatLoad}}
+#' @param fung.params parameters returned by \code{\link{FungLoad}})
 #'
 #' @details TODO
 #' @seealso \code{\link{DetModel}}
 #' @example TODO
 #'
-DynamicEnegryPd <- function(env.df, inf, bat.params, fung.params){
+DynamicEnergyPd <- function(env.df, inf, bat.params, fung.params){
   require(deSolve); require(data.table)
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
@@ -29,12 +29,12 @@ DynamicEnegryPd <- function(env.df, inf, bat.params, fung.params){
                 growth = FungalGrowthRate(Tb = Tb, fung.params = fung.params)*
                   ScaleFungalGrowthRate(pct.rh = Hd, fung.params = fung.params),
                 Eeu <- CalcEnergyTimeEuthermic(Ta = Ta, bat.params = bat.params),
-                Etor <- CalcEnegryTimeTorpid(Ta = Ta, bat.params = bat.params),
-                Ear <- CalcEnegryArousal(Ttor = Ttor, bat.params = bat.params),
+                Etor <- CalcEnergyTimeTorpid(Ta = Ta, bat.params = bat.params),
+                Ear <- CalcEnergyArousal(Ttor = Ttor, bat.params = bat.params),
                 mod.params)
     ts <- data.table(lsoda(y = c(pT = 1,
                                  pE = 0,
-                                 EnegryConsumed = 0,
+                                 EnergyConsumed = 0,
                                  FungalArea = 0),
                            times = twinter,
                            func = DetModel,
@@ -42,7 +42,7 @@ DynamicEnegryPd <- function(env.df, inf, bat.params, fung.params){
     MaxToCurrent <- function(x){
       cummax(x)[-1]
     }
-    Ewinter <- MaxToCurrent(ts$EnegryConsumed)
+    Ewinter <- MaxToCurrent(ts$EnergyConsumed)
     FatConsumed <- ConvertToFat(Ewinter)
     results <- data.table(Ta = Ta,
                           Humidity = Hd,
