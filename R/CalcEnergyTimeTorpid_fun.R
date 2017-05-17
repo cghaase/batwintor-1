@@ -1,6 +1,6 @@
 #' Calculate energy per time at toprid body temp given ambient temperature
 #'
-#' \code{CalcEnegryTimeTorpid} Function calculating the enegry required for a
+#' \code{CalcEnergyTimeTorpid} Function calculating the enegry required for a
 #' bout of torpor at a ambient temperature
 #'
 #' @param Ta ambient emperature
@@ -9,8 +9,8 @@
 #'
 #' @return TODO find units accociated with
 #'
-#' @example ExampleScripts/CalcEnegryTimeTorpid_ex.R
-CalcEnegryTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){
+#' @example ExampleScripts/CalcEnergyTimeTorpid_ex.R
+CalcEnergyTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){
   with(bat.params,{
     ifelse(Ta > Ttormin, TMRmin*q^((Ta-Ttormin)/10),
            TMRmin + (Ttormin - Ta)*Ct)

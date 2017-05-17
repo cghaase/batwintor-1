@@ -1,4 +1,4 @@
-#' Calculate engegry per time euthermic with ambient temperature
+#' Calculate energy per time euthermic with ambient temperature
 #'
 #' \code{CalcEnergyTimeEuthermic} Function calculating the energy required to
 #' maintain euthermia for a given time and ambient temperature.
