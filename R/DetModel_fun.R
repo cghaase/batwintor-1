@@ -12,14 +12,14 @@
 #' future
 #'
 #' @seealso \code{\link{DynamicEnergyPd}}
-#'
+#' @example ExampleScripts/DynamicEnergyPd_ex.R
 #'
 DetModel <- function(t,y, params){
   require(deSolve)
   with(c(as.list(y),params),{
     ttor <- CalcTorporTime(Ta = Ttor, areaPd = FungalArea, inf = WNS,
                            bat.params = params)
-    dpTdt <- pE/tue - pT/ttor # change in TorporProp (pT)/dt
+    dpTdt <- pE/teu - pT/ttor # change in TorporProp (pT)/dt
     dpEdt <- pT/ttor - pE/teu # change in EuthermicProp (pE)/dt
     dJdt  <- Eeu*pE + Etor*pT + Ear*pT/ttor # change in EnergyConsumed/dt
     dFdt  <- growth*pT #change in FungalArea/dt

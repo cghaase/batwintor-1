@@ -10,7 +10,7 @@
 #'
 #' @details TODO
 #' @seealso \code{\link{DetModel}}
-#' @example TODO
+#' @example ExampleScripts/DynamicEnergyPd_ex.R
 #'
 DynamicEnergyPd <- function(env.df, inf, bat.params, fung.params){
   require(deSolve); require(data.table)
@@ -28,9 +28,9 @@ DynamicEnergyPd <- function(env.df, inf, bat.params, fung.params){
     values <- c(Ttor = Ttor, WNS = inf,
                 growth = FungalGrowthRate(Tb = Tb, fung.params = fung.params)*
                   ScaleFungalGrowthRate(pct.rh = Hd, fung.params = fung.params),
-                Eeu <- CalcEnergyTimeEuthermic(Ta = Ta, bat.params = bat.params),
-                Etor <- CalcEnergyTimeTorpid(Ta = Ta, bat.params = bat.params),
-                Ear <- CalcEnergyArousal(Ttor = Ttor, bat.params = bat.params),
+                Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = bat.params),
+                Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = bat.params),
+                Ear = CalcEnergyArousal(Ttor = Ttor, bat.params = bat.params),
                 mod.params)
     ts <- data.table(lsoda(y = c(pT = 1,
                                  pE = 0,
