@@ -28,5 +28,5 @@
 #' @seealso \code{\link{FungLoad}}
 FungSelect <- function(choose){
   data("fung.params")
-  fung.params[choose,]
+  as.list(fung.params[choose,])
 }

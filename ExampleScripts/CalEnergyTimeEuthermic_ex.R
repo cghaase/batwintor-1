@@ -1,6 +1,6 @@
 ##CalEnergyTimeEuthermic Example
-dat <- read.csv("paramFiles/species.parms.csv")
+data("bat.params")
 
-myyu.params <- BatLoad(dat, species = "M.californicus")
+myyu.params <- BatLoad(bat.params, species = "M.californicus")
 
 CalcEnergyTimeEuthermic(4, myyu.params)

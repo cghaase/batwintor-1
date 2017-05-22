@@ -1,7 +1,7 @@
 ##CalcTorporTIme Example
-dat <- read.csv("paramFiles/species.parms.csv")
+data("bat.params")
 
-myyu.params <- BatLoad(dat, species = "M.californicus")
+myyu.params <- BatLoad(bat.params, species = "M.californicus")
 
 CalcTorporTime(Ta = 4, areaPd = 0, inf = F, bat.params = myyu.params)
 
