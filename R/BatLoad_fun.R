@@ -38,12 +38,11 @@
 #' @example ExampleScripts/BatLoad_ex.R
 
 BatLoad <- function(x, species){
-  if(species%in%names(x)){
-    pset <- subset(x, select = c("Parameter", species))
+  if(species%in%rownames(x)){
+    pset <- x[species,]
   }else{
     warning("Unknown species option selected")
   }
-  par <- as.list(pset[,2])
-  names(par) <- pset[,1]
+  par <- as.list(pset)
   return(par)
 }

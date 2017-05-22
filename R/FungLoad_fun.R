@@ -23,7 +23,7 @@
 #' \code{rate.parms.csv} and \code{humid.parms.csv}. These files are
 #' shipped with this package, however if you would like to alter these
 #' paremeters you may do so through their associated \code{.csv} files.
-#' @return Returns a names list of fungal growth scaling parameters
+#' @return Returns a named list of fungal growth scaling parameters
 #'
 #' @example ExampleScripts/FungLoad_ex.R
 #'
