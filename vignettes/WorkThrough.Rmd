@@ -1,0 +1,92 @@
+---
+title: "Work through for *Myotis californicus* and *Myotis yumanensis*"
+author: "C. Reed Hranac"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Work through for *Myotis californicus* and *Myotis yumanensis*}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This vignette is designed to show how the `batwintor` package works from start to finish using real data. Metabolic, and morphometric data was collected over 2 winters in British Columbia, Canada. 
+
+## From Raw
+The raw data for this analysis is avaliable through ([via](https://www.dropbox.com/s/61auiyewty5n6ga/Creston%20Respirometry%20Raw%20Data%20-%20ALL.csv?dl=0)) or but running `data("bats.o.canada")` on your console.
+
+```{r}
+# library(devtools)
+# install_github("cReedHranac/batwintor")
+# library(batwintor)
+
+library(dplyr, warn.conflicts = F)
+dat.dirty <- read.csv("~/Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
+dat <- tbl_df(dat.dirty)
+names(dat) <- c("date", "bat", "species", "sex", "band", "mass.in", "mass.out", "Ta", "Ta.p",
+                "flow", "FiO2", "FeO2", "VO2.ml.min", "VO2.ml.h", "VO2.ml.h.g")
+dat$Ta <- as.factor(dat$Ta)
+```
+
+Now that the data it in it's always a good idea to visualize some of it and make sure that what you think is going in, actually is. Models are only ever as good as the data that you put into them.
+
+```{r, fig.show='hold'}
+myca <- filter(dat, species == "MYCA")
+
+myyu <- filter(dat, species == "MYYU")
+
+hist(myca$mass.in);hist(myyu$mass.in)
+```
+
+Those look close enough to normal, and inded if you run normality tests `shapiro.test()` they are. Another very important parameter is the actaul metabolic rate (MR) which is labled in `dat` as `VO2.ml.h.g`.
+
+```{r, fig.show='hold'}
+myca.6 <- filter(myca, Ta == 6) # For trials conducted at 6 degrees
+myca.2 <- filter(myca, Ta == 2) # For trials conducted at 2 degrees
+hist(myca.6$VO2.ml.h.g)
+hist(myca.2$VO2.ml.h.g)
+```
+
+As you can see the trials at 6 degress look pretty normal, however the trials at 2 degrees seem to have two clusters suggesting that not all of the bats fully thermoconformed implying that there may be some outliers in our data. To handle this we use the `MRFromRaw` function which fits semi-parametric models using the `mixtools` package and from that we can visualize all of our temperature conditions, as well as letting the function pull out the resting metabolic rate (RMR) estimate, the minimum torpor metabolic rate (TMRmin) estimate, what temperature that rate was reached, and the mass estimate. These parameters will be used throughout the rest of the modeling process.
+
+
+```{r, warning=FALSE}
+myca.mr <- MRFromRaw(dat, "MYCA")
+myyu.mr <- MRFromRaw(dat, "MYYU")
+```
+Once we have the estimates we can update the rest of the parameters that are stored internally, and are generally conserved between runs.
+```{r}
+data("bat.params")
+bat.update <- MRUpdate(myca.mr, "M.californicus", params = bat.params)
+bat.update <- MRUpdate(myyu.mr, "M.yumanensis", params = bat.update)
+myca.params <- bat.params["M.californicus",]
+myyu.params <- bat.params["M.yumanensis",]
+```
+Now our bat metabolic parameters are updated with our estimates drawn from the raw data and we're ready to begin the modeling portion of the analysis.
+
+## Fungal Options
+An important factor of this mechanistic model is the inclusion of fungal growth parameters drawn from the literature (see `?LoadFung` and `data("fung.params")' for more imformation). Since the fungal growth paramerters are generally updated much less frequently than our metabolic estimates they are provided with the package, and the calls are simple. In this case we'll chose the growth rate documented but Chaturveti et al. which is the morre agressive of the two growth options avaliable. 
+```{r}
+fung.ch <- FungSelect("Chaturvedi")
+```
+## Model usage 
+```{r}
+myca.mr <- MRFromRaw(dat, "MYCA", plot = F)
+myyu.mr <- MRFromRaw(dat, "MYYU", plot = F)
+```
+Now we're ready to set the the model to run. First thing is to build the environmental space to run the model across. 
+```{r}
+env <- BuildEnv(temp.range = c(-5, 25), hum.range = c(60,10), range.res = .5)
+twinter <- seq(from = 0, to = 9*24*30*1, by = 24) #Maximum time of winter is 9 months, broken at daily intervals 
+## Model Run
+
+myca.F <- apply(env, 1, DynamicEnergyPd,
+                inf = FALSE,
+                bat.params = myca.params,
+                fung.params = fung.ch)
+```
