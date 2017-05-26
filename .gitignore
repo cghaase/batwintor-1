@@ -7,3 +7,4 @@ man/*
 /test_docs
 data/*
 /ModOut/*
+inst/doc

@@ -1,0 +1,108 @@
+---
+title: "Work through for *Myotis californicus* and *Myotis yumanensis*"
+author: "C. Reed Hranac"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Work through for *Myotis californicus* and *Myotis yumanensis*}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This vignette is designed to show how the `batwintor` package works from start to finish using real data. Metabolic, and morphometric data was collected over 2 winters in British Columbia, Canada. 
+
+## From Raw
+The raw data for this analysis is avaliable through ([via](TODO)) or but running `data("bats.o.canada")` on your console.
+
+```{r}
+library(devtools)
+install_github("cReedHranac/batwintor")
+library(batwintor)
+
+library(dplyr, warn.conflicts = F)
+dat.dirty <- read.csv("~/OneDrive - Massey University/Research/WNS/Creston Respirometry Raw Data - ALL.csv")
+dat <- tbl_df(dat.dirty)
+names(dat) <- c("date", "bat", "species", "sex", "band", "mass.in", "mass.out", "Ta", "Ta.p",
+                "flow", "FiO2", "FeO2", "VO2.ml.min", "VO2.ml.h", "VO2.ml.h.g")
+dat$Ta <- as.factor(dat$Ta)
+```
+
+Now that the data it in it's always a good idea to visualize some of it and make sure that what you think is going in, actually is. Models are only ever as good as the data that you put into them.
+
+```{r, fig.show='hold'}
+myca <- filter(dat, species == "MYCA")
+
+myyu <- filter(dat, species == "MYYU")
+
+hist(myca$mass.in);hist(myyu$mass.in)
+```
+
+Those look close enough to normal, and inded if you run normality tests `shapiro.test()` they are. Another very important parameter is the actaul metabolic rate (MR) which is labled in `dat` as `VO2.ml.h.g`.
+
+```{r, fig.show='hold'}
+myca.6 <- filter(myca, Ta == 6) # For trials conducted at 6 degrees
+myca.2 <- filter(myca, Ta == 2) # For trials conducted at 2 degrees
+hist(myca.6$VO2.ml.h.g)
+hist(myca.2$VO2.ml.h.g)
+```
+
+As you can see the trials at 6 degress look pretty normal, however the trials at 2 degrees seem to have two clusters suggesting that not all of the bats fully thermoconformed implying that there may be some outliers in our data. To handle this we use the `MRFromRaw` function which fits semi-parametric models using the `mixtools` package and from that we can visualize all of our temperature conditions, as well as letting the function pull out the resting metabolic rate (RMR) estimate, the minimum torpor metabolic rate (TMRmin) estimate, what temperature that rate was reached, and the mass estimate. These parameters will be used throughout the rest of the modeling process.
+
+```{r}
+myca.mr <- MRFromRaw(dat, "MYCA", plot = F)
+myyu.mr <- MRFromRaw(dat, "MYYU", plot = F)
+```
+
+
+
+
+
+
+
+## Vignette Info
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
