@@ -55,6 +55,7 @@ hist(myca.2$VO2.ml.h.g)
 As you can see the trials at 6 degress look pretty normal, however the trials at 2 degrees seem to have two clusters suggesting that not all of the bats fully thermoconformed implying that there may be some outliers in our data. To handle this we use the `MRFromRaw` function which fits semi-parametric models using the `mixtools` package and from that we can visualize all of our temperature conditions, as well as letting the function pull out the resting metabolic rate (RMR) estimate, the minimum torpor metabolic rate (TMRmin) estimate, what temperature that rate was reached, and the mass estimate. These parameters will be used throughout the rest of the modeling process.
 
 ```{r}
+<<<<<<< HEAD
 myca.mr <- MRFromRaw(dat, "MYCA")
 myyu.mr <- MRFromRaw(dat, "MYYU")
 ```
@@ -72,6 +73,15 @@ An important factor of this mechanistic model is the inclusion of fungal growth 
 fung.ch <- FungSelect("Chaturvedi")
 ```
 ## Model usage 
+=======
+myca.mr <- MRFromRaw(dat, "MYCA", plot = F)
+myyu.mr <- MRFromRaw(dat, "MYYU", plot = F)
+```
+
+
+
+
+>>>>>>> First commit for vignettets branch starting the walk through documentation.
 
 
 
