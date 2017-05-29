@@ -6,8 +6,7 @@
 #' @param t tmeperature I guess? does it even get used? TODO
 #' @param y dependant varriables calculated within
 #' \code{\link{DynamicEnergyPd}}
-#' @param params parameters passed through \code{\link{DynamicEnergyPd}}
-#'
+#' @param params parameters passed through \code{\link{DynamicEnergyPd}}#'
 #' @details This may have room for improvement in it and may change in the
 #' future
 #'
@@ -23,7 +22,6 @@ DetModel <- function(t,y, params){
     dpEdt <- pT/ttor - pE/teu # change in EuthermicProp (pE)/dt
     dJdt  <- Eeu*pE + Etor*pT + Ear*pT/ttor # change in EnergyConsumed/dt
     dFdt  <- growth*pT #change in FungalArea/dt
-
     list(c(dpTdt, dpEdt, dJdt, dFdt))
   })
 }
