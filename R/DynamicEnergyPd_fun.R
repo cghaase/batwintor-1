@@ -26,11 +26,11 @@ DynamicEnergyPd <- function(env.df, inf, bat.params, fung.params){
     Ttor <- ifelse(Ta > Ttormin, Ta, Ttormin) #determinine Ttorpid @ Ta
     Tb <- ifelse(Ttor < Teu, Ttor, Teu) #determine Tb
     values <- c(Ttor = Ttor, WNS = inf,
-                growth = FungalGrowthRate(Tb = Tb, fung.params = fung.params)*
-                  ScaleFungalGrowthRate(pct.rh = Hd, fung.params = fung.params),
-                Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = bat.params),
-                Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = bat.params),
-                Ear = CalcEnergyArousal(Ttor = Ttor, bat.params = bat.params),
+                growth = FungalGrowthRate(Tb = Tb, fung.params = mod.params)*
+                  ScaleFungalGrowthRate(pct.rh = Hd, fung.params = mod.params),
+                Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = mod.params),
+                Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = mod.params),
+                Ear = CalcEnergyArousal(Ttor = Ttor, bat.params = mod.params),
                 mod.params)
     ts <- data.table(lsoda(y = c(pT = 1,
                                  pE = 0,
