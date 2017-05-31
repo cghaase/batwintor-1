@@ -16,7 +16,7 @@ calcTorporTime <- function(Ta, Hd, SA.type = c("body", "wing"), pmass = 0.043, p
   with(as.list(params),{
     
     #Known constants 
-    pO2     = 0.2095      #volumetri proportion of oxygen in air 
+    pO2     = 0.2095      #volumetric proportion of oxygen in air 
     O2.coef = 0.30        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
     b  = 17.502
