@@ -7,7 +7,6 @@
 #' @param SA.type surface area measurement type, either `wing` or `body`
 #' @param pmass propotion of body mass (in mg) to designate EWL threshold; default is 4.3%
 #' @param params list of bat parameters output from \code{\link{BatLoad}}
-#' @param Q change in torpor metabolism as a function of Ta
 #' @param WNS logical; if TRUE, considers the effect of Pd growth on EWL 
 #'
 #' @details TODO
@@ -15,7 +14,7 @@
 #' 
 
 
-calcTorporTime_Pd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, params = c(growthParams,batParams), Q=calcQ(Ta), WNS = c("TRUE, FALSE")){
+calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, params = c(growthParams,batParams),  WNS = c("TRUE, FALSE")){
   with(as.list(params),{
     
     #Known constants 
@@ -27,6 +26,9 @@ calcTorporTime_Pd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043
     GC = 0.0821           #universal gas constant
     k  = 10               #Meeh factor
     #pmass = 0.043  
+    
+    #Calculate the change in metabolism from Ta
+    Q=calcQ(Ta)
     
     #Calculate surface area
     SA.body <-  k * (mass^(2/3))
@@ -77,13 +79,14 @@ calcTorporTime_Pd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043
     } else if(WNS == TRUE){
       if(Ta.time < EWL.time){
         return(Ta.time)
+      #Calculate  torpor time as a function of EWL and Pd growth
       } else if(Ta.time > EWL.time){
         for(t in 1:EWL.time){
           #Calculate new growth of Pd for hour
-          growthrate   <- fungalGrowthRate(Ta,modelParams)       #fungal growth rate as a function of body temperature
-          growthrate_H <- scaleFungalGrowthRate(Hd,modelParams)  #scaling factor for fungal growth based on humidity
+          growthrate   <- fungalGrowthRate(Ta,params)       #fungal growth rate as a function of body temperature
+          growthrate_H <- scaleFungalGrowthRate(Hd,params)  #scaling factor for fungal growth based on humidity
           areaPd <- growthrate*t*growthrate_H 
-          p.areaPd = areaPd/wing.area                            #proportion of wing surface area covered in Pd growth
+          p.areaPd = areaPd/wing.area*100                   #percent of wing surface area covered in Pd growth
           
           #Calculate cutaneous EWL (mg/hr) 
           cEWL.pd <- SA * (rEWL*t) * dWVP 
@@ -96,13 +99,14 @@ calcTorporTime_Pd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043
           TEWL.pd <- cEWL.pd + pEWL.pd
           
           #In Liam's paper, the relationship between EWL and Pd growth was EWL = (p.areaPd*0.21) + 12.80 
-          #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8. 
-          #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
+          #So, when % wing area = 0 (no Pd), EWL for this temp/humidity was 12.8 (this was in dry air!!!)          
+          #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship 
+          #as both temp/humidity are included in Pd growth estimates? What we need is more data!
           TEWL.pd <- TEWL.pd + (p.areaPd*0.21)
           
           if (TEWL.pd >= threshold)  break
-          return(t)
-        }
+         }
+        print(t)
       }
     }
   })
