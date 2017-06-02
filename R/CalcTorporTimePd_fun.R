@@ -89,10 +89,10 @@ calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043,
           p.areaPd = areaPd/wing.area*100                   #percent of wing surface area covered in Pd growth
           
           #Calculate cutaneous EWL (mg/hr) 
-          cEWL.pd <- SA * (rEWL*t) * dWVP 
+          cEWL.pd <- SA * (rEWL*1.5*t) * dWVP 
           
           #Calculate pulmonary EWL (mg/hr) with increased TMR?
-          vol.pd  <- (TMRmin * mass * t)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+          vol.pd  <- (TMRmin * 1.4 * mass * t)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
           pEWL.pd <- vol.pd * sat.def                      
           
           #Calculate total EWL (TEWL; mg/hr)
