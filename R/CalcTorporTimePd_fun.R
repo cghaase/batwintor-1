@@ -19,13 +19,15 @@ calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043,
     
     #Known constants 
     pO2     = 0.2095      #volumetri proportion of oxygen in air 
-    O2.coef = 0.30        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
+    O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
     b  = 17.502
     c  = 240.97
     GC = 0.0821           #universal gas constant
     k  = 10               #Meeh factor
-    #pmass = 0.043  
+    mrPd = 1.4
+    aPd = 0.21
+    rPd = 1.525 
     
     #Calculate the change in metabolism from Ta
     Q=calcQ(Ta)
@@ -89,10 +91,10 @@ calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043,
           p.areaPd = areaPd/wing.area*100                   #percent of wing surface area covered in Pd growth
           
           #Calculate cutaneous EWL (mg/hr) 
-          cEWL.pd <- SA * (rEWL*1.5*t) * dWVP 
+          cEWL.pd <- SA * (rEWL*rPd*t) * dWVP 
           
           #Calculate pulmonary EWL (mg/hr) with increased TMR?
-          vol.pd  <- (TMRmin * 1.4 * mass * t)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+          vol.pd  <- (TMRmin * tPd * mass * t)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
           pEWL.pd <- vol.pd * sat.def                      
           
           #Calculate total EWL (TEWL; mg/hr)
@@ -102,7 +104,7 @@ calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043,
           #So, when % wing area = 0 (no Pd), EWL for this temp/humidity was 12.8 (this was in dry air!!!)          
           #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship 
           #as both temp/humidity are included in Pd growth estimates? What we need is more data!
-          TEWL.pd <- TEWL.pd + (p.areaPd*0.21)
+          TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
           
           if (TEWL.pd >= threshold)  break
          }
