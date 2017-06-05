@@ -12,9 +12,9 @@
 #' @details TODO
 #' @examples TODO
 
-calcTorporTime <- function(Ta, Hd, SA.type = c("body", "wing"), pmass = 0.043, params, Q=calcQ(Ta)){
+calcTorporTime <- function(Ta, Hd, SA.type = c("body", "wing"), pmass = 0.043, params){
   with(as.list(params),{
-    
+    Q=calcQ(Ta)
     #Known constants 
     pO2     = 0.2095      #volumetric proportion of oxygen in air 
     O2.coef = 0.30        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
