@@ -1,11 +1,26 @@
-surv.ploter <- function(surv.raster, dist.map, key=NA){
+#' Plots survival raster results including a nice outline of North America.
+#'
+#' \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} and
+#' adds shapes of North America.
+#'
+#' @param surv.raster return product from \code{\link{SurvivalRaster}}
+#' @param dist.map shapefile representing the distribution you wish to map the
+#' results accross (generally speaking the entire distribution of the species)
+#' @param key you can add a key to the figure for easy multi figure assemblage
+#'
+#' @return returns a map of North America in which the distribution supplied
+#' is filled in with the results from the model run.
+#'
+#' @note This function will be removed/ remodeled with the next version
+
+SurvPlotter <- function(surv.raster, dist.map, key=NA){
   ###Function for plotting the survival raster @ contiental N. America scale
   ##Arguments:
   ## surv.rast <- Output from survivalRas
   ## dist.map <- Shapfile distrubution of species selected
   require(PBSmapping);require(ggplot2)
 
-  spec.df <- surv.df(surv.raster,dist.map)
+  spec.df <- SurvDF(surv.raster,dist.map)
 
   xlim = c(-170,-52)
   ylim = c(10,70)

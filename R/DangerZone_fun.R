@@ -1,4 +1,25 @@
-danger.zone <-function(mod.df, speciesOption="", save.name=NULL){
+#' Plotting the difference between infected and and uninfected hibernating
+#' bats.
+#'
+#' \code{DangerZone} plots the difference in hibernation length potentials
+#' between infected and uninfected bats accross the environmental space.
+#'
+#' @return returns an environmental surface accross which the difference
+#' between infected and uninfected hibernation times is plotted.
+#'
+#' @param mod.df results data from \code{\link{DynamicEnergyPd}}
+#' @param species.option chracter string used for labeling
+#' @param save.name a name and file path relative to the working directory
+#' where the figure will be saved.
+#'
+#' @details Function will be updated in the future to include more plotting
+#' parameter accessability, and potentially a raster method as well.
+#' TODO
+#'
+#' @examples TODO
+
+
+DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
   require(dplyr);require(data.table);require(fields);require(akima)
    mod.dif <- mod.df %>%
      dplyr::group_by(Ta, humidity) %>%
@@ -30,5 +51,9 @@ danger.zone <-function(mod.df, speciesOption="", save.name=NULL){
   key <- paste0("Hibernacula danger zone for ",speciesOption)
   title(key, cex = 2)
   par(adj=0)
+
+  if(!is.null(save.name)){
+    dev.copy(png, paste0(save.name))
+    dev.off()
   }
 }

@@ -1,5 +1,23 @@
+#' Converts model results dataframe into results raster.
+#'
+#' \code{SurvivalRaster} uses supplied environmental rasters to query model
+#' results and creating a raster filled with maximum hibernation estimates.
+#'
+#' @param mod.df results from \code{\link{DynamicEnegryPd}}
+#' @param hum.rast raster of humidity values for extent
+#' @param temp.rast raster of temperature values
+#'
+#' @details This function will be replaces with a direct raster method in the
+#' next build of this package.
+#'
+#' humidity rasters in teh original Hayman et al. 2016 represent the average
+#' of the average humidities for the months Jan-Mar.
+#'
+#' @note This function as is is pretty much shite and takes for.ev.er. use at
+#' your own risk, and really try to do it only once.
+
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
-  require(raster)
+  require(raster);require(dplyr)
   temp.c <- temp.rast - 273
   out <- raster(hum.rast); values(out) <- NA
   out.s <- list(out,out); names(out.s) <- c("max.inf", "max.null")
