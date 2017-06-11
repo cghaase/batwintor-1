@@ -11,9 +11,9 @@
 #'   \item{mu1}{mu1}
 #'   \item{mu2}{mu2}
 #' }
+"fung.params"
 '%!in%' <- function(x,y)!('%in%'(x,y))
 if("fung.params.rda" %!in% list.files("data/")){
-  "fung.params"
   beta1 <- c(0.0007751467,	0.0001762951)
   beta2 <- c(0.2699683006,	0.2699682306)
   beta3 <- c(19.7303882961,	19.7303885569)
