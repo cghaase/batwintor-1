@@ -10,12 +10,18 @@
 #' @details This function will be replaces with a direct raster method in the
 #' next build of this package.
 #'
-#' humidity rasters in teh original Hayman et al. 2016 represent the average
+#' humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
 #'
 #' @note This function as is is pretty much shite and takes for.ev.er. use at
 #' your own risk, and really try to do it only once.
-
+#'
+#' @return A raster of the same extent as \code{hum.rast} filled with the
+#' maximal hibernation estimates from \code{\link{DynamicEnegryPd}}.
+#'
+#' @family PlotTools
+#'
+#' @example please see vignette for usage
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   require(raster);require(dplyr)
   temp.c <- temp.rast - 273

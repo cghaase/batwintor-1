@@ -2,7 +2,7 @@
 #' generation.
 #'
 #' \code{SurvDF} make a pretty dataframe from the output from
-#' \code{\link(SurvivalRaster)}
+#' \code{\link{SurvivalRaster}}
 #'
 #' @param surv.raster output from \code{\link{SurvivalRaster}}
 #' @param dist.map shapefile containing the distribution of the species in
@@ -10,8 +10,9 @@
 #' @return dataframe to be used internally for several of the plotting
 #' functions
 #' @note will be replaced in the next instance of the model so don't worry that
-#' it seems to be completely redundant. it is kinda
+#' it seems to be completely redundant.
 #'
+#' @family PlotTools
 SurvDF <-function(surv.raster, dist.map){
   ###Function for converting the survival raster into a dataframe of months survived.
   ##Arguments:

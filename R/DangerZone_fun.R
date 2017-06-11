@@ -1,10 +1,9 @@
-#' Plotting the difference between infected and and uninfected hibernating
-#' bats.
+#' Plot hibernation danger zones.
 #'
 #' \code{DangerZone} plots the difference in hibernation length potentials
 #' between infected and uninfected bats accross the environmental space.
 #'
-#' @return returns an environmental surface accross which the difference
+#' @return Eeturns an environmental surface accross which the difference
 #' between infected and uninfected hibernation times is plotted.
 #'
 #' @param mod.df results data from \code{\link{DynamicEnergyPd}}
@@ -12,11 +11,18 @@
 #' @param save.name a name and file path relative to the working directory
 #' where the figure will be saved.
 #'
-#' @details Function will be updated in the future to include more plotting
-#' parameter accessability, and potentially a raster method as well.
-#' TODO
+#' @details Due to the fit of fungal growth dynamics to a Michaelis-Menten
+#' equation growth, and threfore danger will all ways saturate with relative
+#' humidity.
 #'
-#' @examples TODO
+#' Function will be updated in the future to include more plotting
+#' parameter accessability, and potentially a raster method as well.
+#'
+#' \url{https://www.youtube.com/watch?v=vwBbrngafl0}
+#'
+#'
+#' @examples please see vignettes
+#' @family PlotTools
 
 
 DangerZone <-function(mod.df, speciesOption="", save.name=NULL){

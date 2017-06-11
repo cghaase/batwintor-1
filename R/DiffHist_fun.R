@@ -1,10 +1,11 @@
-#' Creats histograms displaying the model resulst from the species distribution
+#' Histograms displaying difference survival capasity due to infection status.
 #'
-#' \code{DiffHist} Two hisograms are created and overlayed over one another.
-#' The histograms represent the survival capasitites obtained through
-#' \code{\link{DynamicEnegryPd}} across the distribution. one will contain the
-#' results of null hibernation, and the other infection with WNS.
-#' @return returns two histograms overlaying one another with median estimations
+#' \code{DiffHist} histograms representing null and WNS infected bats resultant
+#' from \code{\link{DynamicEnegryPd}} are created and overlayed over one
+#' another. Values are drawn from the species distribution and represent the
+#' survival capasity of the species at that location.
+#'
+#' @return rReturns two histograms overlaying one another with median estimations
 #'
 #' @param surv.rast results from \code{\link{SurvivalRaster}} without Pd
 #' @param survPD.rast results from \code{\link{SurvivalRaster}} with PD
@@ -14,6 +15,8 @@
 #'
 #' @details This function will likely go the way of the dodo with the next model
 #' updates and build because this is unnecessairy convaluted.
+#'
+#' @family PlotTools
 #'
 DiffHist <- function(surv.rast, survPD.rast, dist.map, SpeciesName, key=NA, keylocX=-4, keylocY, lsize=1){
   ###Function for creating overlapping histograms of survival length
