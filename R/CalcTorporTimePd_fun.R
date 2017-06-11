@@ -7,23 +7,30 @@
 #' @param SA.type surface area measurement type, either `wing` or `body`
 #' @param pmass propotion of body mass (in mg) to designate EWL threshold; default is 4.3%
 #' @param params list of bat parameters output from \code{\link{BatLoad}}
-#' @param Q change in torpor metabolism as a function of Ta
+#' @param WNS logical; if TRUE, considers the effect of Pd growth on EWL 
 #'
 #' @details TODO
 #' @examples TODO
+#' 
 
-calcTorporTime <- function(Ta, Hd, SA.type = c("body", "wing"), pmass = 0.043, params){
+
+calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, params = c(growthParams,batParams),  WNS = c("TRUE, FALSE")){
   with(as.list(params),{
-    Q=calcQ(Ta)
+    
     #Known constants 
-    pO2     = 0.2095      #volumetric proportion of oxygen in air 
-    O2.coef = 0.30        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
+    pO2     = 0.2095      #volumetri proportion of oxygen in air 
+    O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
     b  = 17.502
     c  = 240.97
     GC = 0.0821           #universal gas constant
     k  = 10               #Meeh factor
-    #pmass = 0.043  
+    mrPd = 1.4
+    aPd = 0.21
+    rPd = 1.525 
+    
+    #Calculate the change in metabolism from Ta
+    Q=calcQ(Ta)
     
     #Calculate surface area
     SA.body <-  k * (mass^(2/3))
@@ -69,8 +76,42 @@ calcTorporTime <- function(Ta, Hd, SA.type = c("body", "wing"), pmass = 0.043, p
                       ttormax/Q^((Ta-Ttormin)/10), 
                       ttormax/(1+(Ttormin-Ta)*Ct/TMRmin))
     
-    #Return the shortest torpor time; assuming that if EWL threshold hasn't been met, torpor duration will be a function of Ta
-    return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
-  }
-  )
+    if(WNS == FALSE){
+      return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
+    } else if(WNS == TRUE){
+
+      #Calculate new growth of Pd for hour
+      growthrate   <- fungalGrowthRate(Ta,params)       #fungal growth rate as a function of body temperature
+      growthrate_H <- scaleFungalGrowthRate(Hd,params)  #scaling factor for fungal growth based on humidity
+      areaPd <- growthrate*EWL.time*growthrate_H 
+      p.areaPd = areaPd/wing.area*100                   #percent of wing surface area covered in Pd growth
+          
+      #Calculate cutaneous EWL (mg/hr) 
+      cEWL.pd <- SA * (rEWL*rPd*t) * dWVP 
+          
+      #Calculate pulmonary EWL (mg/hr) with increased TMR?
+      vol.pd  <- (TMRmin * tPd * mass * t)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+      pEWL.pd <- vol.pd * sat.def                      
+          
+      #Calculate total EWL (TEWL; mg/hr)
+      TEWL.pd <- cEWL.pd + pEWL.pd
+          
+      #In Liam's paper, the relationship between EWL and Pd growth was EWL = (p.areaPd*0.21) + 12.80 
+      #So, when % wing area = 0 (no Pd), EWL for this temp/humidity was 12.8 (this was in dry air!!!)          
+      #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship 
+      #as both temp/humidity are included in Pd growth estimates? What we need is more data!
+      TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
+      
+      #Calculate how long to reach threshold with Pd
+      Pd.time <- threshold/TEWL.pd     
+      
+      #Calculate torpor time as a function of Ta (without EWL) with increased TMR due to Pd
+      Ta.time <- ifelse(Ta > Ttormin, 
+                      ttormax/Q^((Ta-Ttormin)/10), 
+                      ttormax/(1+(Ttormin-Ta)*Ct/TMRmin))
+       
+      #Compare torpor times and select the shortest
+      return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))         
+    }
+  })
 }
