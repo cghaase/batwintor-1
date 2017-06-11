@@ -20,7 +20,6 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
       for(i in 1:2){ #mechanism for doing both infection status in 1 go
         ifelse(i == 1, inf <- T, inf <- F)
         results <- apply(env.df, 1,function(x){
-
           Ta <- x[[1]]
           Hd <- x[[2]]
           if(beta3 >= Teu){
@@ -66,6 +65,5 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
       mutate(surv.inf = ifelse(mass*.3 >= g.fat.consumed,1,0)) %>%
       mutate(surv.null = ifelse(mass*.3 >= n.g.fat.consumed,1,0))
     })
-
 }
 

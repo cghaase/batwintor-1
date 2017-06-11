@@ -11,3 +11,6 @@ LazyData: true
 Authors@R: person("C. Reed", "Hranac", email = "crh244@gmail.com", role = c("aut", "cre"))
 Imports: data.table, deSolve, dplyr
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
