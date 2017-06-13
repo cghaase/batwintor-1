@@ -25,3 +25,4 @@ if("fung.params.rda" %!in% list.files("data/")){
   devtools::use_data(fung.params, overwrite = T)
 }
 
+#TEST2
