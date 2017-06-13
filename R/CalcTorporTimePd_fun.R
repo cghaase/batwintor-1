@@ -6,7 +6,7 @@
 #' @param Hd percent humidity
 #' @param SA.type surface area measurement type, either `wing` or `body`
 #' @param pmass propotion of body mass (in mg) to designate EWL threshold; default is 4.3%
-#' @param params list of parameters output from \code{\link{BatLoad}} and \code{\link{FungLoad}} 
+#' @param mod.params list of parameters output from \code{\link{BatLoad}} and \code{\link{FungLoad}} 
 #' @param WNS logical; if TRUE, considers the effect of Pd growth on EWL 
 #'
 #' @details TODO
@@ -14,7 +14,7 @@
 #' 
 
 
-calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, params = c(growthParams,batParams), WNS = c("TRUE, FALSE")){
+calcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, mod.params = c(bat.params, fung.params), WNS = c("TRUE, FALSE")){
   with(as.list(params),{
     
     #Known constants 
