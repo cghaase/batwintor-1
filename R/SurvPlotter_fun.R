@@ -1,19 +1,17 @@
-#' Plots survival raster results across North America.
+#' Plots survival raster results including a nice outline of North America.
 #'
-#' \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} accross
-#'  North America.
+#' \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} and
+#' adds shapes of North America.
 #'
 #' @param surv.raster return product from \code{\link{SurvivalRaster}}
 #' @param dist.map shapefile representing the distribution you wish to map the
 #' results accross (generally speaking the entire distribution of the species)
 #' @param key you can add a key to the figure for easy multi figure assemblage
 #'
-#' @return Returns a map of North America in which the distribution supplied
+#' @return returns a map of North America in which the distribution supplied
 #' is filled in with the results from the model run.
 #'
 #' @note This function will be removed/ remodeled with the next version
-#' @example please see vignette for usage
-#' @family PlotTools
 
 SurvPlotter <- function(surv.raster, dist.map, key=NA){
   ###Function for plotting the survival raster @ contiental N. America scale
