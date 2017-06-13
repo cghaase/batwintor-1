@@ -16,3 +16,6 @@ CalcEnergyTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){
            TMRmin + (Ttormin - Ta)*Ct)
   })
 }
+
+
+#TEST
