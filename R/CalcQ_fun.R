@@ -18,4 +18,3 @@ CalcQ <- function( Ta, Q1 = 1.6, Q2 = 0.26, Q3 = 0.006){
   Q1 + Q2*Ta - Q3*Ta^2
 }
 
-#TEST 3
