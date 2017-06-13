@@ -13,7 +13,7 @@
 #' @details TODO
 #' Does this function need to exist?
 #' @examples TODO
-EnergyPd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, bat.params, fung.params, Q=calcQ(Ta), WNS = c("TRUE, FALSE")){  
+EnergyPd <- function(Ta, twinter, Hd, WNS, bat.params, fung.params){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
     Ttor <- ifelse(Ta > Ttormin, Ta, Ttormin)
@@ -26,12 +26,9 @@ EnergyPd <- function(Ta, Hd, SA.type = c("wing", "body"), pmass = 0.043, bat.par
     Eeu <- CalcEnergyTimeEuthermic(Ta, mod.params)
     Etor <- CalcEnergyTimeTorpid(Ta, mod.params)
     Ear <- CalcEnergyArousal(Ttor, mod.params)
-    Ecool <- CalcEnergyCool(Ttor, mod.params)
-    tar <- CalcArousalTime(Ta, bat.params)
-    tcool <- CalcCoolTime(Ta, bat.params)
-    ttor <- CalcTorporTimePd(Ta, Hd, SA.type, WNS, pmass, Q=calcQ(Ta), mod.params)
-    Ebout <- Eeu*teu + Etor*ttor + Ear + Ecool
-    Ewinter <- (twinter/(ttor + teu + tar + tcool))*Ebout
+    ttor <- CalcTorporTime(Ta, Pd, WNS, mod.params)
+    Ebout <- Eeu*teu + Etor*ttor + Ear*tar
+    Ewinter <- (twinter/(ttor + teu + tar))*Ebout
     fatConsumed <- ConvertToFat(Ewinter)
     results <- c(grams=fatConsumed, area=Pd, time.tor=ttor)
     return(results)
