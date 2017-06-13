@@ -1,11 +1,14 @@
-## DynamicEnergyPd
-data("bat.params"); data("fung.params")
-bat.param <- BatLoad(bat.params, "M.californicus")
-fung.param <- FungSelect("Verant")
-#Create winter parameters to explore
-Ta <- seq(-5,25,.5) #ambient temperatures
-Hd <- seq(60,100,1) #relative humidity
-env <- expand.grid(Ta, Hd); names(env) <- c("Ta", "Hd")
-twinter <- seq(0, 9*24*30, 24)
-mod.ls <- apply(env, 1, DynamicEnergyPd, inf = T, bat.params = bat.param,
-                fung.params = fung.param)
+## DynamicEnegryPd_ex
+data("bat.params")
+data("fung.params")
+
+my.params <- bat.params["M.californicus",]
+fung.ch <- FungSelect("Chaturvedi")
+
+
+env.df <- BuildEnv(temp.range = c(1:10),
+                hum.range = c(90:100),
+                range.res = 1)
+
+twinter <- seq(from = 0, to = 9*24*30*1, by = 24)
+bingo <- DynamicEnergyPd(env.df, my.params, fung.ch)
