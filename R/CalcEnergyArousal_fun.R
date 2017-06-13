@@ -11,7 +11,7 @@
 #' @example ExampleScripts/CalcEnergyArousal_ex.R
 #'
 
-calcEnergyArousal <- function(Ta, params){
+calcEnergyArousal <- function(Ta, bat.params){
 	with(as.list(params),{
 		ifelse(Ta > Ttormin, 
 					(mass*(Teu - Ta)*S) + ((Teu - Ta)/WR)*(TMRmin + ((RMR - TMRmin)/2)),                  #McKechnie & Wolf 2004 equation 3
