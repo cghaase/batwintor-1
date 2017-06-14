@@ -36,9 +36,12 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                       Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = mod.params),
                       Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = mod.params),
                       Ear = CalcEnergyArousal(Ttor = Ttor, bat.params = mod.params),
+                      Ec = CalcEnergyCool(Ta = Ttor, bat.params = mod.params),
                       mod.params)
           det.results <- data.table(lsoda(y = c(pT = 1,
                                                 pE = 0,
+                                                pAr = 0,
+                                                pC = 0,
                                                 EnergyConsumed = 0,
                                                 FungalArea = 0),
                                           times = twinter,

@@ -2,18 +2,20 @@
 #'
 #' \code{CalcEnergyCool} Calculate the energy required to cool to torpid temperatures
 #'
-#' @param Ta temperature 
+#' @param Ta ambient temperature
 #' @param bat.params list of bat parameters output from \code{\link{BatLoad}}
 #'
 #' @return returns energy required to cool
 #'
+#' @example ExampleScripts/CalcEnegryCool_ex.R
 #'
+#' @references McKechnie & Wolf 2004 equation 3
+#' @author Katie Haase
 
-calcCoolTime <- function(Ta, bat.params){
-  with(as.list(params),{
-    ifelse(Ta > Ttormin, 
-           ((Teu - Ta)/CR),                  #McKechnie & Wolf 2004 equation 3
-           ((Teu - Ttormin)/CR))
-  }
-  )			
+CalcEnergyCool<- function(Ta, bat.params){
+  with(bat.params,{
+    ifelse(Ta > Ttormin,
+           (((Teu - Ta)/CR)*(TMRmin + ((RMR - TMRmin)/2))),
+            (((Teu - Ttormin)/CR)*(TMRmin + ((RMR - TMRmin)/2))))
+  })
 }

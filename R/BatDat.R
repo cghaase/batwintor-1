@@ -25,9 +25,10 @@
 #' @details Naming of variables is largely drawn from the "Physiological
 #' Ecology and Energetics of Bats" by Speakman and Thomas contained within
 #' Bat Ecology.
+#'
+"bat.params"
 '%!in%' <- function(x,y)!('%in%'(x,y))
 if("bat.params.rda" %!in% list.files("data/")){
-  "bat.params"
   bats <- c("M.lucifigus",
             "M.myotis",
             "E.serotinus",
