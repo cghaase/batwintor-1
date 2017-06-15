@@ -30,12 +30,12 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           }
           Ttor <- ifelse(Ta > Ttormin, Ta, Ttormin) #determinine Ttorpid @ Ta
           Tb <- ifelse(Ttor < Teu, Ttor, Teu) #determine Tb
-          values <- c(Ttor = Ttor, WNS = inf,
+          values <- c(Tb = Tb, Ttor = Ttor, WNS = inf,
                       growth = FungalGrowthRate(Tb = Tb, fung.params = mod.params)*
                         ScaleFungalGrowthRate(pct.rh = Hd, fung.params = mod.params),
                       Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = mod.params),
                       Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = mod.params),
-                      Ear = CalcEnergyArousal(Ttor = Ttor, bat.params = mod.params),
+                      Ear = CalcEnergyArousal(Ta = Ttor, bat.params = mod.params),
                       Ec = CalcEnergyCool(Ta = Ttor, bat.params = mod.params),
                       mod.params)
           det.results <- data.table(lsoda(y = c(pT = 1,
@@ -43,6 +43,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                                                 pAr = 0,
                                                 pC = 0,
                                                 EnergyConsumed = 0,
+                                                prec.E.arr = 0,
                                                 FungalArea = 0),
                                           times = twinter,
                                           func = DetModel,
@@ -68,6 +69,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
     out.fin <- out.dt %>%
       mutate(surv.inf = ifelse(mass*.3 >= g.fat.consumed,1,0)) %>%
       mutate(surv.null = ifelse(mass*.3 >= n.g.fat.consumed,1,0))
+      return(data.table(out.fin))
     })
 
 }
