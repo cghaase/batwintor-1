@@ -10,12 +10,11 @@
 #' @return TODO find units accociated with
 #'
 #' @example ExampleScripts/CalcEnergyTimeTorpid_ex.R
+#'
+#' @author Katie Haase
 CalcEnergyTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){
   with(bat.params,{
     ifelse(Ta > Ttormin, TMRmin*q^((Ta-Ttormin)/10),
            TMRmin + (Ttormin - Ta)*Ct)
   })
 }
-
-
-#TEST

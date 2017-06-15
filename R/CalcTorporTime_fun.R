@@ -20,7 +20,6 @@ CalcTorporTime <- function(Ta, areaPd, inf, bat.params, q=CalcQ(Ta)){
     if(inf==TRUE){
       areaPd <- ifelse(areaPd < 1, 1, areaPd)
       ttor <- ttor/areaPd # how fungal growth reduceds time torpid
-      ttor <- ttor/areaPd # how fungal growth reduceds time torpid
     }
     return(ttor)
   })
