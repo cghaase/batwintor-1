@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 This vignette is designed to show how the `batwintor` package works from start to finish using real data. Metabolic, and morphometric data was collected over 2 winters in British Columbia, Canada. 
 
 ## From Raw
-The raw data for this analysis is avaliable through ([via](https://www.dropbox.com/s/61auiyewty5n6ga/Creston%20Respirometry%20Raw%20Data%20-%20ALL.csv?dl=0)) or but running `data("bats.o.canada")` on your console.
+The raw data for this analysis is avaliable through ([via](https://www.dropbox.com/s/61auiyewty5n6ga/Creston%20Respirometry%20Raw%20Data%20-%20ALL.csv?dl=0)) 
 
 ```{r}
 # library(devtools)
@@ -62,26 +62,20 @@ myyu.mr <- MRFromRaw(dat, "MYYU")
 Once we have the estimates we can update the rest of the parameters that are stored internally, and are generally conserved between runs.
 ```{r}
 data("bat.params")
-bat.update <- MRUpdate(myca.mr, "M.californicus", params = bat.params)
-bat.update <- MRUpdate(myyu.mr, "M.yumanensis", params = bat.update)
-myca.params <- bat.params["M.californicus",]
-myyu.params <- bat.params["M.yumanensis",]
+myca.params <- MRUpdate(myca.mr, "M.californicus", params = bat.params)
+myyu.params <- MRUpdate(myyu.mr, "M.yumanensis", params = bat.update)
 ```
 Now our bat metabolic parameters are updated with our estimates drawn from the raw data and we're ready to begin the modeling portion of the analysis.
 
 ## Fungal Options
-An important factor of this mechanistic model is the inclusion of fungal growth parameters drawn from the literature (see `?LoadFung` and `data("fung.params")' for more imformation). Since the fungal growth paramerters are generally updated much less frequently than our metabolic estimates they are provided with the package, and the calls are simple. In this case we'll chose the growth rate documented but Chaturveti et al. which is the morre agressive of the two growth options avaliable. 
+An important factor of this mechanistic model is the inclusion of fungal growth parameters drawn from the literature (see `?LoadFung` and `data("fung.params")' for more imformation). Since the fungal growth paramerters are generally updated much less frequently than our metabolic estimates they are provided with the package, and the calls are simple. In this case we'll chose the growth rate documented by Chaturveti et al. which is the morre agressive of the two growth options avaliable. 
 ```{r}
 fung.ch <- FungSelect("Chaturvedi")
 ```
 ## Model usage 
-```{r}
-myca.mr <- MRFromRaw(dat, "MYCA", plot = F)
-myyu.mr <- MRFromRaw(dat, "MYYU", plot = F)
-```
 Now we're ready to set the the model to run. First thing is to build the environmental space to run the model across. 
 ```{r}
-env <- BuildEnv(temp.range = c(-5, 25), hum.range = c(60,10), range.res = .5)
+env <- BuildEnv(temp.range = c(-5, 20), hum.range = c(60,100), range.res = .5)
 twinter <- seq(from = 0, to = 9*24*30*1, by = 24) #Maximum time of winter is 9 months, broken at daily intervals 
 ## Model Run
 

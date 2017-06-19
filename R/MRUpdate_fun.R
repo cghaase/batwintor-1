@@ -19,9 +19,10 @@
 #' @example ExampleScripts/MRUpdate_ex.R
 MRUpdate <- function(x, species, params = bat.params){
   bat.update <- params
-  for(i in 1:length(names(x))){
-    bat.update[species,names(x)[i]] <- x[,names(x)[i]]
+  x.df <- x$df
+  for(i in 1:length(names(x.df))){
+    bat.update[species,names(x.df)[i]] <- x.df[,names(x.df)[i]]
   }
-  return(bat.update)
+  return(bat.update[species,])
 }
 
