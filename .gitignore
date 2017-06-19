@@ -6,3 +6,7 @@ hello*
 man/*
 /test_docs
 data/*
+/ModOut/*
+inst/doc
+data/*
+inst/doc

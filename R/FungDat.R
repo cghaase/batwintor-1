@@ -1,6 +1,6 @@
 #' Growth coeffecients for funal growth models
 #'
-#' The beta and mu growth coeffecients for two different models of fungal growth.
+#' The \beta and \mu growth coeffecients for two different models of fungal growth.
 #'
 #' @format a data set including 3 beta parameters and 2 mu parameters for 2
 #'  models
@@ -11,6 +11,10 @@
 #'   \item{mu1}{mu1}
 #'   \item{mu2}{mu2}
 #' }
+#' @details fungal growth equations are fit to Michaelis Menten equations that
+#' reach maximal values at saturation.
+#'
+#' @references See Haymen et al. 2016 for fitting details
 "fung.params"
 '%!in%' <- function(x,y)!('%in%'(x,y))
 if("fung.params.rda" %!in% list.files("data/")){

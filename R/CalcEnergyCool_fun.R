@@ -8,7 +8,9 @@
 #' @return returns energy required to cool
 #'
 #' @example ExampleScripts/CalcEnegryCool_ex.R
-#'
+#' @family Arousal Functions
+#' @see \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+#' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}}
 #' @references McKechnie & Wolf 2004 equation 3
 #' @author Katie Haase
 
