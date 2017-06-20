@@ -30,9 +30,14 @@
 #' Ecology and Energetics of Bats" by Speakman and Thomas contained within
 #' Bat Ecology.
 #'
+#' \emph{M. yumanensis} WR is the same as \emph{M. californicus} because of the
+#' similarity in body mass and distribution between the two species.
+#'
+#' All species were given the cooling rate \code{CR} 60 as a good estimation
+#'
 #' @seealso data("mylu.params"), data("fung.params")
 #'
-#' @references Haymen et al. 2016
+#' @references Haymen et al. 2016; Menzies et al. 2016
 "bat.params"
 '%!in%' <- function(x,y)!('%in%'(x,y))
 if("bat.params.rda" %!in% list.files("data/")){
@@ -54,8 +59,8 @@ if("bat.params.rda" %!in% list.files("data/")){
   tar <- rep(.75,6)
   teu <- c(rep(3,5),2.1666)
   mass <- c(9, 25, 22.7, 15, 5.55, 5.4)
-  WR <- rep(NA, 6)
-  CR <- rep(NA, 6)
+  WR <- c(48, 90, 78, 90, 77.4, 77.4)
+  CR <- rep(60, 6)
   bat.params <- cbind(RMR = RMR,
                       TMRmin = TMRmin,
                       Teu = Teu,

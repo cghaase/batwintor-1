@@ -32,8 +32,7 @@ DetModel <- function(t,y, params){
     # change in EnergyConsumed/dt
     dJdt  <- Eeu*pE + Etor*pT + Ear*pAr + Ec*pC
     # change in precEArousal/dt
-    dpJdt <- ((Eeu*pE +Ear*pAr + Ec*pC)/ #not sure why this doesnt work
-      (Eeu*pE + Etor*pT + Ear*pAr + Ec*pC))
+    dpJdt <- Eeu*pE +Ear*pAr + Ec*pC
     #change in FungalArea/dt
     dFdt  <- growth*pT
 
