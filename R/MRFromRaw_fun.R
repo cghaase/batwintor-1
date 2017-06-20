@@ -7,14 +7,14 @@
 #' @param species species name or code (as a colname within \code{x})
 #' @return \code{MRFromRaw} returns an list of class \code{MRFromRaw} with the
 #' following items:
-#' \item{df}
+#' \item{df}{
 #' A dataframe filled with adjusted estimates of a species resting
 #' metabolic rate (RMR), torpor metabolic rate minimum (TMRmin), the
 #' temperature at which that rate is achieved (Ttormin), and average mass of
-#' sampled individuals.
-#' \item{spEM}
+#' sampled individuals.}
+#' \item{spEM}{
 #' A list of the \code{\link[mixtools]{spEMsymloc}} items created
-#' which can be plotted or examined individually.
+#' which can be plotted or examined individually.}
 #' @details \code{MRFromRaw} uses the \code{\link[mixtools]{spEMsymloc}} method
 #' to preform semi-parimetric fitting of data using the first and third
 #' quantiles as priors for stocastic process.

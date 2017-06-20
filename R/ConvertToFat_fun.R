@@ -9,7 +9,8 @@
 #'
 #' @details TODO check and make sure units are correct
 #'
-#' @example ConvertToFat(enegry = 9)
+#' @example
+#' ConvertToFat(enegry = 9)
 ConvertToFat <- function(enegry, k1 = 20.1, k2 = 39.3, k3 = 100){
   enegry*k1/(k2*k3)
 }

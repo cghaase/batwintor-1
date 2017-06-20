@@ -9,10 +9,14 @@
 #' @return returns enegry required to arouse from torpor to euthermia
 #'
 #' @example ExampleScripts/CalcEnergyArousal_ex.R
+#'
 #' @family Arousal Functions
-#' @see \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
+#'
+#' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}}
+#'
 #' @references McKechnie & Wolf 2004 equation 3
+#'
 #' @author Katie Haase
 
 CalcEnergyArousal <- function(Ta, bat.params){

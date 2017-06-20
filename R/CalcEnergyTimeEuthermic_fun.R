@@ -7,9 +7,12 @@
 #' @param bat.params list of bat parameters output from \code{\link{BatLoad}}
 #'
 #' @return TODO find units accociated with it
+#'
 #' @family Arousal Functions
-#' @see \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
+#'
+#' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyCool}}
+#'
 #' @example ExampleScripts/CalEnergyTimeEuthermic_ex.R
 CalcEnergyTimeEuthermic <- function(Ta, bat.params){
   with(bat.params,{
