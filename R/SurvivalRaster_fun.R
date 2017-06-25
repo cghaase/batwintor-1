@@ -40,7 +40,8 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
       out.l[[i]] <- min(mod.dif[which(abs(mod.dif$humidity-hum.rast[i]) ==
                                  min(abs(mod.dif$humidity-hum.rast[i]))
                           & abs(mod.dif$Ta-temp.c[i]) ==
-                            min(abs(mod.dif$Ta-temp.c[i]))), ..sel])
+                            min(abs(mod.dif$Ta-temp.c[i]))),
+                          sel, with = FALSE])
     }
     values(out.s[[j]]) <- out.l
   }
