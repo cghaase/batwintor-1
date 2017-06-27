@@ -12,7 +12,7 @@
 #' @note will be replaced in the next instance of the model so don't worry that
 #' it seems to be completely redundant. it is kinda
 #'
-SurvDF <-function(surv.raster, dist.map){
+SurvDF <-function(surv.raster, dist.map, nights){
   ###Function for converting the survival raster into a dataframe of months survived.
   ##Arguments:
   ## surv.rast <- output from survivalRas()
@@ -27,5 +27,6 @@ SurvDF <-function(surv.raster, dist.map){
   spec.Pt = rasterToPoints(tt.spec)
   spec.df = data.frame(spec.Pt)
   colnames(spec.df) <-c ("Longitude","Latitude","Months")
+  spec.df$Months <- spec.df$Months/(30*24)
   return(spec.df)
 }
