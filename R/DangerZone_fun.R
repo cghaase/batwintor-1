@@ -31,7 +31,7 @@ DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
                   mod.dif$humidity, # H
                   (mod.dif$diff), # time in months
                   duplicate=T)
-  color<-colorRampPalette(c( "red","yellow","white","blue"))
+  color<-colorRampPalette(c( "red","yellow","green4"))
   par(omi=c(1,1,0.5,1))
   par(mai=c(0.8,0.8,0.8,0.8))
   par(mfrow=c(1,1))
@@ -53,7 +53,7 @@ DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
   par(adj=0)
 
   if(!is.null(save.name)){
-    dev.copy(png, paste0(save.name))
+    dev.print(width = 600, height = 600, png, paste0(save.name))
     dev.off()
   }
 }
