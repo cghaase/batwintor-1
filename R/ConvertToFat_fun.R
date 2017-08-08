@@ -11,6 +11,6 @@
 #'
 #' @example
 #' ConvertToFat(enegry = 9)
-ConvertToFat <- function(enegry, k1 = 20.1, k2 = 39.3, k3 = 1000){
-  enegry*k1/(k2*k3)
+ConvertToFat <- function(energy, k1 = 20.1, k2 = 39.3, k3 = 1000){
+  energy*k1/(k2*k3)
 }
