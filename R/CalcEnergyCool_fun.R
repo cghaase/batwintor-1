@@ -21,7 +21,7 @@
 CalcEnergyCool<- function(Ta, bat.params){
   with(bat.params,{
     ifelse(Ta > Ttormin,
-           (((Teu - Ta)/CR)*(TMRmin + ((RMR - TMRmin)/2))),
-            (((Teu - Ttormin)/CR)*(TMRmin + ((RMR - TMRmin)/2))))
+           ((((Ceu + Ct)/2)*(Teu-Ta)*mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ta)/CR),
+           ((((Ceu + Ct)/2)*(Teu-Ttormin)*mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ttormin)/CR))
   })
 }
