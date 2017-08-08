@@ -15,7 +15,7 @@
 #' @details This function will likely go the way of the dodo with the next model
 #' updates and build because this is unnecessairy convaluted.
 #'
-DiffHist <- function(surv.rast, survPD.rast, dist.map, SpeciesName, key=NA, keylocX=-4, keylocY, lsize=1){
+DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, key=NA, keylocX=-4, keylocY, lsize=1){
   ###Function for creating overlapping histograms of survival length
   ##Arguments:
   ## Comp1.rast <- Output from survivalRas (generally no PD)
@@ -25,9 +25,9 @@ DiffHist <- function(surv.rast, survPD.rast, dist.map, SpeciesName, key=NA, keyl
   ## key <- figure key for plotting
   ## Other key items included
   ##Comp1 df Gen
-  Comp1.df <- surv.df(surv.rast, dist.map)
+  Comp1.df <- SurvDF(surv.stk[[2]], dist.map, nights = nights)
   ##Comp2 df Gen
-  Comp2.df <- surv.df(survPD.rast, dist.map)
+  Comp2.df <- SurvDF(surv.stk[[1]], dist.map, nights = nights)
   #Creating Histograms
   dif.df<-data.frame(Months=c(Comp1.df$Months,Comp2.df$Months),
                      WNS=factor(c(rep(paste0(SpeciesName,"Pre"),nrow(Comp1.df)),
@@ -38,6 +38,6 @@ DiffHist <- function(surv.rast, survPD.rast, dist.map, SpeciesName, key=NA, keyl
     geom_vline(data=dif.hist.df, aes(xintercept=Months.median,  colour=WNS),
                linetype="dashed", size=lsize)+
     geom_vline(xintercept = 0)
-  dif.Hist<-dif.Hist + geom_text(data = NULL, x = keylocX, y = keylocY, label = key)
+  dif.Hist<-dif.Hist #+ geom_text(data = NULL, x = keylocX, y = keylocY, label = key)
   return(dif.Hist)
 }
