@@ -21,7 +21,12 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   require(raster);require(dplyr)
 
   #Raster modifications
-  temp.c <- temp.rast - 273
+  if(summary(temp.rast)[1] > 200){
+    temp.c <- temp.rast - 273
+  } else{
+    temp.c <- temp.rast
+  }
+
   out <- raster(hum.rast); values(out) <- NA
   out.s <- stack(out,out,out); names(out.s) <- c("max.inf", "max.null", "diff")
 
@@ -60,7 +65,8 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     clamp <- function(x, xmin, xmax) {
       min(max(x, xmin),xmax)
     }
-    clamp(wch, 1, length(y))
+    wch
+   # clamp(wch, 1, length(y))
   }
 
   #Extract data from rasters  to matrix for speed
@@ -78,7 +84,31 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     hum_i <- find_closest(hum[i], humidity_vals)
     Ta_i  <- find_closest(temp[i], Ta_vals)
     # lookup the values in our LUT
-    out.l[[i]] <- lut[Ta_i, hum_i,]
+    # if(Ta_i < 1 ||Ta_i > length(Ta_vals)){
+    #   out.l <- NA
+    # }
+    # if (Ta_i < 1) {
+    #   # out of range temp low
+    #   out.l[[i]] <- -999
+    # } else if (Ta_i > length(Ta_vals)){
+    #   # out of range temp hi
+    #   out.l[[i]] <- 999
+    # }
+    if (hum_i < 1){
+      # out of range hum low
+      out.l[[i]] <- -666
+    } else if(hum_i > length(humidity_vals)){
+      # out of range hum high
+      out.l[[i]] <- 666
+    } else if (Ta_i < 1) {
+      # out of range temp low
+      out.l[[i]] <- -999
+    } else if (Ta_i > length(Ta_vals)){
+      # out of range temp hi
+      out.l[[i]] <- 999
+    } else{
+      out.l[[i]] <- lut[Ta_i, hum_i,]
+    }
   }
 
   #Return values to matrix
