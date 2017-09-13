@@ -6,16 +6,19 @@
 #' two.
 #'
 #' @param mod.df results from \code{\link{DynamicEnegryPd}}
-#' @param hum.rast raster of humidity values for extent
-#' @param temp.rast raster of temperature values
+#' @param hum.rast raster of humidity
+#' @param temp.rast raster of temperature values either in Kevil or degrees
+#' Celcius
 #'
-#' @details This function will be replaces with a direct raster method in the
-#' next build of this package.
+#' @details It is suggested that both raster layers have the same extent,
+#' resolution, and projection as there are currently no internal checks on the
+#' consistance between rasters. Values for output are drawn from the humidity
+#' layer.
 #'
-#' humidity rasters in teh original Hayman et al. 2016 represent the average
+#'
+#' @note humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
-#'
-#' @note
+#
 
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   require(raster);require(dplyr)
@@ -30,12 +33,18 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   out <- raster(hum.rast); values(out) <- NA
   out.s <- stack(out,out,out); names(out.s) <- c("max.inf", "max.null", "diff")
 
+  #Extract data from rasters  to matrix for speed
+  # pull data out of the raster
+  hum <- as.matrix(hum.rast, nrow = nrow(hum.rast), ncol = ncol(hum.rast))
+  temp <- as.matrix(temp.c, nrow = nrow(temp.c), ncol = ncol(temp.c))
+
   mod.dif <- mod.df %>%
     dplyr::group_by(Ta, humidity) %>%
     dplyr::summarise(max.null = max(time*surv.null)/24, max.inf = max(time*surv.inf)/24) %>%
     dplyr::mutate(diff = (max.null-max.inf)/24) %>%
     ungroup %>% data.table
 
+  ####Look Up Table ####
   #Vectors for look up table structure
   Ta_vals <- unique(mod.dif$Ta)
   humidity_vals <- unique(mod.dif$humidity)
@@ -55,6 +64,7 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     lut[as.character(d$Ta), as.character(d$humidity),] <- c(d$max.inf,
                                                             d$max.null, d$diff)
   }
+  #####
 
   # Find the closest item in the vector y to x.
   # NOTE: Assumes that y is increasing, equi-spaced vector
@@ -65,55 +75,27 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     clamp <- function(x, xmin, xmax) {
       min(max(x, xmin),xmax)
     }
-    wch
-   # clamp(wch, 1, length(y))
+
+   clamp(wch, 1, length(y))
   }
 
-  #Extract data from rasters  to matrix for speed
-  # pull data out of the raster
-  hum <- as.matrix(hum.rast)
-  temp <- as.matrix(temp.c)
 
   #Run lookup
-  out.l <- list()
-  for(i in 1:length(hum)){
-    # first find the closest humidity and Ta
-    if(i %% 1000 == 0){
-      cat("up to", i, "of", length(hum), "\n")
+  for(j in 1:nlayers(out.s)){
+    #Create output matrix
+    out.z <- matrix(ncol = ncol(hum), nrow = nrow(hum))
+    for(i in 1:length(hum)){
+      # first find the closest humidity and Ta
+      if(i %% 1000 == 0){
+        cat(j, "of", nlayers(out.s), "up to", i, "of", length(hum), "\n")
+      }
+      hum_i <- find_closest(hum[[i]], humidity_vals)
+      Ta_i  <- find_closest(temp[[i]], Ta_vals)
+      out.z[[i]] <- lut[Ta_i, hum_i,j]
     }
-    hum_i <- find_closest(hum[i], humidity_vals)
-    Ta_i  <- find_closest(temp[i], Ta_vals)
-    # lookup the values in our LUT
-    # if(Ta_i < 1 ||Ta_i > length(Ta_vals)){
-    #   out.l <- NA
-    # }
-    # if (Ta_i < 1) {
-    #   # out of range temp low
-    #   out.l[[i]] <- -999
-    # } else if (Ta_i > length(Ta_vals)){
-    #   # out of range temp hi
-    #   out.l[[i]] <- 999
-    # }
-    if (hum_i < 1){
-      # out of range hum low
-      out.l[[i]] <- -666
-    } else if(hum_i > length(humidity_vals)){
-      # out of range hum high
-      out.l[[i]] <- 666
-    } else if (Ta_i < 1) {
-      # out of range temp low
-      out.l[[i]] <- -999
-    } else if (Ta_i > length(Ta_vals)){
-      # out of range temp hi
-      out.l[[i]] <- 999
-    } else{
-      out.l[[i]] <- lut[Ta_i, hum_i,]
-    }
+    # Set values back from matrix to raster
+    out.s[[j]] <- setValues(out.s[[j]], out.z)
   }
-
-  #Return values to matrix
-  out.m <- do.call(rbind, out.l)
-  out.s <- setValues(out.s, out.m)
 
   return(out.s)
 }

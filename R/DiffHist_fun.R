@@ -15,7 +15,7 @@
 #' @details This function will likely go the way of the dodo with the next model
 #' updates and build because this is unnecessairy convaluted.
 #'
-DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, key=NA, keylocX=-4, keylocY, lsize=1){
+DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, save.name=NULL, key=NA, keylocX=-4, keylocY, lsize=1){
   ###Function for creating overlapping histograms of survival length
   ##Arguments:
   ## Comp1.rast <- Output from survivalRas (generally no PD)
@@ -39,5 +39,10 @@ DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, key=NA, keylocX=-4
                linetype="dashed", size=lsize)+
     geom_vline(xintercept = 0)
   dif.Hist<-dif.Hist #+ geom_text(data = NULL, x = keylocX, y = keylocY, label = key)
+
+  if(!is.null(save.name)){
+    dev.print(width = 600, height = 600, png, paste0(save.name))
+    dev.off()
+  }
   return(dif.Hist)
 }
