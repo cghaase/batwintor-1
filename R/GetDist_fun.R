@@ -19,7 +19,7 @@
 #' #@example TODO? is it needed
 GetDist <- function(path.to.data, species){
   require(rgdal)
-  full <- readOGR(dsn = path.expand(paste0(path.to.data,"MAMMTERR")),
+  full <- readOGR(dsn = file.path(paste0(path.to.data,"/MAMMTERR")),
                   layer = "Mammals_Terrestrial")
   for(i in 1:length(species)){
     if(species[i] %in% full$BINOMIAL){

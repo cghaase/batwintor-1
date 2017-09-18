@@ -22,15 +22,16 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
   require(PBSmapping);require(ggplot2)
   require(maptools); require(plyr)
 
-  ifelse(WNS == T,
-         spec.df <- SurvDF(surv.stk[[1]],dist.map,nights),
-         spec.df <- SurvDF(surv.stk[[2]],dist.map,nights))
+  ifelse(WNS == T, #WNS Flag
+         spec.df <- SurvDF(surv.stk$"max.inf",dist.map,nights),
+         spec.df <- SurvDF(surv.stk$"max.null",dist.map,nights))
 
-  xlim = c(-170,-52)
-  ylim = c(10,70)
   worldmap = map_data("world")
   setnames(worldmap, c("X","Y","PID","POS","region","subregion"))
-  worldmap = clipPolys(worldmap, xlim=xlim,ylim=ylim, keepExtra=TRUE)
+  worldmap = clipPolys(worldmap,
+                       xlim=extent(dist.map)[1:2],
+                       ylim=extent(dist.map)[3:4],
+                       keepExtra=TRUE)
   g.spec <- ggplot(spec.df) +
     aes(x=Longitude, y=Latitude) +
     geom_polygon(data=worldmap, aes(X,Y,group=PID),
@@ -49,7 +50,8 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
     scale_fill_gradient2(low="red4",mid = "white",high="midnightblue"
       #limits=c((min(minValue(stack(surv.rasters))/720)-1)
        #        ,(max(maxValue(stack(surv.rasters))/720)+1))
-      )
+      ) +
+    coord_fixed()
   bkg <- theme(
     panel.background = element_rect(fill = "lightblue",
                                     colour = "lightblue",

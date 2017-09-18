@@ -25,9 +25,9 @@ DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, save.name=NULL, ke
   ## key <- figure key for plotting
   ## Other key items included
   ##Comp1 df Gen
-  Comp1.df <- SurvDF(surv.stk[[2]], dist.map, nights = nights)
+  Comp1.df <- SurvDF(surv.stk$"max.null", dist.map, nights = nights)
   ##Comp2 df Gen
-  Comp2.df <- SurvDF(surv.stk[[1]], dist.map, nights = nights)
+  Comp2.df <- SurvDF(surv.stk$"max.inf", dist.map, nights = nights)
   #Creating Histograms
   dif.df<-data.frame(Months=c(Comp1.df$Months,Comp2.df$Months),
                      WNS=factor(c(rep(paste0(SpeciesName,"Pre"),nrow(Comp1.df)),
