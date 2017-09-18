@@ -61,5 +61,5 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
   )
   #geom_text(data = NULL, x = -170, y = 75, label = key))
 
-  return(g.spec + bkg)
+  return(x <- g.spec + bkg)
 }
