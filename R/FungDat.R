@@ -1,6 +1,6 @@
 #' Growth coeffecients for funal growth models
 #'
-#' The \beta and \mu growth coeffecients for two different models of fungal growth.
+#' The \eqn{\beta} and \eqn{\mu} growth coeffecients for two different models of fungal growth.
 #'
 #' @format a data set including 3 beta parameters and 2 mu parameters for 2
 #'  models

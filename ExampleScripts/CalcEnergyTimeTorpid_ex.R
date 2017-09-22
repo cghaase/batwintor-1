@@ -1,6 +1,9 @@
 ##CalcEnergyTimeTorpid Example
-data("bat.params")
+data("mylu.params")
 
-myyu.params <- BatLoad(bat.params, species = "M.californicus")
+e <- -10:34 #temperature vector
 
-CalcEnergyTimeTorpid(4, myyu.params)
+r <- CalcEnergyTimeTorpid(e, mylu.params)
+
+plot(e, r, xlab = "Temp (C)", ylab = "Energy Expended",
+     main = "CalcEnergyTimeTorpid")

@@ -77,7 +77,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           prec.ar <- ar.fat/fat.consumed
           # Proportion of time in torpor
           prop.tor <- MaxToCurrent(det.results$pT)
-          prop.Ar <- MaxToCurrent(det.results$pAr)
+          prop.ar <- MaxToCurrent(det.results$pAr)
           Tb <- Tb
           # Creat dataframe of results for intermediate product
           results <- data.table(Ta = rep(Ta,length(twinter)),
@@ -87,8 +87,8 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                                       Pd.growth = c(0,
                                                     MaxToCurrent(det.results$FungalArea)),
                                       time = det.results$time,
-                                      Prop.tor = prop.tor,
-                                      Prop.Ar = prop.ar,
+                                      Prop.tor = c(1,prop.tor),
+                                      Prop.Ar = c(0,prop.ar),
                                       Tb = Tb))
           return(results)
         })
