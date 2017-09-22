@@ -75,6 +75,10 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           ar.fat <- ConvertToFat(ar.winter)
           # What precent of costs are due to arousals
           prec.ar <- ar.fat/fat.consumed
+          # Proportion of time in torpor
+          prop.tor <- MaxToCurrent(det.results$pT)
+          prop.Ar <- MaxToCurrent(det.results$pAr)
+          Tb <- Tb
           # Creat dataframe of results for intermediate product
           results <- data.table(Ta = rep(Ta,length(twinter)),
                                 humidity = rep(Hd,length(twinter)),
@@ -82,7 +86,10 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                                       prec.ar = c(0, prec.ar),
                                       Pd.growth = c(0,
                                                     MaxToCurrent(det.results$FungalArea)),
-                                      time = det.results$time))
+                                      time = det.results$time,
+                                      Prop.tor = prop.tor,
+                                      Prop.Ar = prop.ar,
+                                      Tb = Tb))
           return(results)
         })
       foo <- rbindlist(results)
