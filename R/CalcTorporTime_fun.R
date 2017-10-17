@@ -12,6 +12,7 @@
 #' @return returns time bat spends in torpor
 #'
 #' @example ExampleScripts/CalcTorporTime_ex.R
+#' @export
 CalcTorporTime <- function(Ta, areaPd, inf, bat.params, q=CalcQ(Ta)){
   with(bat.params,{
     ttor <- ifelse(Ta > Ttormin,

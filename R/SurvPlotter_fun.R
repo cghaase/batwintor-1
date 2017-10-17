@@ -29,8 +29,8 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
   worldmap = map_data("world")
   setnames(worldmap, c("X","Y","PID","POS","region","subregion"))
   worldmap = clipPolys(worldmap,
-                       xlim=extent(dist.map)[1:2],
-                       ylim=extent(dist.map)[3:4],
+                       xlim=extent(surv.stk)[1:2],
+                       ylim=extent(surv.stk)[3:4],
                        keepExtra=TRUE)
   g.spec <- ggplot(spec.df) +
     aes(x=Longitude, y=Latitude) +
@@ -44,9 +44,9 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
                  fill = "snow",
                  color="grey20") +
     #geom_polygon(data = as.data.frame(dist.map), aes(long,lat), colour = "black", fill = NA) +
-    geom_polygon(data = fortify(dist.map),
-                 aes(long,lat,group=group),
-                 colour = "black", fill = NA) +
+    # geom_polygon(data = fortify(dist.map),
+    #              aes(long,lat,group=group),
+    #              colour = "black", fill = NA) +
     scale_fill_gradient2(low="red4",mid = "white",high="midnightblue"
       #limits=c((min(minValue(stack(surv.rasters))/720)-1)
        #        ,(max(maxValue(stack(surv.rasters))/720)+1))

@@ -17,17 +17,17 @@
 #' TODO
 #'
 #' @examples TODO
+#' @export
 
 
 DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
-  require(dplyr);require(data.table);require(fields);require(akima)
    mod.dif <- mod.df %>%
      dplyr::group_by(Ta, humidity) %>%
      dplyr::summarise(max.null = max(time*surv.null),max.inf = max(time*surv.inf)) %>%
      dplyr::mutate(diff = (max.inf - max.null)/(24*30)) %>%
     ungroup %>% data.table
 
-  zzg <- interp(mod.dif$Ta, # T # can use interp.loess or interp function instead for regular spaced data
+  zzg <- akima::interp(mod.dif$Ta, # T # can use interp.loess or interp function instead for regular spaced data
                   mod.dif$humidity, # H
                   (mod.dif$diff), # time in months
                   duplicate=T)
@@ -40,7 +40,7 @@ DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
   par(cex.sub=1)
   par(cex.main=1)
   par(cex=1)
-  surface(zzg,col =color(100),
+  fields::surface(zzg,col =color(100),
           ylab = "", xlab = "",
           xlim = c(-1,20), ylim = c(80, 100))
 

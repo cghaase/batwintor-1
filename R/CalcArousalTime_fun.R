@@ -14,7 +14,7 @@
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}}
 #'
 #' @references McKechnie & Wolf 2004 equation 3
-#'
+#' @export
 CalcArousalTime <- function(Ta, bat.params){
   with(bat.params,{
     ifelse(Ta > Ttormin,

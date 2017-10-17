@@ -18,6 +18,7 @@
 #' @references McKechnie & Wolf 2004 equation 3
 #'
 #' @author Katie Haase
+#' @export
 
 CalcEnergyArousal <- function(Ta, bat.params){
 	with(bat.params,{

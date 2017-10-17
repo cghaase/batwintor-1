@@ -23,11 +23,11 @@ The raw data for this analysis is available through ([via](https://www.dropbox.c
 ```{r}
 # library(devtools)
 # install_github("cReedHranac/batwintor")
-# library(batwintor)
+library(batwintor)
 
 library(dplyr, warn.conflicts = F)
 # dat.dirty <- read.csv("~/Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
-dat.dirty <- read.csv("C:/Users/crhranac//Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
+dat.dirty <- read.csv("D:/Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
 dat <- tbl_df(dat.dirty)
 names(dat) <- c("date", "bat", "species", "sex", "band", "mass.in", "mass.out", "Ta", "Ta.p",
                 "flow", "FiO2", "FeO2", "VO2.ml.min", "VO2.ml.h", "VO2.ml.h.g")
@@ -76,10 +76,9 @@ fung.ch <- FungSelect("Chaturvedi")
 ## Model Environment
 In order to run the model we need to create an environmental space across which to model. This can be a major determinate for how long the model runs. The larger the environmental space, and the longer the time of winter, the more model runs are required and that cna potenitally take a very long time depending upon the computers preformance. it is therefore hightly suggested that you use the Microsoft Open R distribution as it allows for your computer to split the job across the avaliable cores vastly increasing computation speeds.  
 ```{r}
-env <- BuildEnv(temp.range = c(-5, 20), hum.range = c(60,100), range.res = .5)
-env <- BuildEnv(c(1,10), c(90,100), 1)
+env <- BuildEnv(temp = c(-5,20), hum = c(60,100), range.res = 1)
 twinter <- seq(from = 0, to = 9*24*30*1, by = 24) #Maximum time of winter is 9 months, broken at daily intervals 
 ## Model Run
-myca.mod <- DynamicEnergyPd(env, myca.params, fung.ch)
+# myca.mod <- DynamicEnergyPd(env, myca.params, fung.ch)
 
 ```

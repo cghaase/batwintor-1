@@ -9,8 +9,16 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Authors@R: person("C. Reed", "Hranac", email = "crh244@gmail.com", role = c("aut", "cre"))
-Imports: data.table, deSolve, dplyr
+Imports: 
+  data.table,
+  deSolve,
+  dplyr,
+  ggplot2, 
+  mixtools,
+  raster
 RoxygenNote: 6.0.1
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    akima,
+    fields,
 VignetteBuilder: knitr

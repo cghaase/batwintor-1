@@ -10,6 +10,7 @@
 #'
 #' @seealso \code{\link{FungLoad}}
 #' @example ExampleScripts/FungalGrowthRate_ex.R
+#' @export
 FungalGrowthRate <- function(Tb, fung.params, t.min = 0){
   with(fung.params,{
     ifelse(Tb > beta3|Tb<=t.min,0,beta1*(Tb-t.min)*

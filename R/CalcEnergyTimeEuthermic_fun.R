@@ -14,6 +14,7 @@
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyCool}}
 #'
 #' @example ExampleScripts/CalEnergyTimeEuthermic_ex.R
+#' @export
 CalcEnergyTimeEuthermic <- function(Ta, bat.params){
   with(bat.params,{
     RMR+ (Tlc-Ta)*Ceu

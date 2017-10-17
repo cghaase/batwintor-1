@@ -32,7 +32,7 @@ DiffHist <- function(surv.stk, dist.map, SpeciesName, nights, save.name=NULL, ke
   dif.df<-data.frame(Months=c(Comp1.df$Months,Comp2.df$Months),
                      WNS=factor(c(rep(paste0(SpeciesName,"Pre"),nrow(Comp1.df)),
                                   rep(paste0(SpeciesName,"Post"),nrow(Comp2.df)))))
-  dif.hist.df <- ddply(dif.df, "WNS", summarise, Months.median=median(Months))
+  dif.hist.df <- plyr::ddply(dif.df, "WNS", summarise, Months.median=median(Months))
   dif.Hist<-ggplot(dif.df, aes(x=Months, fill=WNS)) +
     geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-5,6) +
     geom_vline(data=dif.hist.df, aes(xintercept=Months.median,  colour=WNS),

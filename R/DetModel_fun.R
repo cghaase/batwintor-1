@@ -13,9 +13,8 @@
 #'
 #' @seealso \code{\link{DynamicEnergyPd}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
-#'
+#' @export
 DetModel <- function(t,y, params){
-  require(deSolve)
   with(c(as.list(y),params),{
     ttor <- CalcTorporTime(Ta = Tb, areaPd = FungalArea, inf = WNS,
                            bat.params = params)

@@ -12,6 +12,7 @@
 #' @example ExampleScripts/CalcEnergyTimeTorpid_ex.R
 #'
 #' @author Katie Haase
+#' @export
 CalcEnergyTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){
   with(bat.params,{
     ifelse(Ta > Ttormin, TMRmin*q^((Ta-Ttormin)/10),

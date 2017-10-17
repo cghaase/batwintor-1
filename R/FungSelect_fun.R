@@ -26,7 +26,8 @@
 #'
 #' @return Returns a named list of fungal growth scaling parameters
 #' @seealso \code{\link{FungLoad}}
+#' @export
 FungSelect <- function(choose){
-  data("fung.params")
+  data(batwintor::fung.params)
   as.list(fung.params[choose,])
 }

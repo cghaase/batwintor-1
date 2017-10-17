@@ -18,7 +18,7 @@
 #'  @seealso \code{\link{CalcArousalTime}}, \code{\link{CalcEnergyCool}},
 #' \code{\link{CalcEnergyArousal}}, \code{\link{CalcEnergyTimeEuthermic}}
 #' @author Katie Haase
-#'
+#' @export
 CalcCoolTime <- function(Ta, bat.params){
   with(bat.params,{
     ifelse(Ta > Ttormin,

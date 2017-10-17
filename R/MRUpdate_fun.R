@@ -17,6 +17,7 @@
 #' @seealso \code{\link{data("bat.params")}}), \code{\link{MRFromRaw}},
 #' \code{\link{BatLoad}}
 #' @example ExampleScripts/MRUpdate_ex.R
+#' @export
 MRUpdate <- function(x, species, params = bat.params){
   bat.update <- params
   x.df <- x$df

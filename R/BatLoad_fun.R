@@ -36,6 +36,7 @@
 #' \strong{mass}: mass of the critter
 #'
 #' @example ExampleScripts/BatLoad_ex.R
+#' @export
 
 BatLoad <- function(x, species){
   if(species%in%rownames(x)){

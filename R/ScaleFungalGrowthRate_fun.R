@@ -8,6 +8,7 @@
 #' @return returns scaled humidity scaled fungal growth rate
 #'
 #' @example ExampleScripts/ScaleFungalGrowthRate_ex.R
+#' @export
 ScaleFungalGrowthRate <- function(pct.rh, fung.params){
   with(fung.params,{
     mu1*pct.rh/(1+(mu2*pct.rh))

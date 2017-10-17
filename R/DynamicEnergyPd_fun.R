@@ -11,9 +11,9 @@
 #' @details TODO
 #' @seealso \code{\link{DetModel}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
-#'
+#' @export
 DynamicEnergyPd <- function(env.df, bat.params, fung.params){
-  require(deSolve); require(data.table); library(dplyr)
+  require(data.table); library(dplyr)
   out <- list()
   mod.params <- as.list(c(bat.params, fung.params))
     with(mod.params,{

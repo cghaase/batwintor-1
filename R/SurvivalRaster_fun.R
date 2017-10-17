@@ -21,7 +21,8 @@
 #
 
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
-  require(raster);require(dplyr)
+#  require(raster);
+  require(dplyr)
 
   #Raster modifications
   if(summary(temp.rast)[1] > 200){
@@ -95,7 +96,7 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     }
     # Set values back from matrix to raster
     out.s[[j]] <- setValues(out.s[[j]], out.z)
-  }
+    }
 
   return(out.s)
 }

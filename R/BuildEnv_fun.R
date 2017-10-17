@@ -21,9 +21,10 @@
 #' challenges downstream.
 #'
 #' @example ExampleScripts/BuildEnv_ex.R
+#' @export
 BuildEnv <- function(temp, hum, range.res = 1){
   #Raster methods
-  if(is(temp, "Raster") || is(hum, "Raster")){
+  if(methods::is(temp, "Raster") || methods::is(hum, "Raster")){
     t <- setMinMax(temp)
     #Check units (only useful for discovering if units are K or C)
     ifelse( minValue(t) > 150,

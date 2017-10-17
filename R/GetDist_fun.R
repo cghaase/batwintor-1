@@ -21,9 +21,10 @@ GetDist <- function(path.to.data, species){
   require(rgdal)
   full <- readOGR(dsn = file.path(paste0(path.to.data,"/MAMMTERR")),
                   layer = "Mammals_Terrestrial")
+  out <- list()
   for(i in 1:length(species)){
     if(species[i] %in% full$BINOMIAL){
-      assign(species[i], full[full$BINOMIAL %in% species[i],], envir = .GlobalEnv)
+      out[[i]] <- full[full$BINOMIAL %in% species[i],]
     }else{
       cat(paste0(species[i])," was not found in the data set. Was there a
           spelling error by chance?")

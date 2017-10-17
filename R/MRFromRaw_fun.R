@@ -18,8 +18,9 @@
 #' @details \code{MRFromRaw} uses the \code{\link[mixtools]{spEMsymloc}} method
 #' to preform semi-parimetric fitting of data using the first and third
 #' quantiles as priors for stocastic process.
+#' @export
 MRFromRaw <- function(x, sp){
-  require(dplyr);require(mixtools)
+  require(dplyr);
   '%!in%' <- function(x,y)!('%in%'(x,y))
   if(sp %!in% levels(x$species)){
     cat(paste0(sp," is not found within ", x, " please try again."))
