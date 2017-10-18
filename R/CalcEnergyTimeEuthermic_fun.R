@@ -13,7 +13,7 @@
 #' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyCool}}
 #'
-#' @example ExampleScripts/CalEnergyTimeEuthermic_ex.R
+#' @example ExampleScripts/CalcEnergyTimeEuthermic_ex.R
 #' @export
 CalcEnergyTimeEuthermic <- function(Ta, bat.params){
   with(bat.params,{

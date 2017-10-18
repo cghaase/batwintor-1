@@ -6,7 +6,7 @@
 #' @param Ta ambient temperature
 #' @param bat.params list of parameters output from \code{\link{BatLoad}}
 #'
-#' @examples ExampleScripts/CalcArousalTime_ex.R
+#' @example ExampleScripts/CalcArousalTime_ex.R
 #'
 #' @family Arousal Functions
 #'

@@ -10,10 +10,11 @@
 #' @import raster ggplot2
 #' @importFrom deSolve lsoda
 #' @importFrom data.table data.table rbindlist
-#' @importFrom dplyr %>% mutate filter
+#' @importFrom dplyr %>% mutate_ filter_ summarise_ ungroup group_by_
 #' @importFrom mixtools spEMsymloc
 #' @importFrom graphics par mtext title
 #' @importFrom grDevices colorRampPalette dev.print dev.off
 #' @importFrom stats median
+#' @importFrom rgdal readOGR
 #' @importFrom utils data read.csv
 NULL

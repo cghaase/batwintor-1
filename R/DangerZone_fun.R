@@ -20,12 +20,12 @@
 #' @export
 
 
-DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
+DangerZone <-function(mod.df, species.option="", save.name=NULL){
    mod.dif <- mod.df %>%
-     dplyr::group_by(Ta, humidity) %>%
-     dplyr::summarise(max.null = max(time*surv.null),max.inf = max(time*surv.inf)) %>%
-     dplyr::mutate(diff = (max.inf - max.null)/(24*30)) %>%
-    ungroup %>% data.table
+     group_by_(~Ta, ~humidity) %>%
+     summarise_(max.null = ~max(time*surv.null),max.inf = ~max(time*surv.inf)) %>%
+     mutate_(diff = ~(max.inf - max.null)/(24*30)) %>%
+     ungroup %>% data.table
 
   zzg <- akima::interp(mod.dif$Ta, # T # can use interp.loess or interp function instead for regular spaced data
                   mod.dif$humidity, # H
@@ -48,7 +48,7 @@ DangerZone <-function(mod.df, speciesOption="", save.name=NULL){
   mtext("% humidity",side=2,outer=T,cex=1.5)
   mtext(tlab,side=1,outer=T,cex=1.5)
   mtext("Decreased survival time (Months)",side=4,outer=T,line=1,cex=1.5)
-  key <- paste0("Hibernacula danger zone for ",speciesOption)
+  key <- paste0("Hibernacula danger zone for ",species.option)
   title(key, cex = 2)
   par(adj=0)
 

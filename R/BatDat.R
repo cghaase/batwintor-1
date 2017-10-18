@@ -38,3 +38,4 @@
 #' @seealso data("mylu.params"), data("fung.params")
 #'
 #' @references Haymen et al. 2016; Menzies et al. 2016
+"bat.params"

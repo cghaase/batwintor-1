@@ -9,7 +9,7 @@
 #'
 #' @return Time in hours.
 #'
-#' @examples ExampleScripts/CalcCoolTime_ex.R
+#' @example ExampleScripts/CalcCoolTime_ex.R
 #'
 #' @references McKechnie & Wolf 2004 equation 3
 #'

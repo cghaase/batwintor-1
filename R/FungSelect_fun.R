@@ -25,9 +25,10 @@
 #' \strong{beta3}: temperature dependant hourly rate shape parameter
 #'
 #' @return Returns a named list of fungal growth scaling parameters
+#' @example ExampleScripts/FungSelect_ex.R
 #' @seealso \code{\link{FungLoad}}
 #' @export
 FungSelect <- function(choose){
-  data(batwintor::fung.params)
+  data("fung.params")
   as.list(fung.params[choose,])
 }

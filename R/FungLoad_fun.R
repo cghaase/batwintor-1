@@ -1,8 +1,8 @@
 #' Load parameter sets for fungal growth
 #'
-#' \code{FungLoad} Loads fungal growth parameters and sets to selected option.
+#' \code{FungLoad} Loads fungal growth parameters from file and sets to selected option.
 #'
-#' @param path.to.params file path to the parameter files (with "/")
+#' @param path.to.params file path to the parameter files (without trailing "/")
 #' @param growth.option fungal growth parameters see \strong{Details}
 #'
 #' @details Growth parameters are either: "Chaturvedi" (faster growth) from
@@ -26,9 +26,9 @@
 #' @return Returns a named list of fungal growth scaling parameters
 #'
 #' @example ExampleScripts/FungLoad_ex.R
-#'
+#' @export
 FungLoad <- function(path.to.params, growth.option){
-  rate.pars <- read.csv(paste0(path.to.params,"rate.parms.csv"))
+  rate.pars <- read.csv(file.path(path.to.params,"rate.parms.csv"))
   if(growth.option%in%names(rate.pars)){
     r.pset <- subset(rate.pars, select = c("pars", growth.option))
   }else{

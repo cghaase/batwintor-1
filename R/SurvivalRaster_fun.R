@@ -5,7 +5,7 @@
 #' hibernation without infection, with infection and the difference between the
 #' two.
 #'
-#' @param mod.df results from \code{\link{DynamicEnegryPd}}
+#' @param mod.df results from \code{\link[batwintor]{DynamicEnegryPd}}
 #' @param hum.rast raster of humidity
 #' @param temp.rast raster of temperature values either in Kevil or degrees
 #' Celcius
@@ -18,7 +18,7 @@
 #'
 #' @note humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
-#
+#' @export
 
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
 #  require(raster);

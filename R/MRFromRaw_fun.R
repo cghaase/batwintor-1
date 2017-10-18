@@ -4,8 +4,9 @@
 #' parametric metaboic estimates.
 #'
 #' @param x a dataframe
-#' @param species species name or code (as a colname within \code{x})
-#' @return \code{MRFromRaw} returns an list of class \code{MRFromRaw} with the
+#' @param species.option species name or code (as a colname within \code{x})
+#' @return \code{MRFromRaw} returns an list of class
+#' \code{MRFromRaw} with the
 #' following items:
 #' \item{df}{
 #' A dataframe filled with adjusted estimates of a species resting
@@ -19,21 +20,17 @@
 #' to preform semi-parimetric fitting of data using the first and third
 #' quantiles as priors for stocastic process.
 #' @export
-MRFromRaw <- function(x, sp){
-  require(dplyr);
-  '%!in%' <- function(x,y)!('%in%'(x,y))
-  if(sp %!in% levels(x$species)){
-    cat(paste0(sp," is not found within ", x, " please try again."))
+MRFromRaw <- function(x, species.option){
+  if(species.option %!in% levels(x$"species")){
+    cat(paste0(species.option," is not found within ", quo(x), " please try again."))
   }
-  sp.df <- x %>%
-    filter(species == sp)
-  temp <- levels(sp.df$Ta)
+  sp.df <- filter(x, x$"species" == species.option)
+  temp <- levels(as.factor(sp.df$Ta))
   sp.x.temp <- data.frame(matrix(nrow = length(temp), ncol = 4))
   names(sp.x.temp) <- c("Ta", "MR", "mass", "n")
   sp.l <- list()
   for(i in 1:length(temp)){
-    sp.df.t <- sp.df %>%
-      filter(Ta == temp[i])
+    sp.df.t <- filter(sp.df, sp.df$"Ta" == temp[i])
     sp.spEM <- spEMsymloc(sp.df.t$VO2.ml.h.g, mu0=quantile(sp.df.t$VO2.ml.h.g,
                                                            c(.25,.75)),stochastic=TRUE)
     sp.x.temp[i,] <- c(temp[i], sp.spEM$muhat[1], mean(sp.df.t$mass.in),

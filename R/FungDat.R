@@ -15,3 +15,4 @@
 #' reach maximal values at saturation.
 #'
 #' @references See Haymen et al. 2016 for fitting details
+"fung.params"

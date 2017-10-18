@@ -1,4 +1,10 @@
 ##ScaleFungalGrowthRate
 data("fung.params")
 fung.param <- FungSelect("Verant")
-ScaleFungalGrowthRate(pct.rh = 98, fung.params = fung.param)
+
+rh <- 1:100
+
+r <- ScaleFungalGrowthRate(pct.rh = rh, fung.params = fung.param)
+
+plot(rh, r, xlab = "Relative humidity (%)", ylab = "Growth Rate",
+     main = "ScaledFungalGrowthRate")

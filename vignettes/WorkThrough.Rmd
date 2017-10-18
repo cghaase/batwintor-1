@@ -23,9 +23,8 @@ The raw data for this analysis is available through ([via](https://www.dropbox.c
 ```{r}
 # library(devtools)
 # install_github("cReedHranac/batwintor")
-library(batwintor)
+library(batwintor);library(data.table);library(dplyr)
 
-library(dplyr, warn.conflicts = F)
 # dat.dirty <- read.csv("~/Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
 dat.dirty <- read.csv("D:/Dropbox/ShareDocs/Creston Respirometry Raw Data - ALL.csv")
 dat <- tbl_df(dat.dirty)
@@ -37,20 +36,20 @@ dat$Ta <- as.factor(dat$Ta)
 Now that the data it in it's always a good idea to visualize some of it and make sure that what you think is going in, actually is. Models are only ever as good as the data that you put into them.
 
 ```{r, fig.show='hold'}
-myca <- filter(dat, species == "MYCA")
+myca <- filter(dat, dat$species == "MYCA")
 
-myyu <- filter(dat, species == "MYYU")
+myyu <- filter(dat, dat$species == "MYYU")
 
-hist(myca$mass.in);hist(myyu$mass.in)
+# hist(myca$mass.in);hist(myyu$mass.in)
 ```
 
 Those look close enough to normal, and indeed if you run normality tests `shapiro.test()` they are. Another very important parameter is the actual metabolic rate (MR) which is labeled in `dat` as `VO2.ml.h.g`.
 
 ```{r, fig.show='hold'}
-myca.6 <- filter(myca, Ta == 6) # For trials conducted at 6 degrees
-myca.2 <- filter(myca, Ta == 2) # For trials conducted at 2 degrees
-hist(myca.6$VO2.ml.h.g)
-hist(myca.2$VO2.ml.h.g)
+myca.6 <- myca %>% filter_( "Ta" == 6) # For trials conducted at 6 degrees
+myca.2 <- myca %>% filter_( "Ta" == 2) # For trials conducted at 2 degrees
+# hist(myca.6$VO2.ml.h.g)
+# hist(myca.2$VO2.ml.h.g)
 ```
 
 As you can see the trials at 6 degrees look pretty normal, however the trials at 2 degrees seem to have two clusters suggesting that not all of the bats fully thermoconformed implying that there may be some outliers in our data. To handle this we use the `MRFromRaw` function which fits semi-parametric models using the `mixtools` package and from that we can visualize all of our temperature conditions, as well as letting the function pull out the resting metabolic rate (RMR) estimate, the minimum torpor metabolic rate (TMRmin) estimate, what temperature that rate was reached, and the mass estimate. These parameters will be used throughout the rest of the modeling process.

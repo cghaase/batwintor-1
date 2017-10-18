@@ -4,12 +4,11 @@
 #' energy consumed under specified environmental conditions.
 #'
 #' @param env.df dataframe conataing range of env conditions
-#' @param inf infection status (\code{TRUE} or \code{FALSE})
-#' @param bat.params parameters returned by \code{\link{BatLoad}}
-#' @param fung.params parameters returned by \code{\link{FungLoad}})
+#' @param bat.params  parameters returned by \code{\link[pkg:batwintor]{BatLoad}}
+#' @param fung.params parameters returned by \code{\link[pkg:batwintor]{FungLoad}})
 #'
 #' @details TODO
-#' @seealso \code{\link{DetModel}}
+#' @seealso \code{\link[pkg:batwintor]{DetModel}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
 #' @export
 DynamicEnergyPd <- function(env.df, bat.params, fung.params){

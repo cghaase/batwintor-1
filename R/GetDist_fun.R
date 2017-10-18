@@ -17,9 +17,9 @@
 #' to fix in the future.
 #'
 #' #@example TODO? is it needed
+#' @export
 GetDist <- function(path.to.data, species){
-  require(rgdal)
-  full <- readOGR(dsn = file.path(paste0(path.to.data,"/MAMMTERR")),
+  full <- readOGR(dsn = file.path(file.path(path.to.data,"/MAMMTERR")),
                   layer = "Mammals_Terrestrial")
   out <- list()
   for(i in 1:length(species)){

@@ -3,18 +3,20 @@
 #' \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} and
 #' adds shapes of North America.
 #'
-#' @param surv.raster return product from \code{\link{SurvivalRaster}}
+#' @param surv.stk raster result stack from \code{\link[pkg:batwintor]{SurvivalRaster}}
+#' @param WNS logical. Should bats have WNS
 #' @param dist.map shapefile representing the distribution you wish to map the
 #' results accross (generally speaking the entire distribution of the species)
-#' @param key you can add a key to the figure for easy multi figure assemblage
+#' @param nights a raster layer reprensenting the length of winter measured in nigths
 #'
 #' @return returns a map of North America in which the distribution supplied
 #' is filled in with the results from the model run.
 #'
 #' @note This function will be removed/ remodeled with the next version
+#' @export
 
 SurvPlotter <- function(surv.stk, WNS, dist.map,
-                        nights, key=NA){
+                        nights){
   ###Function for plotting the survival raster @ contiental N. America scale
   ##Arguments:
   ## surv.rast <- Output from survivalRas
@@ -61,7 +63,6 @@ SurvPlotter <- function(surv.stk, WNS, dist.map,
     panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                     colour = "white")
   )
-  #geom_text(data = NULL, x = -170, y = 75, label = key))
 
   return(x <- g.spec + bkg)
 }

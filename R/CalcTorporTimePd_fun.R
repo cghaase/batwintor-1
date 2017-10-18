@@ -5,12 +5,15 @@
 #' @param Ta ambient temperature
 #' @param Hd percent humidity
 #' @param SA.type surface area measurement type, either `wing` or `body`
+#' @param areaPd surface area infected by fungus
 #' @param pmass propotion of body mass (in mg) to designate EWL threshold; default is 4.3 percent
-#' @param mod.params list of parameters output from \code{\link{BatLoad}} and \code{\link{FungLoad}}
+#' @param mod.params list of parameters output from \code{\link{BatLoad}}
+#'  and \code{\link{FungLoad}}
 #' @param WNS logical, if TRUE, considers the effect of Pd growth on EWL
 #'
 #' @details TODO
 #' @examples TODO
+#' @export
 CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
                              pmass = 0.043, WNS,mod.params){
   with(mod.params,{
