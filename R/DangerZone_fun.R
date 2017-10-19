@@ -18,8 +18,6 @@
 #'
 #' @examples TODO
 #' @export
-
-
 DangerZone <-function(mod.df, species.option="", save.name=NULL){
    mod.dif <- mod.df %>%
      group_by_(~Ta, ~humidity) %>%

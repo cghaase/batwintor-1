@@ -35,7 +35,7 @@
 #'
 #' All species were given the cooling rate \code{CR} 60 as a good estimation
 #'
-#' @seealso data("mylu.params"), data("fung.params")
+#' @seealso \code{data("mylu.params")}, \code{data("fung.params")}
 #'
 #' @references Haymen et al. 2016; Menzies et al. 2016
 "bat.params"

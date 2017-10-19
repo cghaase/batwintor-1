@@ -1,0 +1,35 @@
+---
+title: "Plotting Walk Though for the Package batwintor"
+author: "C. Reed Hranac"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(dev = 'pdf')
+```
+
+This vignettes was created to showcase the plotting features of batwintor allowing one to visualize the results of modeled hibernation across both theoretical space and geographical space. If you'd see how the data was created please see the `WalkThrough` vignette also available though this package. 
+
+## The data
+The model results are packaged within this package so you can call them by simply
+```{r, message=FALSE}
+library(batwintor);library(data.table)
+data("myca.mod")
+```
+If you'd like to explore the data, or the structure of the data checkout `?myca.mod`
+
+# Plots
+## DangerZone
+One of my favorite plots, partially for the name, but mainly for the way that it allows you to visualize theoretical space is the `DangerZone` plot. 
+```{r}
+DangerZone(myca.mod, species.option = "Myca")
+```
+This plot shows the difference in the maximal length of hibernation between the infected and uninfected bats. The warm colors in the figure show were hibernation is impacted the most, and in this example you can see that it suffers from a ~6 month reduction in maximal length of hibernation in the worst conditions. In conditions more optimal for sustained hibernation those losses in are more in 0-2 month range. This function also has a nice feature were if you supply a file path to the `save.name` argument it will save the output for you.
