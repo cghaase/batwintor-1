@@ -2,7 +2,7 @@
 title: "Work through for *Myotis californicus* and *Myotis yumanensis*"
 author: "C. Reed Hranac"
 date: "`r Sys.Date()`"
-output: pdf_document #rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Work through for *Myotis californicus* and *Myotis yumanensis*}
   %\VignetteEngine{knitr::rmarkdown}

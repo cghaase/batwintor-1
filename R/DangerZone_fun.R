@@ -54,4 +54,5 @@ DangerZone <-function(mod.df, species.option="", save.name=NULL){
     dev.print(width = 600, height = 600, png, paste0(save.name))
     dev.off()
   }
+  return(invisible(NULL))
 }

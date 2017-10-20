@@ -24,7 +24,7 @@ MRFromRaw <- function(x, species.option){
   if(species.option %!in% levels(x$"species")){
     cat(paste0(species.option," is not found within ", quo(x), " please try again."))
   }
-  sp.df <- filter(x, x$"species" == species.option)
+  sp.df <- x[x$species == species.option,]
   temp <- levels(as.factor(sp.df$Ta))
   sp.x.temp <- data.frame(matrix(nrow = length(temp), ncol = 4))
   names(sp.x.temp) <- c("Ta", "MR", "mass", "n")
