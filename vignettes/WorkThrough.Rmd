@@ -69,15 +69,18 @@ An important factor of this mechanistic model is the inclusion of fungal growth 
 fung.ch <- FungSelect("Chaturvedi")
 ```
 ## Model Environment
-In order to run the model we need to create an environmental space across which to model. This can be a major determinate for how long the model runs. The larger the environmental space, and the longer the time of winter, the more model runs are required and that can potentially take a very long time depending upon the computers performance.  
+In order to run the model we need to create an environmental space across which to model. This requires either vecotrs or rasters the describe the the range of humidity and temperature values to run the model across, as well as the resolution of that range. This step can be a major determinate for how long a model run will take. Temperature and humidity ranges extracted from environmental rasters will generally be quite large, and they may extend past conditions that would be biologically relivant (ie. outside of a hibernaculum), however if only range vectors are passed extreme conditions may be excluded.
 ```{r}
 env <- BuildEnv(temp = c(-5,20), hum = c(60,100), range.res = 1)
-twinter <- seq(from = 0, to = 9*24*30*1, by = 24) #Maximum time of winter is 9 months, broken at daily intervals 
-## Model Run
-system.time(
-myca.mod <- DynamicEnergyPd(env, myca.params, fung.ch)  
-)
-
 ```
-## Concluding Remarks
-Over all that didn't take too long, but as either ranges for the variables, or the resolution of the data set increase the calculations can take a decent amount of time so keep that in mind. This concludes this vignette, and these results will be used to continue into the plotting vignette. 
+## Model Run
+The final thing before running the model is to determine the maximal length of winter to run the model accross. In this example we will say 9 month, and create an hourly vecor so we can have good resolution of for the differential equations. This step can be another that changes the the calculation length but it is generally suggested that your `twinter` vecter is at least daily. 
+For the final exampel we will use the built in data set for *Myotis lucifigus* one of the species most heavilly effected by the WNS epidemic. 
+```{r}
+twinter <- seq(from = 0, to = 9*24*30*1, by = 24) #Maximum time of winter is 9 months, broken at daily intervals 
+data("mylu.params")
+system.time(
+mylu.mod <- DynamicEnergyPd(env, mylu.params, fung.ch)  
+)
+```
+This model with the parameters described above benchmarks in at ~359 seconds on run-of-the-mill laptop but will run much faster on most desktops and is generally all the resolution that you'd need however if you want to explore parameter space you may want to keep computational time in mind. 

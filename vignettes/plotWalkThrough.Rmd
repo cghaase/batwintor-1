@@ -22,7 +22,7 @@ This vignettes was created to showcase the plotting features of batwintor allowi
 The model results are packaged within this package so you can call them by simply
 ```{r, message=FALSE}
 library(batwintor);library(data.table)
-data("myca.mod")
+data("mylu.mod")
 ```
 If you'd like to explore the data, or the structure of the data checkout `?myca.mod`
 
@@ -30,6 +30,6 @@ If you'd like to explore the data, or the structure of the data checkout `?myca.
 ## DangerZone
 One of my favorite plots, partially for the name, but mainly for the way that it allows you to visualize theoretical space is the `DangerZone` plot. 
 ```{r, fig.width=7, fig.height=5}
-DangerZone(myca.mod, species.option = "Myca")
+DangerZone(mylu.mod, species.option = "Mylu")
 ```
 This plot shows the difference in the maximal length of hibernation between the infected and uninfected bats. The warm colors in the figure show were hibernation is impacted the most, and in this example you can see that it suffers from a ~6 month reduction in maximal length of hibernation in the worst conditions. In conditions more optimal for sustained hibernation those losses in are more in 0-2 month range. This function also has a nice feature were if you supply a file path to the `save.name` argument it will save the output for you.

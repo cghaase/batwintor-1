@@ -1,6 +1,5 @@
 # utility functions
 
-
 # Not in operator
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
