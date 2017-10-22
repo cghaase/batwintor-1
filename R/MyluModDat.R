@@ -27,6 +27,7 @@
 #' and uninfected animal.
 #' @seealso \code{data("mylu.params")}, \code{data("fung.params")}, \code{data("bat.params")}
 "mylu.mod"
+'%!in%' <- function(x,y)!('%in%'(x,y))
 if("mylu.mod.rda" %!in% list.files("data/")){
   mylu.mod <- fread("raw_data/myluMod.csv")
   devtools::use_data(mylu.mod, overwrite = T)
