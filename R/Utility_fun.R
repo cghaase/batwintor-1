@@ -8,7 +8,7 @@
 
 #' @import raster ggplot2
 #' @importFrom deSolve lsoda
-#' @importFrom data.table data.table rbindlist
+#' @importFrom data.table data.table rbindlist fread
 #' @importFrom dplyr %>% mutate_ filter_ summarise_ ungroup group_by_
 #' @importFrom mixtools spEMsymloc
 #' @importFrom graphics par mtext title

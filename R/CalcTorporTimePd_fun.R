@@ -25,11 +25,11 @@ CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
     b  = 17.502
     c  = 240.97
     GC = 0.0821           #universal gas constant
-    #k  = 10               #Meeh factor
+    k  = 10               #Meeh factor
     Q=CalcQ(Ta)
-    #mrPd = 1.4
-    #aPd = 0.21
-    #rPd = 1.525
+    mrPd = 1.4
+    aPd = 0.21
+    rPd = 1.525
 
     #Caculate surface area
     SA.body <-  k * (mass^(2/3))
