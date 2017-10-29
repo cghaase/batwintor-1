@@ -26,5 +26,8 @@ between infected and uninfected bats accross the environmental space.
 \details{
 Function will be updated in the future to include more plotting
 parameter accessability, and potentially a raster method as well.
-TODO
+\url{https://www.youtube.com/watch?v=kyAn3fSs8_A}
+}
+\author{
+L. Cain, K. Loggins
 }
