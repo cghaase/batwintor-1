@@ -2,7 +2,7 @@
 #'
 #' \code{DiffHist} Two hisograms are created and overlayed over one another.
 #' The histograms represent the survival capasitites obtained through
-#' \code{\link[batwintor]{DynamicEnegryPd}} across the distribution. one will contain the
+#' \code{\link{DynamicEnergyPd}} across the distribution. one will contain the
 #' results of null hibernation, and the other infection with WNS.
 #' @return returns two histograms overlaying one another with median estimations
 #'

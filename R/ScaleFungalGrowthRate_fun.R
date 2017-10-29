@@ -3,7 +3,7 @@
 #' \code{ScaleFungalGrowthRate} scales fungal growth rate with relative
 #' humidity.
 #'
-#' @param fung.params list of parameters passed through \code{\link{LoadFung}}
+#' @param fung.params list of parameters passed through \code{\link{FungLoad}}
 #' @param pct.rh precent relative humidity
 #' @return returns scaled humidity scaled fungal growth rate
 #'

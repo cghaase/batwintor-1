@@ -16,7 +16,6 @@
 #' parameter accessability, and potentially a raster method as well.
 #' TODO
 #'
-#' @examples TODO
 #' @export
 DangerZone <-function(mod.df, species.option="", save.name=NULL){
    mod.dif <- mod.df %>%

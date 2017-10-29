@@ -8,13 +8,13 @@
 #' @param species a character vector of the species to be updated. This should
 #' be a row name from the \code{bat.params}
 #' @param params a dataframe of metabolic parameters (generally that returned
-#' with \code{\link{data("bat.params")}})
+#' with \code{\link{bat.params}})
 #'
 #' @details Generally speaking not all of the metabolic parameters documented
-#' in \code{\link{data("bat.params")}}) are updated at once, and therefore
+#' in \code{\link{bat.params}} are updated at once, and therefore
 #' only those that have new estimates are updated.
 #'
-#' @seealso \code{\link{data("bat.params")}}), \code{\link{MRFromRaw}},
+#' @seealso \code{\link{bat.params}}, \code{\link{MRFromRaw}},
 #' \code{\link{BatLoad}}
 #' @example ExampleScripts/MRUpdate_ex.R
 #' @export

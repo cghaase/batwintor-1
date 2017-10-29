@@ -11,7 +11,7 @@
 #' @details The IUCN MAMMTERR data set includes distribution shapefiles for
 #' most terrestial mammals however they are not without their flaws so use
 #' accordingly. Data can be sourced from
-#' \link{\url{http://www.iucnredlist.org/technical-documents/spatial-data}}
+#' \url{http://www.iucnredlist.org/technical-documents/spatial-data}
 #'
 #' @note This may take a while as the IUCN database is large. May be a point
 #' to fix in the future.

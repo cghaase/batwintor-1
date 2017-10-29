@@ -11,8 +11,6 @@
 #'  and \code{\link{FungLoad}}
 #' @param WNS logical, if TRUE, considers the effect of Pd growth on EWL
 #'
-#' @details TODO
-#' @examples TODO
 #' @export
 CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
                              pmass = 0.043, WNS,mod.params){
