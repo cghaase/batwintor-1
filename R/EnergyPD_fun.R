@@ -8,13 +8,10 @@
 #' @param twinter length of winter
 #' @param Hd humidity
 #' @param WNS logical, should the bats have WNS?
-#' @param bat.params parameters returned by \code{\link{LoadBat}}
-#' @param fung.params parameters returned by \code{\link{LoadFung}}
+#' @param bat.params parameters returned by \code{\link{BatLoad}}
+#' @param fung.params parameters returned by \code{\link{FungLoad}}
 #'
-#' @details TODO
-#' Does this function need to exist?
 #' @export
-#' @examples TODO
 EnergyPd <- function(Ta, twinter, Hd, WNS, bat.params, fung.params){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
