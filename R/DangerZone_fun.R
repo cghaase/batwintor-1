@@ -16,6 +16,8 @@
 #' parameter accessability, and potentially a raster method as well.
 #' \url{https://www.youtube.com/watch?v=kyAn3fSs8_A}
 #' @author L. Cain, K. Loggins
+#' @family PlotFunctions
+#' @seealso \code{\link{MapFigs}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}}
 #' @export
 DangerZone <-function(mod.df, species.option="", save.name=NULL){
    mod.dif <- mod.df %>%
@@ -50,7 +52,7 @@ DangerZone <-function(mod.df, species.option="", save.name=NULL){
   par(adj=0)
 
   if(!is.null(save.name)){
-    dev.print(width = 600, height = 600, png, paste0(save.name))
+    dev.print(width = 600, height = 600, device = png, paste0(save.name, ".png"))
     dev.off()
   }
   return(invisible(NULL))

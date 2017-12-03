@@ -1,6 +1,6 @@
 #' Calculate maximum time in torpor
 #'
-#' \code{calcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first
+#' \code{CalcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first
 #'
 #' @param Ta ambient temperature
 #' @param Hd percent humidity
@@ -12,12 +12,12 @@
 #' @param WNS logical, if TRUE, considers the effect of Pd growth on EWL
 #'
 #' @export
-CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
-                             pmass = 0.043, WNS,mod.params){
-  with(mod.params,{
 
-    #Known constants
-    pO2     = 0.2095      #volumetri proportion of oxygen in air
+CalcTorporTimePd <- function(Ta, pct.rh, areaPd,pmass = 0.043, WNS, mod.params = c(fung.params, bat.params)){
+  with(mod.params,{
+    Hd = pcr.rh
+
+    pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
     b  = 17.502
@@ -30,9 +30,7 @@ CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
     rPd = 1.525
 
     #Caculate surface area
-    SA.body <-  k * (mass^(2/3))
-    SA.wing <- (k * (mass^(2/3))) + wing.area
-    SA <- ifelse(SA.type == "wing", SA.wing, SA.body)
+    SA <- k * (mass^(2/3))
 
     #Calculate water vapor pressure differential
     WVP.skin <- ifelse(Ta > Ttormin,
@@ -63,7 +61,8 @@ CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- (mass*1000)*pmass
+    threshold <- ifelse(is.null(fat),(0.7*mass*1000)*pmass, fat*1000*pmass)
+
 
     #Calculate how long until threshold is reached
     EWL.time <- threshold/TEWL
@@ -76,31 +75,31 @@ CalcTorporTimePd <- function(Ta, Hd, SA.type = c("wing", "body"), areaPd,
     if(WNS == FALSE){
       return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
     } else if(WNS == TRUE){
-          p.areaPd = areaPd/SA*100                   #proportion of wing surface area covered in Pd growth
+      p.areaPd = areaPd/SA*100                   #proportion of wing surface area covered in Pd growth
 
-          #Calculate cutaneous EWL (mg/hr)
-          cEWL.pd <- SA * ((rEWL*rPd)) * dWVP
+      #Calculate cutaneous EWL (mg/hr)
+      cEWL.pd <- SA * ((rEWL*rPd)) * dWVP
 
-          #Calculate pulmonary EWL (mg/hr) with increased TMR?
-          vol.pd  <- (TMRmin * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
-          pEWL.pd <- vol.pd * sat.def
+      #Calculate pulmonary EWL (mg/hr) with increased TMR?
+      vol.pd  <- (TMRmin * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+      pEWL.pd <- vol.pd * sat.def
 
-          #Calculate total EWL (TEWL; mg/hr)
-          TEWL.pd <- cEWL.pd + pEWL.pd
+      #Calculate total EWL (TEWL; mg/hr)
+      TEWL.pd <- cEWL.pd + pEWL.pd
 
-          #In Liam's paper, the relationship between EWL and Pd growth was EWL = (p.areaPd*0.21) + 12.80
-          #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8.
-          #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
-          TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
+      #In Liam's paper, the relationship between EWL and Pd growth was EWL = (p.areaPd*0.21) + 12.80
+      #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8.
+      #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
+      TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
 
-          Pd.time <- threshold/TEWL.pd
+      Pd.time <- threshold/TEWL.pd
 
-          #Calculate torpor time as a function of Ta (without EWL) with increased TMR
-          Ta.time.pd <- ifelse(Ta > Ttormin,
-                            ttormax/Q^((Ta-Ttormin)/10),
-                            ttormax/(1+(Ttormin-Ta)*Ct/TMRmin*mrPd))
+      #Calculate torpor time as a function of Ta (without EWL) with increased TMR
+      Ta.time.pd <- ifelse(Ta > Ttormin,
+                           ttormax/Q^((Ta-Ttormin)/10),
+                           ttormax/(1+(Ttormin-Ta)*Ct/TMRmin*mrPd))
 
-          return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))
+      return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))
     }
   })
 }

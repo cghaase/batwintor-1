@@ -28,5 +28,10 @@ Strip figures are a combination of \code{\link{SurvPlotter}} and
 the resutlts for a single species in a single function
 }
 \seealso{
-\code{\link{SurvivalRaster}}, \code{\link{SurvPlotter}}, \code{\link{DiffHist}}
+\code{\link{SurvivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}};
+\code{\link{DangerZone}}
+
+Other PlotFunctions: \code{\link{DangerZone}},
+  \code{\link{DiffHist}}, \code{\link{SurvPlotter}},
+  \code{\link{SurvivalRaster}}
 }

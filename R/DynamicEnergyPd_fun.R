@@ -12,7 +12,6 @@
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
 #' @export
 DynamicEnergyPd <- function(env.df, bat.params, fung.params){
-  require(data.table); library(dplyr)
   out <- list()
   mod.params <- as.list(c(bat.params, fung.params))
     with(mod.params,{
@@ -99,8 +98,8 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                     n.prec.ar = out[[2]]$prec.ar)
     # Create columns with survival outcomes  based on avaliable fat reserves
     out.fin <- out.dt %>%
-      mutate(surv.inf = ifelse(mass*.3 >= g.fat.consumed,1,0)) %>%
-      mutate(surv.null = ifelse(mass*.3 >= n.g.fat.consumed,1,0))
+      mutate_(surv.inf = ifelse(~(mass*.3) >= ~g.fat.consumed,1,0)) %>%
+      mutate_(surv.null = ifelse(~(mass*.3) >= ~n.g.fat.consumed,1,0))
       return(data.table(out.fin))
     })
 }

@@ -34,3 +34,10 @@ results of null hibernation, and the other infection with WNS.
 This function will likely go the way of the dodo with the next model
 updates and build because this is unnecessairy convaluted.
 }
+\seealso{
+\code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}}
+
+Other PlotFunctions: \code{\link{DangerZone}},
+  \code{\link{MapFigs}}, \code{\link{SurvPlotter}},
+  \code{\link{SurvivalRaster}}
+}

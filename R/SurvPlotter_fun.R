@@ -3,7 +3,7 @@
 #' \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} and
 #' adds shapes of North America.
 #'
-#' @param surv.stk raster result stack from \code{\link[pkg:batwintor]{SurvivalRaster}}
+#' @param surv.stk raster result stack from \code{\link{SurvivalRaster}}
 #' @param WNS logical. Should bats have WNS
 #' @param dist.map shapefile representing the distribution you wish to map the
 #' results accross (generally speaking the entire distribution of the species)
@@ -13,24 +13,19 @@
 #' is filled in with the results from the model run.
 #'
 #' @note This function will be removed/ remodeled with the next version
+#' @family PlotFunctions
+#' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
+#' \code{\link{DiffHist}}
 #' @export
 
-SurvPlotter <- function(surv.stk, WNS, dist.map,
-                        nights){
-  ###Function for plotting the survival raster @ contiental N. America scale
-  ##Arguments:
-  ## surv.rast <- Output from survivalRas
-  ## dist.map <- Shapfile distrubution of species selected
-  require(PBSmapping);require(ggplot2)
-  require(maptools); require(plyr)
-
+SurvPlotter <- function(surv.stk, WNS, dist.map, nights){
   ifelse(WNS == T, #WNS Flag
          spec.df <- SurvDF(surv.stk$"max.inf",dist.map,nights),
          spec.df <- SurvDF(surv.stk$"max.null",dist.map,nights))
 
   worldmap = map_data("world")
   setnames(worldmap, c("X","Y","PID","POS","region","subregion"))
-  worldmap = clipPolys(worldmap,
+  worldmap = PBSmapping::clipPolys(worldmap,
                        xlim=extent(surv.stk)[1:2],
                        ylim=extent(surv.stk)[3:4],
                        keepExtra=TRUE)

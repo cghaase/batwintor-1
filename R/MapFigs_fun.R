@@ -14,7 +14,8 @@
 #' the resutlts for a single species in a single function
 #'
 #' @family PlotFunctions
-#' @seealso \code{\link{SurvivalRaster}}, \code{\link{SurvPlotter}}, \code{\link{DiffHist}}
+#' @seealso \code{\link{SurvivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}};
+#' \code{\link{DangerZone}}
 #' @export
 MapFigs <- function(surv.stk, dist.map, nights, species.name, save.name){
   ##function for creating super cool strip plots of the SurvivalMaps and Diff hist all in one.
@@ -22,7 +23,7 @@ MapFigs <- function(surv.stk, dist.map, nights, species.name, save.name){
   yes.inf <- SurvPlotter(surv.stk = surv.stk, WNS = T, dist.map = dist.map, nights = nights)
   sp.diff <- DiffHist(surv.stk = surv.stk, dist.map = dist.map, species.name = species.name, nights = nights)
 
-  if(save.name != NULL){
+  if(!is.null(save.name)){
     pdf(save.name ,width = 12, height = 4)
     grid.arrange(no.inf, yes.inf, sp.diff,
                ncol=3)

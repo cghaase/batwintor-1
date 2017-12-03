@@ -30,3 +30,11 @@ layer.
 humidity rasters in the original Hayman et al. 2016 represent the average
 of the average humidities for the months Jan-Mar.
 }
+\seealso{
+\code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}};
+\code{\link{DiffHist}}
+
+Other PlotFunctions: \code{\link{DangerZone}},
+  \code{\link{DiffHist}}, \code{\link{MapFigs}},
+  \code{\link{SurvPlotter}}
+}

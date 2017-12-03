@@ -28,6 +28,13 @@ Function will be updated in the future to include more plotting
 parameter accessability, and potentially a raster method as well.
 \url{https://www.youtube.com/watch?v=kyAn3fSs8_A}
 }
+\seealso{
+\code{\link{MapFigs}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}}
+
+Other PlotFunctions: \code{\link{DiffHist}},
+  \code{\link{MapFigs}}, \code{\link{SurvPlotter}},
+  \code{\link{SurvivalRaster}}
+}
 \author{
 L. Cain, K. Loggins
 }

@@ -18,24 +18,24 @@
 #'
 #' @note humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
+#' @family PlotFunctions
+#' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}};
+#' \code{\link{DiffHist}}
 #' @export
 
 SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
-#  require(raster);
-  require(dplyr)
-
-  #Raster modifications
+  #Raster modifications for Kelvin temperatures
   if(summary(temp.rast)[1] > 200){
     temp.c <- temp.rast - 273
   } else{
     temp.c <- temp.rast
   }
 
+  #Creating output raster dimensions
   out <- raster(hum.rast); values(out) <- NA
   out.s <- stack(out,out,out); names(out.s) <- c("max.inf", "max.null", "diff")
 
   #Extract data from rasters  to matrix for speed
-  # pull data out of the raster
   hum <- as.matrix(hum.rast, nrow = nrow(hum.rast), ncol = ncol(hum.rast))
   temp <- as.matrix(temp.c, nrow = nrow(temp.c), ncol = ncol(temp.c))
 
@@ -65,11 +65,11 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     lut[as.character(d$Ta), as.character(d$humidity),] <- c(d$max.inf,
                                                             d$max.null, d$diff)
   }
-  #####
 
-  # Find the closest item in the vector y to x.
-  # NOTE: Assumes that y is increasing, equi-spaced vector
+  ####Find closest####
   find_closest <- function(x, y) {
+    # Find the closest item in the vector y to x.
+    # NOTE: Assumes that y is increasing, equi-spaced vector
     dy <- (y[length(y)] - y[1]) / (length(y)-1)
     wch <- round((x - y[1]) / dy + 1)
     # check the range.

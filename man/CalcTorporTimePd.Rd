@@ -4,15 +4,11 @@
 \alias{CalcTorporTimePd}
 \title{Calculate maximum time in torpor}
 \usage{
-CalcTorporTimePd(Ta, Hd, SA.type = c("wing", "body"), areaPd, pmass = 0.043,
-  WNS, mod.params)
+CalcTorporTimePd(Ta, pct.rh, areaPd, pmass = 0.043, WNS,
+  mod.params = c(fung.params, bat.params))
 }
 \arguments{
 \item{Ta}{ambient temperature}
-
-\item{Hd}{percent humidity}
-
-\item{SA.type}{surface area measurement type, either `wing` or `body`}
 
 \item{areaPd}{surface area infected by fungus}
 
@@ -22,7 +18,11 @@ CalcTorporTimePd(Ta, Hd, SA.type = c("wing", "body"), areaPd, pmass = 0.043,
 
 \item{mod.params}{list of parameters output from \code{\link{BatLoad}}
 and \code{\link{FungLoad}}}
+
+\item{Hd}{percent humidity}
+
+\item{SA.type}{surface area measurement type, either `wing` or `body`}
 }
 \description{
-\code{calcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first
+\code{CalcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first
 }

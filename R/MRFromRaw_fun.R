@@ -30,7 +30,7 @@ MRFromRaw <- function(x, species.option){
   names(sp.x.temp) <- c("Ta", "MR", "mass", "n")
   sp.l <- list()
   for(i in 1:length(temp)){
-    sp.df.t <- filter(sp.df, sp.df$"Ta" == temp[i])
+    sp.df.t <- filter_(sp.df, ~Ta == temp[i])
     sp.spEM <- spEMsymloc(sp.df.t$VO2.ml.h.g, mu0=quantile(sp.df.t$VO2.ml.h.g,
                                                            c(.25,.75)),stochastic=TRUE)
     sp.x.temp[i,] <- c(temp[i], sp.spEM$muhat[1], mean(sp.df.t$mass.in),

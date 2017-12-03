@@ -17,20 +17,12 @@
 #'
 #' @details This function will likely go the way of the dodo with the next model
 #' updates and build because this is unnecessairy convaluted.
+#' @family PlotFunctions
+#' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}}
 #' @export
 DiffHist <- function(surv.stk, dist.map, species.name, nights, save.name=NULL, ...){
-  ###Function for creating overlapping histograms of survival length
-  ##Arguments:
-  ## Comp1.rast <- Output from survivalRas (generally no PD)
-  ## Comp2PD.rast <- Output from survivalRas (generally with PD)
-  ## dist.map <- Shapfile distrubution of species selected
-  ## species.option <- character string for plotting
-
-  ##Comp1 df Gen
   Comp1.df <- SurvDF(surv.stk$"max.null", dist.map, nights = nights)
-  ##Comp2 df Gen
   Comp2.df <- SurvDF(surv.stk$"max.inf", dist.map, nights = nights)
-  #Creating Histograms
   dif.df<-data.frame(Months=c(Comp1.df$Months,Comp2.df$Months),
                      WNS=factor(c(rep(paste0(species.name,"Pre"),nrow(Comp1.df)),
                                   rep(paste0(species.name,"Post"),nrow(Comp2.df)))))

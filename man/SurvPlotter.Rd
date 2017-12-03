@@ -7,7 +7,7 @@
 SurvPlotter(surv.stk, WNS, dist.map, nights)
 }
 \arguments{
-\item{surv.stk}{raster result stack from \code{\link[pkg:batwintor]{SurvivalRaster}}}
+\item{surv.stk}{raster result stack from \code{\link{SurvivalRaster}}}
 
 \item{WNS}{logical. Should bats have WNS}
 
@@ -26,4 +26,12 @@ adds shapes of North America.
 }
 \note{
 This function will be removed/ remodeled with the next version
+}
+\seealso{
+\code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
+\code{\link{DiffHist}}
+
+Other PlotFunctions: \code{\link{DangerZone}},
+  \code{\link{DiffHist}}, \code{\link{MapFigs}},
+  \code{\link{SurvivalRaster}}
 }
