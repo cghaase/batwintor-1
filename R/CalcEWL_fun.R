@@ -9,9 +9,9 @@
 #' @param torpid
 #' @param WNS
 #' @export
-CalcEWL <- function(Ta, pcr.rh, t, areaPd, mod.params = c(fung.params,bat.params), torpid = TRUE, WNS = c(TRUE,FALSE)){
+CalcEWL <- function(Ta, pct.rh, t, areaPd, mod.params = c(fung.params,bat.params), torpid = TRUE, WNS = c(TRUE,FALSE)){
   with(mod.params,{
-    Hd = pcr.rh
+    Hd = pct.rh
 
     #Known constants
     pO2     = 0.2095      #volumetric proportion of oxygen in air
@@ -26,7 +26,7 @@ CalcEWL <- function(Ta, pcr.rh, t, areaPd, mod.params = c(fung.params,bat.params
     rPd = 1.525
 
     #Caculate surface area
-    SA <- SA.body
+    SA <- k*(mass^(2/3))
 
     #Calculate water vapor pressure differential
     if(torpid == TRUE){
