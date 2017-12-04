@@ -61,7 +61,7 @@ CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- (0.55*mass*1000)*pmass
+    threshold <- (pLean*mass*1000)*pmass
 
 
     #Calculate how long until threshold is reached
