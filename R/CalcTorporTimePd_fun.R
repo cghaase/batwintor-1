@@ -5,7 +5,6 @@
 #' @param Ta ambient temperature
 #' @param pct.rh precent humidity
 #' @param areaPd surface area infected by fungus
-#' @param pmass propotion of body mass (in mg) to designate EWL threshold; default is 4.3 percent
 #' @param WNS logical, if TRUE, considers the effect of Pd growth on EWL
 #' @param mod.params list of parameters output from \code{\link{BatLoad}}
 #'  and \code{\link{FungLoad}}
@@ -15,9 +14,9 @@
 CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params, bat.params)){
   with(mod.params,{
     #Define threshold based on infection status
-    ifelse(WNS, pmass <- .043, pmass <- .01)
+    ifelse(WNS, pmass <- .043, pmass <- .007)
 
-    Hd = pcr.rh
+    Hd = pct.rh
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
@@ -62,7 +61,7 @@ CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- ifelse(is.null(fat),(0.7*mass*1000)*pmass, fat*1000*pmass)
+    threshold <- (0.55*mass*1000)*pmass
 
 
     #Calculate how long until threshold is reached

@@ -32,22 +32,25 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           # determine Tb
           Tb <- ifelse(Ttor < Teu, Ttor, Teu)
           # create values that will be fed into the dynamic model
-          values <- c(Tb = Tb, Ttor = Ttor, WNS = inf,
+          values <- c(Tb = Tb, Ttor = Ttor, WNS = inf, Hd= Hd,
                       # Fungal growth area
                       growth = FungalGrowthRate(Tb = Tb, fung.params = mod.params)*
                         ScaleFungalGrowthRate(pct.rh = Hd, fung.params = mod.params),
                       # Energy cost for euthermia
                       Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = mod.params),
+                      # Energy costs for flying during euthermia
+                      Efl = CalcEnergyFlying(Ta = Ta, bat.params = mod.params),
                       # Energy cost for torpor
                       Etor = CalcEnergyTimeTorpid(Ta = Ta, bat.params = mod.params),
                       # Energy cost for arousal from torpor
                       Ear = CalcEnergyArousal(Ta = Ttor, bat.params = mod.params),
                       # Energy cost for cooling from euthermic
                       Ec = CalcEnergyCool(Ta = Ttor, bat.params = mod.params),
-                      mod.params)
+                        mod.params)
           # Call differential equation model
           det.results <- data.table(lsoda(y = c(pT = 1, # Inital values
                                                 pE = 0,
+                                                pFl = 0,
                                                 pAr = 0,
                                                 pC = 0,
                                                 EnergyConsumed = 0,
@@ -76,6 +79,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           # Proportion of time in torpor
           prop.tor <- MaxToCurrent(det.results$pT)
           prop.ar <- MaxToCurrent(det.results$pAr)
+          prop.fl <- MaxToCurrent(det.results$pFl)
           Tb <- Tb
           # Creat dataframe of results for intermediate product
           results <- data.table(Ta = rep(Ta,length(twinter)),
@@ -87,6 +91,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                                       time = det.results$time,
                                       Prop.tor = c(1,prop.tor),
                                       Prop.Ar = c(0,prop.ar),
+                                      Prop.Fl = c(0,prop.fl),
                                       Tb = Tb))
           return(results)
         })
@@ -98,8 +103,8 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                     n.prec.ar = out[[2]]$prec.ar)
     # Create columns with survival outcomes  based on avaliable fat reserves
     out.fin <- out.dt %>%
-      mutate_(surv.inf = ifelse(~(mass*.3) >= ~g.fat.consumed,1,0)) %>%
-      mutate_(surv.null = ifelse(~(mass*.3) >= ~n.g.fat.consumed,1,0))
+      mutate(surv.inf = ifelse(mass*.3 >= g.fat.consumed,1,0)) %>%
+      mutate(surv.null = ifelse(mass*.3 >= n.g.fat.consumed,1,0))
       return(data.table(out.fin))
     })
 }
