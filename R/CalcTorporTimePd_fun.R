@@ -14,8 +14,6 @@
 CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params, bat.params)){
   with(mod.params,{
     #Define threshold based on infection status
-    ifelse(WNS, pmass <- .043, pmass <- .007)
-
     Hd = pct.rh
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
@@ -61,7 +59,7 @@ CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- (0.55*mass*1000)*pmass
+    threshold <- (pLean*mass*1000)*pMass
 
 
     #Calculate how long until threshold is reached
@@ -91,8 +89,8 @@ CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params
       #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8.
       #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
       TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
-
-      Pd.time <- threshold/TEWL.pd
+      threshold.pd <- (pLean*mass*1000)*pMass.i
+      Pd.time <- threshold.pd/TEWL.pd
 
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
       Ta.time.pd <- ifelse(Ta > Ttormin,
