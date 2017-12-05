@@ -20,7 +20,7 @@ DetModel <- function(t,y, params){
                            mod.params = params)
     tar <- CalcArousalTime(Ta = Tb, bat.params = params)
     tc <- CalcCoolTime(Ta = Tb, bat.params = params)
-    tfl <- CalcTimeFlying( p = p, bat.params = params)
+    tfl <- CalcTimeFlying(pFly = pFly, bat.params = params)
     # change in TorporProp (pT)/dt
     dpTdt <- (pE/teu + pAr/tar + pC/tc + pFl/tfl)/4 - pT/ttor
     # change in ArousalProp (pAr)/dt
