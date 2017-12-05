@@ -9,7 +9,7 @@
 #' @import raster ggplot2 methods
 #' @importFrom deSolve lsoda
 #' @importFrom data.table data.table rbindlist fread setnames
-#' @importFrom dplyr %>% mutate_ filter_ summarise_ ungroup group_by_ quo
+#' @importFrom dplyr %>% mutate filter_ summarise_ ungroup group_by_ quo
 #' @importFrom mixtools spEMsymloc
 #' @importFrom graphics par mtext title
 #' @importFrom grDevices colorRampPalette dev.print dev.off png

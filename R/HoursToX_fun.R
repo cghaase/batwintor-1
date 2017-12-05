@@ -32,3 +32,10 @@ prop.to.months <- function(x){
   x*(365/30)
 }
 
+#' \code{day.to.hour}
+#' @param x days to convert
+#' @details general functions for consistant exchange between time units
+#' @export
+day.to.hour <- function(x){
+  x*24
+}
