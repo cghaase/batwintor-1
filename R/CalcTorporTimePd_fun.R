@@ -90,7 +90,7 @@ CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params
       #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
       TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
       threshold.pd <- (pLean*mass*1000)*pMass.i
-      Pd.time <- threshold/TEWL.pd
+      Pd.time <- threshold.pd/TEWL.pd
 
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
       Ta.time.pd <- ifelse(Ta > Ttormin,
