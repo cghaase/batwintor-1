@@ -4,11 +4,24 @@
 \alias{CalcEWL}
 \title{Calculate Evaporative Water Loss}
 \usage{
-CalcEWL(Ta, pcr.rh, t, areaPd, mod.params = c(fung.params, bat.params),
+CalcEWL(Ta, pct.rh, t, areaPd, mod.params = c(fung.params, bat.params),
   torpid = TRUE, WNS = c(TRUE, FALSE))
 }
 \arguments{
+\item{Ta}{ambient temperature (degrees C)}
+
+\item{pct.rh}{precent relative humidity}
+
 \item{t}{time}
+
+\item{areaPd}{area of fungal growth (cm2)}
+
+\item{mod.params}{list of parameters output from \code{\link{BatLoad}}
+and \code{\link{FungLoad}}}
+
+\item{torpid}{logical, if the animal is storpid or not}
+
+\item{WNS}{logical, if the animal is infected with Pd or not}
 }
 \description{
 \code{CalcEWL}

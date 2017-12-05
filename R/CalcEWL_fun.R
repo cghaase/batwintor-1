@@ -1,13 +1,14 @@
 #' Calculate Evaporative Water Loss
 #'
 #' \code{CalcEWL}
-#' @param Ta
-#' @param pcr.rh
+#' @param Ta ambient temperature (degrees C)
+#' @param pct.rh precent relative humidity
 #' @param t time
-#' @param areaPd
-#' @param mod.params
-#' @param torpid
-#' @param WNS
+#' @param areaPd area of fungal growth (cm2)
+#' @param mod.params list of parameters output from \code{\link{BatLoad}}
+#'  and \code{\link{FungLoad}}
+#' @param torpid logical, if the animal is storpid or not
+#' @param WNS logical, if the animal is infected with Pd or not
 #' @export
 CalcEWL <- function(Ta, pct.rh, t, areaPd, mod.params = c(fung.params,bat.params), torpid = TRUE, WNS = c(TRUE,FALSE)){
   with(mod.params,{

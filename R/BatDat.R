@@ -1,27 +1,35 @@
 #' Modeling parameters for 6 species of hibernating bats.
 #'
 #' A dataset containing information regarding morphometrics, euthermic and torpor metabolic rates of
-#' 6 species of hibernating bats.
+#' 12 species of hibernating bats.
 #'
-#' @format a dataset containg 14 measurements for 6 species
+#' @format a dataset containg 22 measurements for 12 species
 #' \describe{
-#'   \item{RMR}{Resting metabolic rate in volume O2 mL/h/g}
-#'   \item{TMRmin}{minimum metabolic rate during torpor in volume O2 mL/h/g}
-#'   \item{Teu}{euthermic temperature in degrees C}
-#'   \item{Tlc}{lower critical temperature in degrees C}
-#'   \item{Ttormin}{Temperature at which TMRmin is achieved in degrees C}
-#'   \item{Ceu}{conductance during euthermic temperatures (TODO units)}
-#'   \item{Ct}{conductance during torpor (TODO units)}
-#'   \item{S}{specific heat of tissue (TODO units)}
-#'   \item{ttormax}{maximal length of time for a bout of torpor in hours}
-#'   \item{tar}{time take to arouse from torpor in hours}
-#'   \item{teu}{time spent euthermic during a bout of torpor in hours}
-#'   \item{mass}{animal mass in grams}
-#'   \item{WR}{warming rate from torpor to euthermic temperature in degrees C/
-#'     hour}
-#'   \item{CR}{cooling rate from euthermic temperature to torpor in degrees C/
-#'     hour}
-#'   }
+#'   \item{mass}{mass of the animal (g)}
+#'   \item{RMR}{resting metabolic rate (volume O2 mL/h/g)}
+#'   \item{TMRmin}{minimum metabolic rate during torpor (volume O2 mL/h/g)}
+#'   \item{Teu}{euthermic temperature  (degrees C)}
+#'   \item{Tlc}{lower critical temperature (degrees C)}
+#'   \item{Ttormin}{Temperature at which TMRmin is achieved (degrees C)}
+#'   \item{Ceu}{conductance during euthermic temperatures (mlO2/g/C)}
+#'   \item{Ct}{conductance during torpor (mlO2/g/C)}
+#'   \item{S}{specific heat of tissue (mlO2/g/C)}
+#'   \item{ttormax}{maximal length of time for a bout of torpor (hours)}
+#'   \item{teu}{time spent euthermic during a bout of torpor (hours)}
+#'   \item{WR}{warming rate from torpor to euthermic temperature degrees (C/hour)}
+#'   \item{CR}{cooling rate from euthermic temperature to torpor degrees (C/hour)}
+#'   \item{rEWL}{rate of evaporative water loss (mg/hr per dWVP per cm2)}
+#'   \item{mrPd}{increased rate of TMRmin dure to fungal infection}
+#'   \item{aPd}{increase in total EWL as a function of fungal growth}
+#'   \item{rPd}{increase in area-specific EWL due to infection}
+#'   \item{pMass.i}{estimated threshold of water loss for arrousal infected bats
+#'   (proportion lean mass)}
+#'   \item{pMass}{estimated threshold of water loss for arrousal in uninfected bats
+#'   (proportion lean mass)}
+#'   \item{pFly}{proportion of time spent flying during euthermic arrousals (hours)}
+#'   \item{pLean}{proportion of lean mass to total mass}
+#'   \item{pFat}{proportion fat to total mass}
+#' }
 #' @details Within this data set, and generally through out the package
 #' \code{T} will represent a temperature value, while \code{t} will represent
 #' a time value.
@@ -29,11 +37,6 @@
 #' Naming of variables is largely drawn from the "Physiological
 #' Ecology and Energetics of Bats" by Speakman and Thomas contained within
 #' Bat Ecology.
-#'
-#' \emph{M. yumanensis} WR is the same as \emph{M. californicus} because of the
-#' similarity in body mass and distribution between the two species.
-#'
-#' All species were given the cooling rate \code{CR} 60 as a good estimation
 #'
 #' @seealso \code{data("mylu.params")}, \code{data("fung.params")}
 #'

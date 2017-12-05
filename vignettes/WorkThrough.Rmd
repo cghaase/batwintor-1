@@ -22,7 +22,7 @@ The raw data for this analysis is available through ([via](https://www.dropbox.c
 
 ```{r, message=FALSE}
 library(batwintor);library(data.table);library(dplyr)
-dat.dirty <- read.csv("../raw_data/RawData.csv")
+dat.dirty <- read.csv("../data-raw/RawData.csv")
 dat <- tbl_df(dat.dirty)
 names(dat) <- c("date", "bat", "species", "sex", "band", "mass.in", "mass.out", "Ta", "Ta.p",
                 "flow", "FiO2", "FeO2", "VO2.ml.min", "VO2.ml.h", "VO2.ml.h.g")

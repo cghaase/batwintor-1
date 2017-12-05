@@ -11,9 +11,9 @@
 #' @seealso \code{\link[pkg:batwintor]{DetModel}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
 #' @export
-DynamicEnergyPd <- function(env.df, bat.params, fung.params, p){
+DynamicEnergyPd <- function(env.df, bat.params, fung.params){
   out <- list()
-  mod.params <- as.list(c(bat.params, fung.params,p=p))
+  mod.params <- as.list(c(bat.params, fung.params))
     with(mod.params,{
       #Mechanism to do WNS + and - in one function
       for(i in 1:2){

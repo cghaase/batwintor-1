@@ -4,24 +4,20 @@
 \alias{CalcTorporTimePd}
 \title{Calculate maximum time in torpor}
 \usage{
-CalcTorporTimePd(Ta, pct.rh, areaPd, pmass = 0.043, WNS,
-  mod.params = c(fung.params, bat.params))
+CalcTorporTimePd(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params,
+  bat.params))
 }
 \arguments{
 \item{Ta}{ambient temperature}
 
-\item{areaPd}{surface area infected by fungus}
+\item{pct.rh}{precent humidity}
 
-\item{pmass}{propotion of body mass (in mg) to designate EWL threshold; default is 4.3 percent}
+\item{areaPd}{surface area infected by fungus}
 
 \item{WNS}{logical, if TRUE, considers the effect of Pd growth on EWL}
 
 \item{mod.params}{list of parameters output from \code{\link{BatLoad}}
 and \code{\link{FungLoad}}}
-
-\item{Hd}{percent humidity}
-
-\item{SA.type}{surface area measurement type, either `wing` or `body`}
 }
 \description{
 \code{CalcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first
