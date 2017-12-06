@@ -1,3 +1,10 @@
+mW_mlO2hr <- function(mW){
+  Watts = mW*0.001
+  Jhr = Watts * 60
+  mO2hr = Jhr*20.1
+  return(mO2hr)
+}
+
 # utility functions
 
 # Not in operator
