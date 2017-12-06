@@ -21,7 +21,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
         # apply model engine across env dataframe
         results <- apply(env.df, 1,function(x){
           Ta <- x[[1]]
-          Hd <- x[[2]]
+          pct.rh <- x[[2]]
           if(beta3 >= Teu){
             warning("The model assumes fungal growth does not occure at euthermic
                     temperature. \n This assumption is violated in the current
@@ -32,10 +32,10 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           # determine Tb
           Tb <- ifelse(Ttor < Teu, Ttor, Teu)
           # create values that will be fed into the dynamic model
-          values <- c(Tb = Tb, Ttor = Ttor, WNS = inf, Hd= Hd,
+          values <- c(Tb = Tb, Ttor = Ttor, WNS = inf, pct.rh= pct.rh,
                       # Fungal growth area
                       growth = FungalGrowthRate(Tb = Tb, fung.params = mod.params)*
-                        ScaleFungalGrowthRate(pct.rh = Hd, fung.params = mod.params),
+                        ScaleFungalGrowthRate(pct.rh = pct.rh, fung.params = mod.params),
                       # Energy cost for euthermia
                       Eeu = CalcEnergyTimeEuthermic(Ta = Ta, bat.params = mod.params),
                       # Energy costs for flying during euthermia
@@ -83,7 +83,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           Tb <- Tb
           # Creat dataframe of results for intermediate product
           results <- data.table(Ta = rep(Ta,length(twinter)),
-                                humidity = rep(Hd,length(twinter)),
+                                pct.rh = rep(pct.rh,length(twinter)),
                                 cbind(g.fat.consumed = c(0,fat.consumed),
                                       prec.ar = c(0, prec.ar),
                                       Pd.growth = c(0,

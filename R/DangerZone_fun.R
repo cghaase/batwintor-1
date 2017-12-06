@@ -21,13 +21,13 @@
 #' @export
 DangerZone <-function(mod.df, species.option="", save.name=NULL){
    mod.dif <- mod.df %>%
-     group_by_(~Ta, ~humidity) %>%
+     group_by_(~Ta, ~pct.rh) %>%
      summarise_(max.null = ~max(time*surv.null),max.inf = ~max(time*surv.inf)) %>%
      mutate_(diff = ~(max.inf - max.null)/(24*30)) %>%
      ungroup %>% data.table
 
   zzg <- akima::interp(mod.dif$Ta, # T # can use interp.loess or interp function instead for regular spaced data
-                  mod.dif$humidity, # H
+                  mod.dif$pct.rh, # H
                   (mod.dif$diff), # time in months
                   duplicate=T)
   color<-colorRampPalette(c( "red","yellow","green4"))

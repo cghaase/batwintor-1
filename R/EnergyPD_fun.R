@@ -6,20 +6,20 @@
 #'
 #' @param Ta ambient temperature
 #' @param twinter length of winter
-#' @param Hd humidity
+#' @param pct.rh humidity
 #' @param WNS logical, should the bats have WNS?
 #' @param bat.params parameters returned by \code{\link{BatLoad}}
 #' @param fung.params parameters returned by \code{\link{FungLoad}}
 #'
 #' @export
-EnergyPd <- function(Ta, twinter, Hd, WNS, bat.params, fung.params){
+EnergyPd <- function(Ta, twinter, pct.rh, WNS, bat.params, fung.params){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
     Ttor <- ifelse(Ta > Ttormin, Ta, Ttormin)
     Tb <- ifelse(Ttor < Teu,Ttor,Teu)
     # Fungal Growth
     growthrate <- FungalGrowthRate(Tb, mod.params)
-    growthrate.H <- ScaleFungalGrowthRate(Hd, mod.params)
+    growthrate.H <- ScaleFungalGrowthRate(pct.rh, mod.params)
     PD <- growthrate*growthrate.H
     # Energy use
     Eeu <- CalcEnergyTimeEuthermic(Ta, mod.params)

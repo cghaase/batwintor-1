@@ -6,7 +6,7 @@
 #' two.
 #'
 #' @param mod.df results from \code{DynamicEnegryPd}
-#' @param hum.rast raster of humidity
+#' @param pct.rh.rast raster of humidity
 #' @param temp.rast raster of temperature values either in Kevil or degrees
 #' Celcius
 #'
@@ -23,7 +23,7 @@
 #' \code{\link{DiffHist}}
 #' @export
 
-SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
+SurvivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
   #Raster modifications for Kelvin temperatures
   if(summary(temp.rast)[1] > 200){
     temp.c <- temp.rast - 273
@@ -32,15 +32,15 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   }
 
   #Creating output raster dimensions
-  out <- raster(hum.rast); values(out) <- NA
+  out <- raster(pct.rh.rast); values(out) <- NA
   out.s <- stack(out,out,out); names(out.s) <- c("max.inf", "max.null", "diff")
 
   #Extract data from rasters  to matrix for speed
-  hum <- as.matrix(hum.rast, nrow = nrow(hum.rast), ncol = ncol(hum.rast))
+  pct.rh <- as.matrix(pct.rh.rast, nrow = nrow(pct.rh.rast), ncol = ncol(pct.rh.rast))
   temp <- as.matrix(temp.c, nrow = nrow(temp.c), ncol = ncol(temp.c))
 
   mod.dif <- mod.df %>%
-    dplyr::group_by(Ta, humidity) %>%
+    dplyr::group_by(Ta, pct.rh) %>%
     dplyr::summarise(max.null = max(time*surv.null)/24, max.inf = max(time*surv.inf)/24) %>%
     dplyr::mutate(diff = (max.null-max.inf)/24) %>%
     ungroup %>% data.table
@@ -48,12 +48,12 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   ####Look Up Table ####
   #Vectors for look up table structure
   Ta_vals <- unique(mod.dif$Ta)
-  humidity_vals <- unique(mod.dif$humidity)
+  pct.rh_vals <- unique(mod.dif$pct.rh)
 
   #Look Up Table
-  lut <- array(NA, dim=c(length(Ta_vals), length(humidity_vals), 3)) # 3 for max.inf, max.null, diff
+  lut <- array(NA, dim=c(length(Ta_vals), length(pct.rh_vals), 3)) # 3 for max.inf, max.null, diff
   dimnames(lut)[[1]] <- Ta_vals
-  dimnames(lut)[[2]] <- humidity_vals
+  dimnames(lut)[[2]] <- pct.rh_vals
   dimnames(lut)[[3]] <- c("max.inf", "max.null", "diff")
 
   #Fill look up table
@@ -62,7 +62,7 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
     if (i %% 1000 == 0) {
       cat("up to", i, "of", nrow(mod.dif), "\n")
     }
-    lut[as.character(d$Ta), as.character(d$humidity),] <- c(d$max.inf,
+    lut[as.character(d$Ta), as.character(d$pct.rh),] <- c(d$max.inf,
                                                             d$max.null, d$diff)
   }
 
@@ -84,15 +84,15 @@ SurvivalRaster <- function(mod.df, hum.rast, temp.rast){
   #Run lookup
   for(j in 1:nlayers(out.s)){
     #Create output matrix
-    out.z <- matrix(ncol = ncol(hum), nrow = nrow(hum))
-    for(i in 1:length(hum)){
+    out.z <- matrix(ncol = ncol(pct.rh), nrow = nrow(pct.rh))
+    for(i in 1:length(pct.rh)){
       # first find the closest humidity and Ta
       if(i %% 1000 == 0){
-        cat(j, "of", nlayers(out.s), "up to", i, "of", length(hum), "\n")
+        cat(j, "of", nlayers(out.s), "up to", i, "of", length(pct.rh), "\n")
       }
-      hum_i <- find_closest(hum[[i]], humidity_vals)
+      pct.rh_i <- find_closest(pct.rh[[i]], pct.rh_vals)
       Ta_i  <- find_closest(temp[[i]], Ta_vals)
-      out.z[[i]] <- lut[Ta_i, hum_i,j]
+      out.z[[i]] <- lut[Ta_i, pct.rh_i,j]
     }
     # Set values back from matrix to raster
     out.s[[j]] <- setValues(out.s[[j]], out.z)

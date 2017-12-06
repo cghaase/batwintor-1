@@ -7,39 +7,39 @@
 #'
 #' @param temp a raster or a list of two numbers representing the minimum and maximum
 #' temperatures to run the model across.
-#' @param hum a raster or a list of two numebers representing the minimum and maximum
+#' @param pct.rh a raster or a list of two numebers representing the minimum and maximum
 #' percent relative humidity to run the model across.
 #' @param range.res a single numeber representing the resultion of
-#' \code{temp.range} and \code{hum.range}.
+#' \code{temp.range} and \code{pct.rh.range}.
 #'
 #' @return returns a dataframe containing all possiable combinations of
 #' temperature and humidity conditions across which the model will be run.
 #'
 #' @details This step can be a major determinate of how fast the model will run
-#' . If the \code{temp.range} and \code{hum.range} and large or
+#' . If the \code{temp.range} and \code{pct.rh.range} and large or
 #' \code{range.res} is especially fine, this may present computational
 #' challenges downstream.
 #'
 #' @example ExampleScripts/BuildEnv_ex.R
 #' @export
-BuildEnv <- function(temp, hum, range.res = 1){
+BuildEnv <- function(temp, pct.rh, range.res = 1){
   #Raster methods
-  if(methods::is(temp, "Raster") || methods::is(hum, "Raster")){
+  if(methods::is(temp, "Raster") || methods::is(pct.rh, "Raster")){
     t <- setMinMax(temp)
     #Check units (only useful for discovering if units are K or C)
     ifelse( minValue(t) > 150,
             temp.range <- c(minValue(t), maxValue(t))-273,#from K to C
             temp.range <- c(minValue(t), maxValue(t)))
-    h <- setMinMax(hum)
-    hum.range <- c(round(minValue(h)), maxValue(h))
+    h <- setMinMax(pct.rh)
+    pct.rh.range <- c(round(minValue(h)), maxValue(h))
   } else{
     temp.range <- temp
-    hum.range <- hum
+    pct.rh.range <- pct.rh
   }
 
   Ta <- seq(from = min(temp.range), to = max(temp.range), by = range.res)
-  Hd <- seq(from = min(hum.range), to = max(hum.range), by = range.res)
-  env <- expand.grid(Ta,Hd);names(env) <- c("Ta", "Hd")
+  pct.rh <- seq(from = min(pct.rh.range), to = max(pct.rh.range), by = range.res)
+  env <- expand.grid(Ta,pct.rh);names(env) <- c("Ta", "pct.rh")
   cat("The ENV proposed will consist of ", nrow(env)*(9*24*30) ," calculations.
       If this is too many please considering changing the vector resolution")
   return(env)
