@@ -8,9 +8,6 @@
 #' @param Q3 Q constant 3 = 0.006
 #' @return Returns the value of Q10 value for the given ambient temperature
 #'
-#' @details TODO Q10 fit source needed
-#'
-#' TODO Doesn't this only apply down untill Tlc?
 #' @examples
 #' CalcQ(4)
 #' CalcQ(6, 1.6, 0.26, 0.006)

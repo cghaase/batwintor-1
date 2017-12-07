@@ -43,5 +43,8 @@ fung.chat <- FungSelect("Chaturvedi")
 fung.ver  <- FungSelect("Verant")
 }
 \seealso{
-\code{\link{FungLoad}}
+\code{\link{FungLoad}},  \code{\link{FungalGrowthRate}},
+\code{\link{ScaleFungalGrowthRate}}
+
+Other Fungal Functions: \code{\link{ScaleFungalGrowthRate}}
 }

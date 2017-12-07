@@ -14,7 +14,7 @@ CalcEnergyTimeTorpid(Ta, bat.params, q = CalcQ(Ta))
 \item{q}{Q10 scaling value}
 }
 \value{
-TODO find units accociated with
+energy expended in volume \eqn{O^2}mL/h/g)
 }
 \description{
 \code{CalcEnergyTimeTorpid} Function calculating the enegry required for a
@@ -30,6 +30,11 @@ r <- CalcEnergyTimeTorpid(e, mylu.params)
 
 plot(e, r, xlab = "Temp (C)", ylab = "Energy Expended",
      main = "CalcEnergyTimeTorpid")
+}
+\seealso{
+\code{\link{CalcEWL}},
+
+Other Torpor Functions: \code{\link{CalcEWL}}
 }
 \author{
 Katie Haase

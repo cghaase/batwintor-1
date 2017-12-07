@@ -44,3 +44,7 @@ paremeters you may do so through their associated \code{.csv} files.
 # fung.param <- FungLoad(path.to.params = foo,
 #                        growth.option = "Verant")
 }
+\seealso{
+\code{\link{FungalGrowthRate}},  \code{\link{FungSelect}},
+\code{\link{ScaleFungalGrowthRate}}
+}

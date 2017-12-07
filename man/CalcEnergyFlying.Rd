@@ -17,3 +17,15 @@ energy expended during a time unit of flight
 \description{
 \code{CalcEnergyFlying} calculates energry expended during a unit of light
 }
+\seealso{
+\code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+\code{\link{CalcEnergyCool}}, \code{\link{CalcTimeArousal}},
+\code{\link{CalcEnergyArousal}}, \code{\link{CalcEnergyTimeEuthermic}},
+\code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+
+Other Arousal Functions: \code{\link{CalcArousalTime}},
+  \code{\link{CalcEnergyArousal}},
+  \code{\link{CalcEnergyCool}},
+  \code{\link{CalcEnergyTimeEuthermic}},
+  \code{\link{CalcTimeFlying}}
+}

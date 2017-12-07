@@ -4,21 +4,29 @@
 \alias{DynamicEnergyPd}
 \title{Dynamic energy cost calculation}
 \usage{
-DynamicEnergyPd(env.df, bat.params, fung.params)
+DynamicEnergyPd(env, bat.params, fung.params)
 }
 \arguments{
-\item{env.df}{dataframe conataing range of env conditions}
+\item{env}{an object produced by \code{\link{BuildEnv}} conataing range of env conditions
+and a time vector to run the model across}
 
-\item{bat.params}{parameters returned by \code{\link[pkg:batwintor]{BatLoad}}}
+\item{bat.params}{parameters returned by \code{bat.params}}
 
-\item{fung.params}{parameters returned by \code{\link[pkg:batwintor]{FungLoad}})}
+\item{fung.params}{parameters returned by \code{fung.params}}
+}
+\value{
+returns a dataframe containing a model results for each set of environmental
+conditions at each time point.
 }
 \description{
 \code{DynamicEnergyPd} determines the growth area of Pd and the sums the
 energy consumed under specified environmental conditions.
 }
 \details{
-TODO
+This function formats, data going into, and processes data coming out of
+\code{\link{DetModel}}, and is the main main function of the package.
+Outputs from ths function can be exceedingly large, and take a heckin' long time
+so please plan accordingly.
 }
 \examples{
 ## DynamicEnegryPd_ex
@@ -37,5 +45,8 @@ twinter <- seq(from = 0, to = 9*24*30*1, by = 24)
 bingo <- DynamicEnergyPd(env.df, my.params, fung.ch)
 }
 \seealso{
-\code{\link[pkg:batwintor]{DetModel}}
+\code{\link{DetModel}}, \code{\link{BuildEnv}}
+
+Other Model Engine: \code{\link{BuildEnv}},
+  \code{\link{DetModel}}
 }

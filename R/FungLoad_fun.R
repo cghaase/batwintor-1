@@ -25,6 +25,9 @@
 #' paremeters you may do so through their associated \code{.csv} files.
 #' @return Returns a named list of fungal growth scaling parameters
 #'
+#' @family Fungal funcitons
+#' @seealso \code{\link{FungalGrowthRate}},  \code{\link{FungSelect}},
+#' \code{\link{ScaleFungalGrowthRate}}
 #' @example ExampleScripts/FungLoad_ex.R
 #' @export
 FungLoad <- function(path.to.params, growth.option){

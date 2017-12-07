@@ -13,6 +13,10 @@
 #' @details The function includes mechanisms to deal with the evaporative water loss (EWL)
 #' of both torpid and euthermic individuals, as well as increasing metabolic rates
 #' for those infected with Pd.
+#'
+#' @family Torpor Functions
+#' @seealso \code{\link{CalcEnergyTimeTorpid}}
+#' @author Katie Haase
 #' @export
 CalcEWL <- function(Ta, pct.rh, t, areaPd, mod.params = c(fung.params,bat.params),
                     torpid = TRUE, WNS = c(TRUE,FALSE)){

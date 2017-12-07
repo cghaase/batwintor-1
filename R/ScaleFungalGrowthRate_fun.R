@@ -7,6 +7,9 @@
 #' @param pct.rh precent relative humidity
 #' @return returns scaled humidity scaled fungal growth rate
 #'
+#' @family Fungal Functions
+#' @seealso \code{\link{FungLoad}}, \code{\link{FungSelect}},
+#' \code{\link{FungalGrowthRate}}
 #' @example ExampleScripts/ScaleFungalGrowthRate_ex.R
 #' @export
 ScaleFungalGrowthRate <- function(pct.rh, fung.params){

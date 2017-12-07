@@ -17,6 +17,8 @@
 #'
 #'  @seealso \code{\link{CalcArousalTime}}, \code{\link{CalcEnergyCool}},
 #' \code{\link{CalcEnergyArousal}}, \code{\link{CalcEnergyTimeEuthermic}}
+#' \code{\link{CalcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+#'
 #' @author Katie Haase
 #' @export
 CalcCoolTime <- function(Ta, bat.params){

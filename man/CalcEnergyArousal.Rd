@@ -34,11 +34,14 @@ McKechnie & Wolf 2004 equation 3
 }
 \seealso{
 \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
-\code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}}
+\code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
+\code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 
 Other Arousal Functions: \code{\link{CalcArousalTime}},
   \code{\link{CalcEnergyCool}},
-  \code{\link{CalcEnergyTimeEuthermic}}
+  \code{\link{CalcEnergyFlying}},
+  \code{\link{CalcEnergyTimeEuthermic}},
+  \code{\link{CalcTimeFlying}}
 }
 \author{
 Katie Haase

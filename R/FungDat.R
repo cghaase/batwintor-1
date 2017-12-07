@@ -14,5 +14,7 @@
 #' @details fungal growth equations are fit to Michaelis Menten equations that
 #' reach maximal values at saturation.
 #'
+#' @family Data
+#'
 #' @references See Haymen et al. 2016 for fitting details
 "fung.params"

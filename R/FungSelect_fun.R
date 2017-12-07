@@ -26,7 +26,11 @@
 #'
 #' @return Returns a named list of fungal growth scaling parameters
 #' @example ExampleScripts/FungSelect_ex.R
-#' @seealso \code{\link{FungLoad}}
+#'
+#' @family Fungal Functions
+#'
+#' @seealso \code{\link{FungLoad}},  \code{\link{FungalGrowthRate}},
+#' \code{\link{ScaleFungalGrowthRate}}
 #' @export
 FungSelect <- function(choose){
   data("fung.params")

@@ -3,15 +3,17 @@
 #' \code{DetModel} solves differential equasions accociated with the
 #' deterministic model of fungal growth.
 #'
-#' @param t tmeperature I guess? does it even get used? TODO
+#' @param t time
 #' @param y dependant varriables calculated within
 #' \code{\link{DynamicEnergyPd}}
-#' @param params parameters passed through \code{\link{DynamicEnergyPd}}
+#' @param params parameters accociated with \code{bat.params},
+#' and \code{fung.params}
 #'
-#' @details This may have room for improvement in it and may change in the
-#' future
+#' @details internal function for \code{\link{DynamicEnergyPd}} t ocalculate the
+#' proportion of time and energy spent in the various states that compose a hibernation.
 #'
-#' @seealso \code{\link{DynamicEnergyPd}}
+#' @family Model Engine
+#' @seealso \code{\link{DynamicEnergyPd}},  \code{\link{BuildEnv}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
 #' @export
 DetModel <- function(t,y, params){

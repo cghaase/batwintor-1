@@ -6,14 +6,14 @@
 #' @format a dataset containg 22 measurements for 12 species
 #' \describe{
 #'   \item{mass}{mass of the animal (g)}
-#'   \item{RMR}{resting metabolic rate (volume O2 mL/h/g)}
-#'   \item{TMRmin}{minimum metabolic rate during torpor (volume O2 mL/h/g)}
+#'   \item{RMR}{resting metabolic rate (volume \eqn{O^2}mL/h/g)}
+#'   \item{TMRmin}{minimum metabolic rate during torpor (volume \eqn{O^2}mL/h/g)}
 #'   \item{Teu}{euthermic temperature  (degrees C)}
 #'   \item{Tlc}{lower critical temperature (degrees C)}
 #'   \item{Ttormin}{Temperature at which TMRmin is achieved (degrees C)}
-#'   \item{Ceu}{conductance during euthermic temperatures (mlO2/g/C)}
-#'   \item{Ct}{conductance during torpor (mlO2/g/C)}
-#'   \item{S}{specific heat of tissue (mlO2/g/C)}
+#'   \item{Ceu}{conductance during euthermic temperatures (ml\eqn{O^2}/g/C)}
+#'   \item{Ct}{conductance during torpor (ml\eqn{O^2}/g/C)}
+#'   \item{S}{specific heat of tissue (ml\eqn{O^2}/g/C)}
 #'   \item{ttormax}{maximal length of time for a bout of torpor (hours)}
 #'   \item{teu}{time spent euthermic during a bout of torpor (hours)}
 #'   \item{WR}{warming rate from torpor to euthermic temperature degrees (C/hour)}
@@ -38,6 +38,10 @@
 #' Ecology and Energetics of Bats" by Speakman and Thomas contained within
 #' Bat Ecology.
 #'
+#' The data in contained within is composed of data gleaned from the literature,
+#' as well as data generated through the SERDP project and in conjunction with
+#' collaboraters in Canada.
+#' @family Data
 #' @seealso \code{data("mylu.params")}, \code{data("fung.params")}
 #'
 #' @references Haymen et al. 2016; Menzies et al. 2016

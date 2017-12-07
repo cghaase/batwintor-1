@@ -24,5 +24,18 @@ and \code{\link{FungLoad}}}
 \item{WNS}{logical, if the animal is infected with Pd or not}
 }
 \description{
-\code{CalcEWL}
+\code{CalcEWL} calculates evaporative waterloss based on species specific parameter.
+}
+\details{
+The function includes mechanisms to deal with the evaporative water loss (EWL)
+of both torpid and euthermic individuals, as well as increasing metabolic rates
+for those infected with Pd.
+}
+\seealso{
+\code{\link{CalcEnergyTimeTorpid}}
+
+Other Torpor Functions: \code{\link{CalcEnergyTimeTorpid}}
+}
+\author{
+Katie Haase
 }

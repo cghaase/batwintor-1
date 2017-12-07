@@ -1,10 +1,3 @@
-mW_mlO2hr <- function(mW){
-  Watts = mW*0.001
-  Jhr = Watts * 60
-  mO2hr = Jhr*20.1
-  return(mO2hr)
-}
-
 # utility functions
 
 # Not in operator
@@ -13,17 +6,4 @@ mW_mlO2hr <- function(mW){
 # Defaults for NULL values
 '%||%' <- function(a, b) if (is.null(a)) b else a
 
-#' @import raster ggplot2 methods
-#' @importFrom deSolve lsoda
-#' @importFrom data.table data.table rbindlist fread setnames
-#' @importFrom dplyr %>% mutate filter_ summarise_ ungroup group_by_ quo
-#' @importFrom mixtools spEMsymloc
-#' @importFrom graphics par mtext title
-#' @importFrom grDevices colorRampPalette dev.print dev.off png
-#' @importFrom stats median
-#' @importFrom rgdal readOGR
-#' @importFrom utils data read.csv
-#' @importFrom plyr ddply
-#' @importFrom PBSmapping clipPolys
-#' @importFrom rlang .data
 NULL

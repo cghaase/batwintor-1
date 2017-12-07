@@ -1,28 +1,34 @@
 #' Build an environmental space to run the model across
 #'
 #' \code{BuildEnv} builds the environmental parameters across which the
-#' mechanistic model will be applied. This does not necessairly need to
+#' dynamic model will be applied. This does not necessairly need to
 #' represent real-world condtions but can instead be used to explore all of
 #' parameter space.
 #'
-#' @param temp a raster or a list of two numbers representing the minimum and maximum
-#' temperatures to run the model across.
-#' @param pct.rh a raster or a list of two numebers representing the minimum and maximum
-#' percent relative humidity to run the model across.
+#' @param temp a \code{\link[raster]{raster}} or a list of two numbers representing the
+#'  minimum and maximum temperatures to run the model across.
+#' @param pct.rh a \code{\link[raster]{raster}} or a list of two numebers representing
+#'  the minimum and maximum percent relative humidity to run the model across.
 #' @param range.res a single numeber representing the resultion of
 #' \code{temp.range} and \code{pct.rh.range}.
+#' @param twinter the maximal length of winter to run the model across in either days or
+#' months.
+#' @param winter.res temporal resolution of the \code{twinter} vector. Default is
+#' hourly, although other options can be selected.
 #'
-#' @return returns a dataframe containing all possiable combinations of
-#' temperature and humidity conditions across which the model will be run.
+#' @return returns an expanded dataframe containing all possiable combinations of
+#' temperature and humidity conditions across which the model will be run, as well
+#' as vector to act as the temporal vector to run the model across
 #'
 #' @details This step can be a major determinate of how fast the model will run
 #' . If the \code{temp.range} and \code{pct.rh.range} and large or
 #' \code{range.res} is especially fine, this may present computational
 #' challenges downstream.
-#'
+#' @family Model Engine
+#' @seealso \code{\link{DynamicEnergyPd}}
 #' @example ExampleScripts/BuildEnv_ex.R
 #' @export
-BuildEnv <- function(temp, pct.rh, range.res = 1){
+BuildEnv <- function(temp, pct.rh, range.res = 1, twinter, winter.res = 1){
   #Raster methods
   if(methods::is(temp, "Raster") || methods::is(pct.rh, "Raster")){
     t <- setMinMax(temp)
@@ -40,7 +46,13 @@ BuildEnv <- function(temp, pct.rh, range.res = 1){
   Ta <- seq(from = min(temp.range), to = max(temp.range), by = range.res)
   pct.rh <- seq(from = min(pct.rh.range), to = max(pct.rh.range), by = range.res)
   env <- expand.grid(Ta,pct.rh);names(env) <- c("Ta", "pct.rh")
-  cat("The ENV proposed will consist of ", nrow(env)*(9*24*30) ," calculations.
+  ifelse(twinter > 12,
+         twin <- seq(from=0, to = day.to.hour(twinter), by = winter.res),
+         twin <- seq(from=0, month.to.hour(twinter), by = winter.res))
+  cat("The ENV proposed will consist of ", nrow(env)*length(twin) ," calculations.
       If this is too many please considering changing the vector resolution")
-  return(env)
+
+  out <- list(env = env, twinter = twin)
+  class(out) <- c("WinterEnv")
+  return(out)
 }
