@@ -31,7 +31,6 @@ the resutlts for a single species in a single function
 \code{\link{SurvivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}};
 \code{\link{DangerZone}}
 
-Other PlotFunctions: \code{\link{DangerZone}},
-  \code{\link{DiffHist}}, \code{\link{SurvPlotter}},
-  \code{\link{SurvivalRaster}}
+Other Plot Functions: \code{\link{DangerZone}},
+  \code{\link{SurvPlotter}}, \code{\link{SurvivalRaster}}
 }

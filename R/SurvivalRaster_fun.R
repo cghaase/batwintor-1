@@ -18,7 +18,7 @@
 #'
 #' @note humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
-#' @family PlotFunctions
+#' @family Plot Functions
 #' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}};
 #' \code{\link{DiffHist}}
 #' @export
