@@ -7,20 +7,21 @@
 DetModel(t, y, params)
 }
 \arguments{
-\item{t}{tmeperature I guess? does it even get used? TODO}
+\item{t}{time}
 
 \item{y}{dependant varriables calculated within
 \code{\link{DynamicEnergyPd}}}
 
-\item{params}{parameters passed through \code{\link{DynamicEnergyPd}}}
+\item{params}{parameters accociated with \code{bat.params},
+and \code{fung.params}}
 }
 \description{
 \code{DetModel} solves differential equasions accociated with the
 deterministic model of fungal growth.
 }
 \details{
-This may have room for improvement in it and may change in the
-future
+internal function for \code{\link{DynamicEnergyPd}} t ocalculate the
+proportion of time and energy spent in the various states that compose a hibernation.
 }
 \examples{
 ## DynamicEnegryPd_ex
@@ -39,5 +40,8 @@ twinter <- seq(from = 0, to = 9*24*30*1, by = 24)
 bingo <- DynamicEnergyPd(env.df, my.params, fung.ch)
 }
 \seealso{
-\code{\link{DynamicEnergyPd}}
+\code{\link{DynamicEnergyPd}},  \code{\link{BuildEnv}}
+
+Other Model Engine: \code{\link{BuildEnv}},
+  \code{\link{DynamicEnergyPd}}
 }

@@ -7,10 +7,13 @@
 #' @param bat.params list of bat parameters output from \code{\link{BatLoad}}
 #' @param q Q10 scaling value
 #'
-#' @return TODO find units accociated with
+#' @return energy expended in volume \eqn{O^2}mL/h/g)
 #'
 #' @example ExampleScripts/CalcEnergyTimeTorpid_ex.R
 #'
+#' @family Torpor Functions
+#'
+#' @seealso \code{\link{CalcEWL}},
 #' @author Katie Haase
 #' @export
 CalcEnergyTimeTorpid <- function(Ta, bat.params, q = CalcQ(Ta)){

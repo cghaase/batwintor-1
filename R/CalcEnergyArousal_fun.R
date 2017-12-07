@@ -13,7 +13,8 @@
 #' @family Arousal Functions
 #'
 #' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
-#' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}}
+#' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
+#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #'
 #' @references McKechnie & Wolf 2004 equation 3
 #'

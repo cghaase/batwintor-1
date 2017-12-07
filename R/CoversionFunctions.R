@@ -1,4 +1,4 @@
-#' Time conversion functions
+#' conversion functions
 #'
 #' \code{hour.to.month}
 #' @param x input value of hours
@@ -7,7 +7,13 @@
 hour.to.month <- function(x){
   x/(24*30)
 }
-#'
+#' \code{month.to.hour}
+#' @param x input value of months
+#' @details general functions for consistant exchange between time units
+#' @export
+month.to.hour <- function(x){
+  x*24*30
+}
 #' \code{hour.to.day}
 #' @param x input number of hours
 #' @details general functions for consistant exchange between time units
@@ -39,3 +45,23 @@ prop.to.months <- function(x){
 day.to.hour <- function(x){
   x*24
 }
+
+#' \code{mW_ml02hr}
+#' @param mW energy in milliWatts
+#' @return energy in ml02/hr
+#' @export
+mW_mlO2hr <- function(mW){
+  Watts = mW*0.001
+  Jhr = Watts * 60
+  mO2hr = Jhr*20.1
+  return(mO2hr)
+}
+
+#' \code{k.to.c}
+#' @param x temperature in degrees Kelvin
+#' @return temperature in degrees Celcius
+#' @export
+k.to.c <- function(x){
+  x + 273
+}
+

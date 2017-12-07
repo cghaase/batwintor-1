@@ -18,3 +18,14 @@ a time
 \code{calcTimeFlying} calculates the time spent flying as a proportion of
 time in euthermic arrousal
 }
+\seealso{
+\code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+\code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
+\code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+
+Other Arousal Functions: \code{\link{CalcArousalTime}},
+  \code{\link{CalcEnergyArousal}},
+  \code{\link{CalcEnergyCool}},
+  \code{\link{CalcEnergyFlying}},
+  \code{\link{CalcEnergyTimeEuthermic}}
+}

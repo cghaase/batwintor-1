@@ -33,5 +33,6 @@ plot(e, r, xlab = "Temp (C)", ylab = "Growth rate",
      main = "Fungal Growth Rate")
 }
 \seealso{
-\code{\link{FungLoad}}
+\code{\link{FungLoad}},  \code{\link{FungSelect}},
+\code{\link{ScaleFungalGrowthRate}}
 }

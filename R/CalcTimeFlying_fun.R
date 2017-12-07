@@ -6,6 +6,11 @@
 #' @param bat.params see \code{\link{BatLoad}}
 #'
 #' @return a time
+#' @family Arousal Functions
+#'
+#' @seealso  \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+#' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
+#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #' @export
 CalcTimeFlying <- function(pFly, bat.params){
   with(bat.params,{

@@ -30,3 +30,9 @@ r <- ScaleFungalGrowthRate(pct.rh = rh, fung.params = fung.param)
 plot(rh, r, xlab = "Relative humidity (\%)", ylab = "Growth Rate",
      main = "ScaledFungalGrowthRate")
 }
+\seealso{
+\code{\link{FungLoad}}, \code{\link{FungSelect}},
+\code{\link{FungalGrowthRate}}
+
+Other Fungal Functions: \code{\link{FungSelect}}
+}

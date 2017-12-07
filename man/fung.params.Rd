@@ -26,4 +26,7 @@ reach maximal values at saturation.
 \references{
 See Haymen et al. 2016 for fitting details
 }
+\seealso{
+Other Data: \code{\link{bat.params}}
+}
 \keyword{datasets}

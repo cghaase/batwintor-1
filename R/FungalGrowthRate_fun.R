@@ -8,7 +8,9 @@
 #' @param t.min temperature minimum (= 0 degrees C)
 #' @return returns temperature determinate growth rate
 #'
-#' @seealso \code{\link{FungLoad}}
+#' @family Fungal functions
+#' @seealso \code{\link{FungLoad}},  \code{\link{FungSelect}},
+#' \code{\link{ScaleFungalGrowthRate}}
 #' @example ExampleScripts/FungalGrowthRate_ex.R
 #' @export
 FungalGrowthRate <- function(Tb, fung.params, t.min = 0){

@@ -4,35 +4,48 @@
 \alias{BuildEnv}
 \title{Build an environmental space to run the model across}
 \usage{
-BuildEnv(temp, hum, range.res = 1)
+BuildEnv(temp, pct.rh, range.res = 1, twinter, winter.res = 1)
 }
 \arguments{
-\item{temp}{a raster or a list of two numbers representing the minimum and maximum
-temperatures to run the model across.}
+\item{temp}{a \code{\link[raster]{raster}} or a list of two numbers representing the
+minimum and maximum temperatures to run the model across.}
 
-\item{hum}{a raster or a list of two numebers representing the minimum and maximum
-percent relative humidity to run the model across.}
+\item{pct.rh}{a \code{\link[raster]{raster}} or a list of two numebers representing
+the minimum and maximum percent relative humidity to run the model across.}
 
 \item{range.res}{a single numeber representing the resultion of
-\code{temp.range} and \code{hum.range}.}
+\code{temp.range} and \code{pct.rh.range}.}
+
+\item{twinter}{the maximal length of winter to run the model across in either days or
+months.}
+
+\item{winter.res}{temporal resolution of the \code{twinter} vector. Default is
+hourly, although other options can be selected.}
 }
 \value{
-returns a dataframe containing all possiable combinations of
-temperature and humidity conditions across which the model will be run.
+returns an expanded dataframe containing all possiable combinations of
+temperature and humidity conditions across which the model will be run, as well
+as vector to act as the temporal vector to run the model across
 }
 \description{
 \code{BuildEnv} builds the environmental parameters across which the
-mechanistic model will be applied. This does not necessairly need to
+dynamic model will be applied. This does not necessairly need to
 represent real-world condtions but can instead be used to explore all of
 parameter space.
 }
 \details{
 This step can be a major determinate of how fast the model will run
-. If the \code{temp.range} and \code{hum.range} and large or
+. If the \code{temp.range} and \code{pct.rh.range} and large or
 \code{range.res} is especially fine, this may present computational
 challenges downstream.
 }
 \examples{
 ##BuildEnv
 m.env <- BuildEnv(temp = c(1,100), hum = c(1,100), range.res = 1)
+}
+\seealso{
+\code{\link{DynamicEnergyPd}}
+
+Other Model Engine: \code{\link{DetModel}},
+  \code{\link{DynamicEnergyPd}}
 }

@@ -4,12 +4,12 @@
 \alias{SurvivalRaster}
 \title{Converts model results dataframe into results raster.}
 \usage{
-SurvivalRaster(mod.df, hum.rast, temp.rast)
+SurvivalRaster(mod.df, pct.rh.rast, temp.rast)
 }
 \arguments{
 \item{mod.df}{results from \code{DynamicEnegryPd}}
 
-\item{hum.rast}{raster of humidity}
+\item{pct.rh.rast}{raster of humidity}
 
 \item{temp.rast}{raster of temperature values either in Kevil or degrees
 Celcius}

@@ -5,6 +5,13 @@
 #' @param bat.params see \code{\link{BatLoad}}
 #'
 #' @return energy expended during a time unit of flight
+
+#' @family Arousal Functions
+#'
+#' @seealso  \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+#' \code{\link{CalcEnergyCool}}, \code{\link{CalcTimeArousal}},
+#' \code{\link{CalcEnergyArousal}}, \code{\link{CalcEnergyTimeEuthermic}},
+#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #' @export
 CalcEnergyFlying <- function(Ta, bat.params){
   with(bat.params,{

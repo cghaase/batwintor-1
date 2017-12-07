@@ -3,15 +3,24 @@
 #' \code{DynamicEnergyPd} determines the growth area of Pd and the sums the
 #' energy consumed under specified environmental conditions.
 #'
-#' @param env.df dataframe conataing range of env conditions
-#' @param bat.params  parameters returned by \code{\link[pkg:batwintor]{BatLoad}}
-#' @param fung.params parameters returned by \code{\link[pkg:batwintor]{FungLoad}})
+#' @param env an object produced by \code{\link{BuildEnv}} conataing range of env conditions
+#' and a time vector to run the model across
+#' @param bat.params  parameters returned by \code{bat.params}
+#' @param fung.params parameters returned by \code{fung.params}
 #'
-#' @details TODO
-#' @seealso \code{\link[pkg:batwintor]{DetModel}}
+#' @return returns a dataframe containing a model results for each set of environmental
+#' conditions at each time point.
+#'
+#' @details This function formats, data going into, and processes data coming out of
+#' \code{\link{DetModel}}, and is the main main function of the package.
+#' Outputs from ths function can be exceedingly large, and take a heckin' long time
+#' so please plan accordingly.
+#'
+#' @family Model Engine
+#' @seealso \code{\link{DetModel}}, \code{\link{BuildEnv}}
 #' @example ExampleScripts/DynamicEnergyPd_ex.R
 #' @export
-DynamicEnergyPd <- function(env.df, bat.params, fung.params){
+DynamicEnergyPd <- function(env, bat.params, fung.params){
   out <- list()
   mod.params <- as.list(c(bat.params, fung.params))
     with(mod.params,{
@@ -19,7 +28,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
       for(i in 1:2){
         ifelse(i == 1, inf <- T, inf <- F)
         # apply model engine across env dataframe
-        results <- apply(env.df, 1,function(x){
+        results <- apply(env[[1]], 1,function(x){
           Ta <- x[[1]]
           pct.rh <- x[[2]]
           if(beta3 >= Teu){
@@ -57,7 +66,7 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
                                                 prec.E.arr = 0,
                                                 FungalArea = 0),
                                           # Time to solve across
-                                          times = twinter,
+                                          times = env[[2]],
                                           func = DetModel,
                                           parms = values))
           # Helper function for energy calculations
@@ -82,8 +91,8 @@ DynamicEnergyPd <- function(env.df, bat.params, fung.params){
           prop.fl <- MaxToCurrent(det.results$pFl)
           Tb <- Tb
           # Creat dataframe of results for intermediate product
-          results <- data.table(Ta = rep(Ta,length(twinter)),
-                                pct.rh = rep(pct.rh,length(twinter)),
+          results <- data.table(Ta = rep(Ta,length(env[2])),
+                                pct.rh = rep(pct.rh,length(env[2])),
                                 cbind(g.fat.consumed = c(0,fat.consumed),
                                       prec.ar = c(0, prec.ar),
                                       Pd.growth = c(0,
