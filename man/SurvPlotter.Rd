@@ -31,7 +31,6 @@ This function will be removed/ remodeled with the next version
 \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
 \code{\link{DiffHist}}
 
-Other PlotFunctions: \code{\link{DangerZone}},
-  \code{\link{DiffHist}}, \code{\link{MapFigs}},
-  \code{\link{SurvivalRaster}}
+Other Plot Functions: \code{\link{DangerZone}},
+  \code{\link{MapFigs}}, \code{\link{SurvivalRaster}}
 }

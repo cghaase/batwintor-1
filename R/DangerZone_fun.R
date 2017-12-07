@@ -16,7 +16,7 @@
 #' parameter accessability, and potentially a raster method as well.
 #' \url{https://www.youtube.com/watch?v=kyAn3fSs8_A}
 #' @author L. Cain, K. Loggins
-#' @family PlotFunctions
+#' @family Plot Functions
 #' @seealso \code{\link{MapFigs}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}}
 #' @export
 DangerZone <-function(mod.df, species.option="", save.name=NULL){

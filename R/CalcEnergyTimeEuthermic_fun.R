@@ -18,5 +18,5 @@
 #' @export
 CalcEnergyTimeEuthermic <- function(Ta, bat.params){
   with(bat.params,{
-    RMR+ (Tlc-Ta)*Ceu
+    (RMR+ (Tlc-Ta)*Ceu)*(1-pFly)
   })}

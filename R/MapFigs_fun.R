@@ -13,7 +13,7 @@
 #' \code{\link{DiffHist}} all tied together to create one neat strip conviently displaying
 #' the resutlts for a single species in a single function
 #'
-#' @family PlotFunctions
+#' @family Plot Functions
 #' @seealso \code{\link{SurvivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{DiffHist}};
 #' \code{\link{DangerZone}}
 #' @export

@@ -13,7 +13,7 @@
 #' is filled in with the results from the model run.
 #'
 #' @note This function will be removed/ remodeled with the next version
-#' @family PlotFunctions
+#' @family Plot Functions
 #' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
 #' \code{\link{DiffHist}}
 #' @export

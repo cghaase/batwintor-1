@@ -36,8 +36,4 @@ updates and build because this is unnecessairy convaluted.
 }
 \seealso{
 \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}}
-
-Other PlotFunctions: \code{\link{DangerZone}},
-  \code{\link{MapFigs}}, \code{\link{SurvPlotter}},
-  \code{\link{SurvivalRaster}}
 }
