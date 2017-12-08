@@ -1,0 +1,44 @@
+---
+title: "batwintor: *M. lucifugus* Example"
+author: "C. Reed Hranac"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{batwintor: *M. lucifugus* Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## Introduction
+  This vignette is designed to demonstrate the basic workings of the `batwintor` package using the built in data. This data has been collected from published literature, our own field studies (provide SERDP language here) and in collaboration with the Laursen lab at the university of British Columbia.
+
+## Data
+The data products included in this packages area `bat.params`, and `fung.params`. They contain all of the information that you will need in order to run the model. 
+To access this data simply type:
+```{r}
+library(devtools)
+#install_github("cReedHranac/batwintor") #install from GitHub
+library(batwintor)
+data("bat.params") ; data("fung.params")
+```
+The structure and details of these data items are available though `?`. In summary, `bat.params` contains 22 parameters for 12 species and `fung.params` includes parameters for two different growth equations. Throughout this vignette we will be modeling the bat species *Myotis lucifugus* (coded as `mylu`) and using the `Chaturvedi` fungal parameters.
+```{r}
+mylu.params <- BatLoad(bat.params, "mylu")
+fung.ch <- FungSelect("Chaturvedi")
+```
+
+## Model
+Once you've selected the data you want to you it's time to set up the environmental space to run the model across. **Note:** This step can be a major determinate in how long it the calculations will take. 
+```{r}
+env <- BuildEnv(temp = c(0,20), #temperatures in degrees C
+                pct.rh = c(60, 100), #precent humidity
+                range.res = 1, #resolution of the temperature and humidity ranges
+                twinter = 9, #maximal length of winter (in this case I have months)
+                winter.res = 24) #resolution of the time vector in vectors
+```
