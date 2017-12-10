@@ -4,7 +4,7 @@
 \name{batwintor}
 \alias{batwintor}
 \alias{batwintor-package}
-\title{batwinto: A pacakge for computing the metabolic costs of hibernation on bats
+\title{batwintor: A pacakge for computing the metabolic costs of hibernation on bats
 with additional tools to address the impact of White-nose Syndrome on North
 American species.}
 \description{
@@ -15,7 +15,7 @@ allow you to explore the majorit of the packages functions.
 }
 \section{Data}{
 
-  There are 3 data sets included within the package.
+There are 3 data sets included within the package.
 \code{\link{bat.params}}, \code{\link{mylu.params}}, and
 \code{\link{fung.params}}. \code{bat.params} contains all of the parameter
 estimations necessary to run the primary model for 12 species of North
@@ -36,5 +36,36 @@ how long a bat will maintain a torpid metabolic state
 (\code{\link{CalcTorporTimePD}}), which is dependent largley on
 \code{\link{CalcEWL}}, and \code{\link{CalcEnergyTimeTorpid}} is used to
 determine the energy expended during those bouts of torpor.
+}
+
+\section{Arousal Functions}{
+
+The \code{Arousal Functions} are designed to
+explane the energry expendatures between bouts of torpor.
+\code{\link{CalcArousalTime}} and \code{\link{CalcEnergyArousal}} document
+the return from torpid body temperatures to euthermia. The functions
+\code{\link{CalcEnergyTimeEuthermic}} describes energy expendature during
+euthermia, and the \code{\link{CalcTimeFlying}} and
+\code{\link{CalcEnergyFlying}} functions describe ammendments made to encourperate
+the metabolic costs of flight during arousals. The \code{\link{CalcTimeCool}}
+and \code{\link{CalcEnergyCool}} functions handle the return from eutheria
+to torpid state and complete the arousal cycle.
+}
+
+\section{Model Functions}{
+
+The model functions are the heart of the package and are composed of:
+\code{\link{BuildEnv}}, \code{\link{DynamicModelPd}}, and
+\code{\link{DetMod}}. The \code{BuildEnv} function allows you to create your
+the parameter space that your model will run across in the form of
+environmental spave and a time vector. The \code{DynamicEnergyPd} takes
+the supplied environment, the parameters passed in and formats the data
+for the \code{DetMod} which solves the differential equations.
+\code{DynamicEnergyPD} then formats, and outputs the results for post-processing
+and plotting
+}
+
+\section{Plot Tools}{
+
 }
 
