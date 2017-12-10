@@ -58,12 +58,12 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
                         mod.params)
           # Call differential equation model
           det.results <- data.table(lsoda(y = c(pT = 1, # Inital values
-                                                pE = 0,
-                                                pFl = 0,
                                                 pAr = 0,
                                                 pC = 0,
+                                                pE = 0,
+                                                pFl = 0,
+                                                prec.E.ar = 0,
                                                 EnergyConsumed = 0,
-                                                prec.E.arr = 0,
                                                 FungalArea = 0),
                                           # Time to solve across
                                           times = env[[2]],
@@ -77,10 +77,9 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
           }
           # Energy costs for up to that point in the winter
           e.winter <- MaxToCurrent(det.results$EnergyConsumed)
+          ar.winter <- MaxToCurrent(det.results$prec.E.arr)
           # Convert units to grams of fat
           fat.consumed <- ConvertToFat(e.winter)
-          # Energy cost for arousals up to that point in the winter
-          ar.winter <- MaxToCurrent(det.results$prec.E.arr)
           # Convert arousal costs to grams fat
           ar.fat <- ConvertToFat(ar.winter)
           # What precent of costs are due to arousals
