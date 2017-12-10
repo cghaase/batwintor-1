@@ -9,7 +9,7 @@
 #' @param params parameters accociated with \code{bat.params},
 #' and \code{fung.params}
 #'
-#' @details internal function for \code{\link{DynamicEnergyPd}} t ocalculate the
+#' @details internal function for \code{\link{DynamicEnergyPd}} to calculate the
 #' proportion of time and energy spent in the various states that compose a hibernation.
 #'
 #' @family Model Engine
@@ -22,8 +22,8 @@ DetModel <- function(t,y, params){
                            mod.params = params)
     tar <- CalcArousalTime(Ta = Tb, bat.params = params)
     tc <- CalcCoolTime(Ta = Tb, bat.params = params)
-    tfl <- CalcTimeFlying(pFly = pFly, bat.params = params)
-    tieu <- (teu*(1-pFly)) #time inactive euthermic
+    tfl <- CalcTimeFlying(bat.params = params)
+    tieu <- CalcTimeEuthermic(bat.params = params) #time inactive euthermic
     # change in TorporProp (pT)/dt
     dpTdt <- (pE/tieu + pAr/tar + pC/tc + pFl/tfl)/4 - pT/ttor
     # change in ArousalProp (pAr)/dt

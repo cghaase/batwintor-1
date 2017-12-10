@@ -20,7 +20,7 @@ and \code{fung.params}}
 deterministic model of fungal growth.
 }
 \details{
-internal function for \code{\link{DynamicEnergyPd}} t ocalculate the
+internal function for \code{\link{DynamicEnergyPd}} to calculate the
 proportion of time and energy spent in the various states that compose a hibernation.
 }
 \examples{

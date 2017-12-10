@@ -340,8 +340,7 @@ fung.params <- FungSelect("Chaturvedi")
 env.df  <- BuildEnv(temp = c(-5,20), pct.rh = c(50,100), range.res = 5, twinter = 10, winter.res = 1)
 
 #Create vector of species
-#species <- c("mylu", "myve", "coto", "epfu", "pesu")
-species = "mylu"
+species <- c("mylu", "myve", "coto", "epfu", "pesu")
 
 #Run model over parameter space per species
 surv.out <- data.frame()
@@ -374,22 +373,21 @@ load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_epfu_8
 #Create vectors of environmental and species data
 temps <- seq(-5,20,5)
 hd <- seq(50,100,5)
-#species <- c("mylu", "myve", "coto", "epfu", "pesu")
+species <- c("mylu", "myve", "coto", "epfu", "pesu")
 
 
-#s = species[1]
 #Organize survival data for plotting purposes
 df.months <- data.frame()
 for(t in temps){
   for(h in hd){
-    #for(s in species){
-      #s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
-      s.data <- subset(de.df, de.df$Ta == t & de.df$pct.rh == h)
+    for(s in species){
+      s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
+      #s.data <- subset(de.df, de.df$Ta == t & de.df$pct.rh == h)
       months.inf  <- max(s.data$time[s.data$surv.inf == 1])/24/30
       months.null <- max(s.data$time[s.data$surv.null == 1])/24/30
       df <- data.frame(Species = s, Ta = t, pct.rh = h, Months.inf = months.inf, Months.null = months.null)
       df.months = rbind(df.months,df)
-    #}
+    }
   }
 }
 
