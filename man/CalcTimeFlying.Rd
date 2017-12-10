@@ -4,11 +4,9 @@
 \alias{CalcTimeFlying}
 \title{Calculate the time spent flying}
 \usage{
-CalcTimeFlying(pFly, bat.params)
+CalcTimeFlying(bat.params)
 }
 \arguments{
-\item{pFly}{proportion of euthermia spent flying}
-
 \item{bat.params}{see \code{\link{BatLoad}}}
 }
 \value{
@@ -16,7 +14,7 @@ a time
 }
 \description{
 \code{calcTimeFlying} calculates the time spent flying as a proportion of
-time in euthermic arrousal
+time in euthermic arrousals
 }
 \seealso{
 \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},

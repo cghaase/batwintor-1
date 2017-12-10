@@ -9,7 +9,7 @@
 #' @param params parameters accociated with \code{bat.params},
 #' and \code{fung.params}
 #'
-#' @details internal function for \code{\link{DynamicEnergyPd}} t ocalculate the
+#' @details internal function for \code{\link{DynamicEnergyPd}} to calculate the
 #' proportion of time and energy spent in the various states that compose a hibernation.
 #'
 #' @family Model Engine
@@ -22,17 +22,18 @@ DetModel <- function(t,y, params){
                            mod.params = params)
     tar <- CalcArousalTime(Ta = Tb, bat.params = params)
     tc <- CalcCoolTime(Ta = Tb, bat.params = params)
-    tfl <- CalcTimeFlying(pFly = pFly, bat.params = params)
+    tfl <- CalcTimeFlying(bat.params = params)
+    tieu <- CalcTimeEuthermic(bat.params = params) #time inactive euthermic
     # change in TorporProp (pT)/dt
-    dpTdt <- (pE/teu + pAr/tar + pC/tc + pFl/tfl)/4 - pT/ttor
+    dpTdt <- (pE/tieu + pAr/tar + pC/tc + pFl/tfl)/4 - pT/ttor
     # change in ArousalProp (pAr)/dt
-    dpAdt <- (pE/teu + pC/tc + pT/ttor + pFl/tfl)/4 - pAr/tar
+    dpAdt <- (pE/tieu + pC/tc + pT/ttor + pFl/tfl)/4 - pAr/tar
     # change in CoolProp (pC)/dt
-    dpCdt <- (pE/teu + pAr/tar + pT/ttor + pFl/tfl)/4 - pC/tc
+    dpCdt <- (pE/tieu + pAr/tar + pT/ttor + pFl/tfl)/4 - pC/tc
     # change in EuthermicProp (pE)/dt
-    dpEdt <- (pT/ttor + pAr/tar + pC/tc + pFl/tfl)/4 - pE/teu
-    # Cange in FlyingProp (pF)/dt
-    dpEfldt <- (pT/ttor + pAr/tar + pC/tc + pE/teu)/4 - pFl/tfl
+    dpEdt <- (pT/ttor + pAr/tar + pC/tc + pFl/tfl)/4 - pE/tieu
+    # Cange in FlyingProp (pFl)/dt
+    dpFldt <- (pT/ttor + pAr/tar + pC/tc + pE/tieu)/4 - pFl/tfl
     # change in EnergyConsumed/dt
     dJdt  <- Eeu*pE + Etor*pT + Ear*pAr + Ec*pC + Efl*pFl
     # change in precEArousal/dt
@@ -40,7 +41,7 @@ DetModel <- function(t,y, params){
     #change in FungalArea/dt
     dFdt  <- growth*pT
 
-    list(c(dpTdt, dpEdt, dpEfldt, dpAdt, dpCdt, dJdt, dpJdt, dFdt))
+    list(c(dpTdt, dpEdt, dpFldt, dpAdt, dpCdt, dJdt, dpJdt, dFdt))
   })
 }
 
