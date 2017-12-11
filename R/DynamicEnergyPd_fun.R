@@ -62,8 +62,8 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
                                                 pC = 0,
                                                 pE = 0,
                                                 pFl = 0,
-                                                prec.E.ar = 0,
                                                 EnergyConsumed = 0,
+                                                EnergyBoutArrousal = 0,
                                                 FungalArea = 0),
                                           # Time to solve across
                                           times = env[[2]],
@@ -77,10 +77,9 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
           }
           # Energy costs for up to that point in the winter
           e.winter <- MaxToCurrent(det.results$EnergyConsumed)
-          ar.winter <- MaxToCurrent(det.results$prec.E.arr)
+          ar.winter <- MaxToCurrent(det.results$EnergyBoutArrousal)
           # Convert units to grams of fat
           fat.consumed <- ConvertToFat(e.winter)
-          # Convert arousal costs to grams fat
           ar.fat <- ConvertToFat(ar.winter)
           # What precent of costs are due to arousals
           prec.ar <- ar.fat/fat.consumed
@@ -93,7 +92,7 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
           results <- data.table(Ta = rep(Ta,length(env[2])),
                                 pct.rh = rep(pct.rh,length(env[2])),
                                 cbind(g.fat.consumed = c(0,fat.consumed),
-                                      prec.ar = c(0, prec.ar),
+                                      pEnergyBoutArrousal = c(0, prec.ar),
                                       Pd.growth = c(0,
                                                     MaxToCurrent(det.results$FungalArea)),
                                       time = det.results$time,
@@ -108,7 +107,10 @@ DynamicEnergyPd <- function(env, bat.params, fung.params){
       }
  # Create one better dataframe with all pertinent columns
     out.dt <- cbind(out[[1]], n.g.fat.consumed = out[[2]]$g.fat.consumed,
-                    n.prec.ar = out[[2]]$prec.ar)
+                    n.pEnergyBoutArrousal = out[[2]]$pEnergyBoutArrousal,
+                    n.Prop.tor = out[[2]]$Prop.tor,
+                    n.Prop.Ar = out[[2]]$Prop.Ar,
+                    n.Prop.Fl = out[[2]]$Prop.Fl)
     # Create columns with survival outcomes  based on avaliable fat reserves
     out.fin <- out.dt %>%
       mutate(surv.inf = ifelse(mass*pFat >= g.fat.consumed,1,0)) %>%

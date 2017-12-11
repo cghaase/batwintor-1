@@ -4,7 +4,8 @@
 \alias{BuildEnv}
 \title{Build an environmental space to run the model across}
 \usage{
-BuildEnv(temp, pct.rh, range.res = 1, twinter, winter.res = 1)
+BuildEnv(temp, pct.rh, range.res.temp = 1, range.res.rh = 1, twinter,
+  winter.res = 24)
 }
 \arguments{
 \item{temp}{a \code{\link[raster]{raster}} or a list of two numbers representing the
@@ -13,8 +14,10 @@ minimum and maximum temperatures to run the model across.}
 \item{pct.rh}{a \code{\link[raster]{raster}} or a list of two numebers representing
 the minimum and maximum percent relative humidity to run the model across.}
 
-\item{range.res}{a single numeber representing the resultion of
-\code{temp.range} and \code{pct.rh.range}.}
+\item{range.res.temp}{a single numeber representing the resultion of
+\code{temp.range}.}
+
+\item{range.res.rh}{a single numeber representing the resultion of \code{pct.rh.range}.}
 
 \item{twinter}{the maximal length of winter to run the model across in either days or
 months.}
