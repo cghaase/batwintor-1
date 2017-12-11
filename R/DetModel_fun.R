@@ -41,7 +41,7 @@ DetModel <- function(t,y, params){
     #change in FungalArea/dt
     dFdt  <- growth*pT
 
-    list(c(dpTdt, dpEdt, dpFldt, dpAdt, dpCdt, dJdt, dpJdt, dFdt))
+    list(c(dpTdt, dpAdt, dpCdt, dpEdt, dpFldt, dJdt, dpJdt, dFdt))
   })
 }
 

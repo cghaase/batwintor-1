@@ -8,6 +8,7 @@ library(devtools)
 library(deSolve)
 library(data.table)
 library(dplyr)
+library(beepr)
 
 #Read in bat data
 data("bat.params")
@@ -22,7 +23,7 @@ fung.params <- FungSelect("Chaturvedi")
 mylu.params <- BatLoad(bat.params, "mylu")
 
 #Build environment
-env.df  <- BuildEnv(temp = c(7,7), pct.rh = c(97,97), range.res = 1, twinter = 10, winter.res = 1)
+env.df  <- BuildEnv(temp = c(7,7), pct.rh = c(97,97), range.res.temp = 1, range.res.rh = 1, twinter = 10, winter.res = 1)
 
 #Allow prop of flying to vary
 s <- seq(0.05, 1, 0.05)
@@ -38,8 +39,6 @@ for(f in s){
                        g.fat.consumed = mylu.mod.inf$g.fat.consumed, InfectTime = mylu.mod.inf$time)
   df <- rbind(df, all.df)
 }
-
-
 
 ################################################################################
 #### Fit species-specific lines to rEWL & body mass (revist with more data) ####
@@ -337,7 +336,7 @@ data("bat.params")
 fung.params <- FungSelect("Chaturvedi")
 
 #Create dataframe of environmental parameters (taken from our microclimate data)
-env.df  <- BuildEnv(temp = c(-5,20), pct.rh = c(50,100), range.res = 5, twinter = 10, winter.res = 1)
+env.df  <- BuildEnv(temp = c(-5,20), pct.rh = c(20,100), range.res.temp = 1, range.res.rh = 5, twinter = 10, winter.res = 24)
 
 #Create vector of species
 species <- c("mylu", "myve", "coto", "epfu", "pesu")
@@ -348,7 +347,6 @@ for(s in species){
 
   #Assign bat parameters
   s.params <- BatLoad(bat.params, s)
-  s.params$pMass <- 0.043
 
   #Calculate dynamic energy over range of environmental conditions
   de.df <- data.frame(DynamicEnergyPd(env = env.df, bat.params = s.params, fung.params = fung.params))
@@ -356,25 +354,19 @@ for(s in species){
   #Append to data frame and remove parameter names
   surv.out <- rbind(surv.out, data.frame(species=rep(s,dim(de.df)[1]),de.df))
 }
-save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_8Dec2017.RData")
+save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_11Dec2017.RData")
 
 ################################################################################
 #### Plot monthly survival over parameter space                             ####
 ################################################################################
 library(ggplot2)
 
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_8Dec2017.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_mylu_8Dec2017.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_myve_8Dec2017.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_coto_8Dec2017.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_pesu_8Dec2017.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/surv_epfu_8Dec2017.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_11Dec2017.RData")
 
 #Create vectors of environmental and species data
-temps <- seq(-5,20,5)
-hd <- seq(50,100,5)
+temps <- seq(-5,20,1)
+hd <- seq(20,100,5)
 species <- c("mylu", "myve", "coto", "epfu", "pesu")
-
 
 #Organize survival data for plotting purposes
 df.months <- data.frame()
@@ -382,7 +374,6 @@ for(t in temps){
   for(h in hd){
     for(s in species){
       s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
-      #s.data <- subset(de.df, de.df$Ta == t & de.df$pct.rh == h)
       months.inf  <- max(s.data$time[s.data$surv.inf == 1])/24/30
       months.null <- max(s.data$time[s.data$surv.null == 1])/24/30
       df <- data.frame(Species = s, Ta = t, pct.rh = h, Months.inf = months.inf, Months.null = months.null)
@@ -391,52 +382,9 @@ for(t in temps){
   }
 }
 
-mylu.months <- df.months
-myve.months <- df.months
-coto.months <- df.months
-epfu.months <- df.months
-pesu.months <- df.months
-
-save(mylu.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_mylu.RData")
-save(myve.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_myve.RData")
-save(coto.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_coto.RData")
-save(epfu.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_epfu.RData")
-save(pesu.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_pesu.RData")
-
 save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot.RData")
 
-#Create function for plotting over space
-plotEnvSpace <- function(df.months, s, title, WNS){
-  plot.sub <- df.months[df.months$Species == s, ]
-  p <- ggplot(plot.sub, aes(Ta, pct.rh)) + theme_classic() +
-    geom_raster(aes(fill = ifelse(WNS==TRUE,Months.inf,Months.null)), interpolate = TRUE) +
-    ggtitle(title) +
-    theme(plot.title = element_text(face="italic")) +
-    xlab("Temperature (C)") +
-    ylab("Relative Humidity (%)") +
-    scale_fill_gradientn(colours = terrain.colors(15), limits = c(2.5, 5))
-    #geom_polygon(data = polygon[polygon$Site == "SLL",], aes(x=X, y=Y), colour="black", fill=NA)
-}
-
-#Apply function to all species
-multiplot(plotEnvSpace(df.months,s="mylu","Myotis lucifugus - infected", WNS=TRUE),
-          plotEnvSpace(df.months,s="myve","Myotis velfer - infected", WNS=TRUE),
-          plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - infected", WNS=TRUE),
-          plotEnvSpace(df.months,s="coto","Corynorhinus townsendii - infected", WNS=TRUE),
-          plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - infected", WNS=TRUE),
-          plotEnvSpace(df.months,s="mylu","Myotis lucifugus - healthy", WNS=FALSE),
-          plotEnvSpace(df.months,s="myve","Myotis velfer - healthy", WNS=FALSE),
-          plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - healthy", WNS=FALSE),
-          plotEnvSpace(df.months,s="coto","Corynorhinus townsendii - healthy", WNS=FALSE),
-          plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - healthy", WNS=FALSE),
-          cols=2)
-
-
-
-
-
-
-##### Functions used ####
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
 
@@ -472,3 +420,36 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     }
   }
 }
+
+#Create function for plotting over space
+plotEnvSpace <- function(df.months, s, title, WNS){
+  plot.sub <- df.months[df.months$Species == s, ]
+  if(WNS == TRUE){fill=plot.sub$Months.inf}else{fill=plot.sub$Months.null}
+  p <- ggplot(plot.sub, aes(Ta, pct.rh)) + theme_classic() +
+    geom_raster(aes(fill = fill), interpolate = TRUE) +
+    ggtitle(title) +
+    theme(plot.title = element_text(face="italic")) +
+    xlab("Temperature (C)") +
+    ylab("Relative Humidity (%)") +
+    scale_fill_gradientn(colours = terrain.colors(10), limits = c(0, 10))
+    #geom_polygon(data = polygon[polygon$Site == "SLL",], aes(x=X, y=Y), colour="black", fill=NA)
+  #plot(p)
+}
+
+
+#Apply function to all species
+p1 = plotEnvSpace(df.months,s="mylu","Myotis lucifugus - infected", WNS=TRUE)
+p2 = plotEnvSpace(df.months,s="myve","Myotis velfer - infected", WNS=TRUE)
+p3 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - infected", WNS=TRUE)
+p4 = plotEnvSpace(df.months,s="coto","Corynorhinus townsendii - infected", WNS=TRUE)
+p5 = plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - infected", WNS=TRUE)
+
+p11 = plotEnvSpace(df.months,s="mylu","Myotis lucifugus - healthy", WNS=FALSE)
+p12 = plotEnvSpace(df.months,s="myve","Myotis velfer - healthy", WNS=FALSE)
+p13 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - healthy", WNS=FALSE)
+p14 = plotEnvSpace(df.months,s="coto","Corynorhinus townsendii - healthy", WNS=FALSE)
+p15 = plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - healthy", WNS=FALSE)
+
+multiplot(p1,p3,p11,p13, cols = 2)
+multiplot(p2,p4,p12,p14, cols = 2)
+

@@ -9,8 +9,9 @@
 #'  minimum and maximum temperatures to run the model across.
 #' @param pct.rh a \code{\link[raster]{raster}} or a list of two numebers representing
 #'  the minimum and maximum percent relative humidity to run the model across.
-#' @param range.res a single numeber representing the resultion of
-#' \code{temp.range} and \code{pct.rh.range}.
+#' @param range.res.temp a single numeber representing the resultion of
+#' \code{temp.range}.
+#' @param range.res.rh a single numeber representing the resultion of \code{pct.rh.range}.
 #' @param twinter the maximal length of winter to run the model across in either days or
 #' months.
 #' @param winter.res temporal resolution of the \code{twinter} vector. Default is
@@ -28,7 +29,7 @@
 #' @seealso \code{\link{DynamicEnergyPd}}
 #' @example ExampleScripts/BuildEnv_ex.R
 #' @export
-BuildEnv <- function(temp, pct.rh, range.res = 1, twinter, winter.res = 1){
+BuildEnv <- function(temp, pct.rh, range.res.temp = 1, range.res.rh = 1,  twinter, winter.res = 24){
   #Raster methods
   if(methods::is(temp, "Raster") || methods::is(pct.rh, "Raster")){
     t <- setMinMax(temp)
@@ -43,8 +44,8 @@ BuildEnv <- function(temp, pct.rh, range.res = 1, twinter, winter.res = 1){
     pct.rh.range <- pct.rh
   }
 
-  Ta <- seq(from = min(temp.range), to = max(temp.range), by = range.res)
-  pct.rh <- seq(from = min(pct.rh.range), to = max(pct.rh.range), by = range.res)
+  Ta <- seq(from = min(temp.range), to = max(temp.range), by = range.res.temp)
+  pct.rh <- seq(from = min(pct.rh.range), to = max(pct.rh.range), by = range.res.rh)
   env <- expand.grid(Ta,pct.rh);names(env) <- c("Ta", "pct.rh")
   ifelse(twinter > 12,
          twin <- seq(from=0, to = day.to.hour(twinter), by = winter.res),
