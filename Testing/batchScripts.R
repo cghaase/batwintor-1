@@ -12,11 +12,11 @@ WNS_run <- function(species, out.name){
   data("fung.params")
   fung.ch <- FungSelect(choose =  "Chaturvedi")
 
-  env <- BuildEnv(temp = c(-1,10),
-                  pct.rh = c(90,100),
+  env <- BuildEnv(temp = c(-5,20),
+                  pct.rh = c(20,100),
                   range.res.temp = .5,
                   range.res.rh = 1,
-                  twinter = 6,
+                  twinter = 10,
                   winter.res = 24)
   z <- DynamicEnergyPd(env = env,
                   bat.params = bat.p,
@@ -47,5 +47,4 @@ out.name <- file.path("D:", "Dropbox",
                       "batwintor_aux", "Run_10_12")
 WNS_batch(species.l = species.l,
           out.name = out.name)
-species <- species.l[[1]]
-WNS_run(spec, out.name)
+
