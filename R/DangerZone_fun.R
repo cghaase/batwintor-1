@@ -28,7 +28,8 @@ DangerZone <-function(mod.df, title, save.name=NULL, ...){
   ungroup %>% data.table
 
   dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~diff))  +
-    scale_fill_gradientn("Difference\n(months)",colors = c("gold1", "grey95", "steelblue3")) +
+    scale_fill_gradientn("Difference\n(months)",colors = c("gold1", "grey95", "steelblue3"),
+                         limits = c(-8,0)) +
     geom_raster(aes_(fill = ~diff), interpolate = T) +
     scale_x_continuous(expand = c(0,0))+
     scale_y_continuous(expand = c(0,0))+
@@ -38,13 +39,13 @@ DangerZone <-function(mod.df, title, save.name=NULL, ...){
     xlab("Temperature (C)") +
     ylab("Relative Humidity (%)")+
     theme_minimal()+
-    theme(plot.title = element_text(size = 18),
-          axis.title = element_text(size = 16),
-          axis.text = element_text(size = 16),
+    theme(plot.title = element_text(size = 18,  family="serif"),
+          axis.title = element_text(size = 16,  family="serif"),
+          axis.text = element_text(size = 16,  family="serif"),
           aspect.ratio = 1,
           legend.key.size = unit(42, "points"),
-          legend.title = element_text(size = 16),
-          legend.text = element_text(size = 16))
+          legend.title = element_text(size = 16,  family="serif"),
+          legend.text = element_text(size = 16,  family="serif"))
 
   if(!is.null(save.name)){
     ggsave( filename = save.name, ...)

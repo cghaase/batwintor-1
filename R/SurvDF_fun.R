@@ -2,9 +2,9 @@
 #' generation.
 #'
 #' \code{SurvDF} make a pretty dataframe from the output from
-#' \code{\link[pkg:batwintor]{SurvivalRaster}}
+#' \code{\link{SurvivalRaster}}
 #'
-#' @param surv.raster output from \code{\link[pkg:batwintor]{SurvivalRaster}}
+#' @param surv.raster output from \code{\link{SurvivalRaster}}
 #' @param dist.map shapefile containing the distribution of the species in
 #' question.
 #' @param nights a raster layer reprensenting the length of winter measured in nigths
@@ -14,11 +14,6 @@
 #' it seems to be completely redundant. it is kinda
 #' @export
 SurvDF <-function(surv.raster, dist.map = NULL, nights){
-  ###Function for converting the survival raster into a dataframe of months survived.
-  ##Arguments:
-  ## surv.rast <- output from survivalRas()
-  ## dist.map <- shapfile distrubution of species selected
-
   if(extent(surv.raster) == extent(nights)){
     rex <- surv.raster - nights
     tt.spec <- calc(rex, day.to.month)

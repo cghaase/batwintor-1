@@ -4,7 +4,7 @@
 #' adds shapes of North America.
 #'
 #' @param surv.stk raster result stack from \code{\link{SurvivalRaster}}
-#' @param WNS logical. Should bats have WNS
+#' @param WNS logical. Should the bats plotted be infected with WNS?
 #' @param dist.map shapefile representing the distribution you wish to map the
 #' results accross (generally speaking the entire distribution of the species)
 #' @param nights a raster layer reprensenting the length of winter measured in nigths
@@ -12,22 +12,28 @@
 #' @return returns a map of North America in which the distribution supplied
 #' is filled in with the results from the model run.
 #'
-#' @note This function will be removed/ remodeled with the next version
 #' @family Plot Functions
 #' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
 #' \code{\link{DiffHist}}
 #' @export
 
 SurvPlotter <- function(surv.stk, WNS, dist.map, nights){
-  ifelse(WNS == T, #WNS Flag
-         spec.df <- SurvDF(surv.stk$"max.inf",dist.map,nights),
-         spec.df <- SurvDF(surv.stk$"max.null",dist.map,nights))
+  if(WNS == T){
+    surv <- surv.stk[[1]]
+  }else{surv <- surv.stk[[2]]}
+
+  rex <- surv - nights
+  tt.spec <- calc(rex, day.to.month)
+  spec.Pt = rasterToPoints(tt.spec)
+  spec.df = data.frame(spec.Pt)
+  colnames(spec.df) <-c ("Longitude","Latitude","Months")
+
 
   worldmap = map_data("world")
   setnames(worldmap, c("X","Y","PID","POS","region","subregion"))
   worldmap = PBSmapping::clipPolys(worldmap,
-                       xlim=extent(surv.stk)[1:2],
-                       ylim=extent(surv.stk)[3:4],
+                       xlim=extent(surv)[1:2],
+                       ylim=extent(surv)[3:4],
                        keepExtra=TRUE)
   g.spec <- ggplot(spec.df) +
     aes(x=Longitude, y=Latitude) +

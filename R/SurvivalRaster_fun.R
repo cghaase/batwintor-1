@@ -40,9 +40,9 @@ SurvivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
   temp <- as.matrix(temp.c, nrow = nrow(temp.c), ncol = ncol(temp.c))
 
   mod.dif <- mod.df %>%
-    dplyr::group_by(Ta, pct.rh) %>%
-    dplyr::summarise(max.null = max(time*surv.null)/24, max.inf = max(time*surv.inf)/24) %>%
-    dplyr::mutate(diff = (max.null-max.inf)/24) %>%
+    group_by_(~Ta, ~pct.rh) %>%
+    summarise_(max.null = ~hour.to.day(max(time*surv.null)), max.inf = ~hour.to.day(max(time*surv.inf))) %>%
+    mutate_(diff = ~hour.to.day(max.null-max.inf)) %>%
     ungroup %>% data.table
 
   ####Look Up Table ####
