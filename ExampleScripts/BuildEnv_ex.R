@@ -1,2 +1,7 @@
 ##BuildEnv
-m.env <- BuildEnv(temp = c(1,100), hum = c(1,100), range.res = 1)
+m.env <- BuildEnv(temp = c(1,100),
+                  pct.rh = c(1,100),
+                  range.res.temp = 1,
+                  range,range.res.rh = 1,
+                  twinter = 9,
+                  winter.res = 24)

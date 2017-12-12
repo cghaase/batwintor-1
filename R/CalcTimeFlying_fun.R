@@ -9,7 +9,7 @@
 #'
 #' @seealso  \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
-#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+#' \code{\link{CalcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #' @export
 CalcTimeFlying <- function(bat.params){
   with(bat.params,{

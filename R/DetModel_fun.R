@@ -19,7 +19,7 @@
 DetModel <- function(t,y, params){
   with(c(as.list(y),params),{
     ttor <- CalcTorporTimePd(Ta = Tb, pct.rh = pct.rh, areaPd = FungalArea, WNS = WNS,
-                           mod.params = params)
+                           bat.params = params, fung.param = params)
     tar <- CalcArousalTime(Ta = Tb, bat.params = params)
     tc <- CalcCoolTime(Ta = Tb, bat.params = params)
     tfl <- CalcTimeFlying(bat.params = params)

@@ -5,15 +5,17 @@
 \title{Plotting the difference between infected and and uninfected hibernating
 bats.}
 \usage{
-DangerZone(mod.df, species.option = "", save.name = NULL)
+DangerZone(mod.df, title, save.name = NULL, ...)
 }
 \arguments{
 \item{mod.df}{results data from \code{\link{DynamicEnergyPd}}}
 
-\item{species.option}{chracter string used for labeling}
+\item{title}{title for the figure}
 
 \item{save.name}{a name and file path relative to the working directory
 where the figure will be saved.}
+
+\item{...}{used to pass arguments to \code{\link[ggplot2]{ggsave}}}
 }
 \value{
 returns an environmental surface accross which the difference

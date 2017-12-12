@@ -19,9 +19,9 @@ energy expended during a time unit of flight
 }
 \seealso{
 \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
-\code{\link{CalcEnergyCool}}, \code{\link{CalcTimeArousal}},
+\code{\link{CalcEnergyCool}}, \code{\link{CalcTimeEuthermic}},
 \code{\link{CalcEnergyArousal}}, \code{\link{CalcEnergyTimeEuthermic}},
-\code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+\code{\link{CalcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 
 Other Arousal Functions: \code{\link{CalcArousalTime}},
   \code{\link{CalcEnergyArousal}},

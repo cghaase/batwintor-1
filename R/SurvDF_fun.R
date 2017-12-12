@@ -31,7 +31,7 @@ SurvDF <-function(surv.raster, dist.map = NULL, nights){
     cold.crop <- crop(coldnightUS,extent(dist.map),weight=T) #crop nights
     spec.night.crop <- mask(cold.crop, dist.map)#mask nights
     spec.months <- calc(spec.night.crop, prop.to.months)
-    tt.spec <- spec.r.months - spec.month
+    tt.spec <- spec.r.months - spec.months
   }
   spec.Pt = rasterToPoints(tt.spec)
   spec.df = data.frame(spec.Pt)

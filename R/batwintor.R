@@ -15,7 +15,7 @@
 #' (first two letters genus and species) as we got tired of writing out the
 #' whole name every time. The parameters for \emph{Myotis
 #' lucifugus}(\code{mylu}) is extracted from \code{bat.params} as an example
-#' and stored as \code{\link{mylu.params}}. \code{\link{fung,params}} contains
+#' and stored as \code{\link{mylu.params}}. \code{\link{fung.params}} contains
 #' the parameters required to calculate and scale the growth of
 #' \emph{Pseduogymnoascans destructans}, the psycrophilic fungal agent
 #' responsable for WNS.
@@ -23,7 +23,7 @@
 #' @section Torpor Functions:
 #' The \code{Torpor Fucntions} are used to calculate
 #' how long a bat will maintain a torpid metabolic state
-#' (\code{\link{CalcTorporTimePD}}), which is dependent largley on
+#' (\code{\link{CalcTorporTimePd}}), which is dependent largley on
 #' \code{\link{CalcEWL}}, and \code{\link{CalcEnergyTimeTorpid}} is used to
 #' determine the energy expended during those bouts of torpor.
 #'
@@ -35,14 +35,14 @@
 #' \code{\link{CalcEnergyTimeEuthermic}} describes energy expendature during
 #' euthermia, and the \code{\link{CalcTimeFlying}} and
 #' \code{\link{CalcEnergyFlying}} functions describe ammendments made to encourperate
-#' the metabolic costs of flight during arousals. The \code{\link{CalcTimeCool}}
+#' the metabolic costs of flight during arousals. The \code{\link{CalcCoolTime}}
 #' and \code{\link{CalcEnergyCool}} functions handle the return from eutheria
 #' to torpid state and complete the arousal cycle.
 #'
 #' @section Model Functions:
 #' The model functions are the heart of the package and are composed of:
-#' \code{\link{BuildEnv}}, \code{\link{DynamicModelPd}}, and
-#' \code{\link{DetMod}}. The \code{BuildEnv} function allows you to create your
+#' \code{\link{BuildEnv}}, \code{\link{DynamicEnergyPd}}, and
+#' \code{\link{DetModel}}. The \code{BuildEnv} function allows you to create your
 #' the parameter space that your model will run across in the form of
 #' environmental spave and a time vector. The \code{DynamicEnergyPd} takes
 #' the supplied environment, the parameters passed in and formats the data

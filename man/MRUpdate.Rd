@@ -4,7 +4,7 @@
 \alias{MRUpdate}
 \title{Updates build-in metabolic parameter estimates using new data.}
 \usage{
-MRUpdate(x, species, params = bat.params)
+MRUpdate(x, species, params = data("bat.params", package = "batwintor"))
 }
 \arguments{
 \item{x}{object returned by \code{\link{MRFromRaw}}}
