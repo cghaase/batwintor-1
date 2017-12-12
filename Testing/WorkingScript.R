@@ -265,39 +265,34 @@ means.b <- data.frame(rowMeans(df.b))
 means.c <- data.frame(rowMeans(df.c))
 
 #Reorganize df for plotting purposes (ie remove variables that aren't within actual function)
-means.a <- data.frame(means=PRCCresults.a[[1]][,1])
-means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,9,13:16,22:26),1])
-means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3:6,9,13:18,22:26),1])
+#means.a <- data.frame(means=PRCCresults.a[[1]][,1])
+means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,6,13:16,22:26),1])
+means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3,6,9,13:18,20,22:26),1])
 
 #Plot mean with significance
 op <- par(family = "serif")
 names.a = expression("Body Mass","RMR","TMR"[min],"T"[eu],"T"[lc],"T"[tormin],"C"[eu],"C"[tor],"t"[tormax],"t"[eu],"Warming Rate","Cooling Rate","Rate of EWL",
-          "TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Euthermia Spent Flying","% Body Mass at Lean","% Body Mass as Fat",beta[1],beta[2],beta[3],mu[1],mu[2])
-names.b = expression("Body Mass","TMR"[min],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd",beta[1],beta[2],beta[3],mu[1],mu[2])
-names.c = expression("Body Mass","TMR"[min],"T"[eu],"T"[lc],"T"[tormin],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],beta[1],beta[2],beta[3],mu[1],mu[2])
+          "TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Euthermia Spent Flying","% Body Mass as Lean","% Body Mass as Fat",beta[1],beta[2],beta[3],mu[1],mu[2])
+names.b = expression("Body Mass","TMR"[min],"T"[tormin],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd",beta[1],beta[2],beta[3],mu[1],mu[2])
+names.c = expression("Body Mass","TMR"[min],"T"[tormin],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Body Mass as Lean",beta[1],beta[2],beta[3],mu[1],mu[2])
 
 par(mar=c(5.1,15,4.1,2.1))
-barplot(means.a[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.a, horiz=TRUE, col = "grey85", main = "Survival")
 t.cutoff=qt(0.05/2,df=100-2)
 sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
                (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+
+barplot(means.a[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
+        names.arg= names.a, horiz=TRUE, col = ifelse(means.a > sig.cutoffs[1] & means.a < sig.cutoffs[2], "grey85", "steelblue3"), main = "Survival")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
 barplot(means.b[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.b, horiz=TRUE, col = "grey85", main = "Total Evaporative Water Loss")
-t.cutoff=qt(0.05/2,df=100-2)
-sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
-               (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+        names.arg= names.b, horiz=TRUE, col = ifelse(means.b > sig.cutoffs[1] & means.b < sig.cutoffs[2], "grey85", "steelblue3"), main = "Total Evaporative Water Loss")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
 barplot(means.c[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.c, horiz=TRUE, col = "grey85", main = "Torpor Bout Duration")
-t.cutoff=qt(0.05/2,df=100-2)
-sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
-               (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+        names.arg= names.c, horiz=TRUE, col = ifelse(means.c > sig.cutoffs[1] & means.c < sig.cutoffs[2], "grey85", "steelblue3"), main = "Torpor Bout Duration")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
@@ -453,7 +448,13 @@ p15 = plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - healthy", WNS=FALS
 multiplot(p1,p3,p11,p13, cols = 2)
 multiplot(p2,p4,p12,p14, cols = 2)
 
-
+#Use Danger Zone plotting
+surv.mylu <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/myluDNEpd.csv")
+surv.myve <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/myveDNEpd.csv")
+surv.epfu <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/epfuDNEpd.csv")
+DangerZone(surv.mylu, title = "Myotis lucifigus")
+DangerZone(surv.myve, title = "Myotis velifer")
+DangerZone(surv.epfu, title = "Eptesicus fuscus")
 
 ################################################################################
 #### Validate torpor duration                                               ####

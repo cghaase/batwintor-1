@@ -14,7 +14,7 @@
 #'
 #' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyTimeEuthermic}},
-#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+#' \code{\link{CalcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #'
 #' @references McKechnie & Wolf 2004 equation 3
 #'

@@ -20,7 +20,7 @@ returns list of names parameters used for metabolic calculations
 \details{
 Function loads the metabolic parameters that will be used accross
 the entire distribution. Generally speaking it is suggested that you use
-\code{\link{BatDat}} which is built in.
+\code{\link{bat.params}} which is built in.
 }
 \examples{
 ##BatLoad Example

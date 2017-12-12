@@ -6,12 +6,13 @@
 #' @param pct.rh precent humidity
 #' @param areaPd surface area infected by fungus
 #' @param WNS logical, if TRUE, considers the effect of Pd growth on EWL
-#' @param mod.params list of parameters output from \code{\link{BatLoad}}
-#'  and \code{\link{FungLoad}}
+#' @param bat.params  parameters returned by \code{bat.params}
+#' @param fung.params parameters returned by \code{fung.params}
 #'
 #' @export
 
-CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params, bat.params)){
+CalcTorporTimePd <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
+  mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
     #Define threshold based on infection status
     Hd = pct.rh

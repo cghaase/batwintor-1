@@ -18,7 +18,7 @@
 #' \code{\link{BatLoad}}
 #' @example ExampleScripts/MRUpdate_ex.R
 #' @export
-MRUpdate <- function(x, species, params = bat.params){
+MRUpdate <- function(x, species, params = data("bat.params", package = "batwintor")){
   bat.update <- params
   x.df <- x$df
   for(i in 1:length(names(x.df))){

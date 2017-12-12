@@ -189,8 +189,8 @@ means.surv <- data.frame(means=PRCCresults.surv[[1]][,1])
 means.ewl  <- data.frame(means=PRCCresults.ewl[[1]][c(1,3,10,14:17,23:27),1])
 means.tbd  <- data.frame(means=PRCCresults.tbd[[1]][c(1,3:6,10,14:19,23:27),1])
 
-means.ewl <- data.frame(means=PRCCresults.ewl[[1]][c(1,3,9,13:16,22:26),1])
-means.tbd <- data.frame(means=PRCCresults.tbd[[1]][c(1,3:6,9,13:18,22:26),1])
+# means.ewl <- data.frame(means=PRCCresults.ewl[[1]][c(1,3,9,13:16,22:26),1])
+# means.tbd <- data.frame(means=PRCCresults.tbd[[1]][c(1,3:6,9,13:18,22:26),1])
 
 #Plot mean with significance
 op <- par(family = "serif")

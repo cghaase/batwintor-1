@@ -4,8 +4,7 @@
 \alias{CalcTorporTimePd}
 \title{Calculate maximum time in torpor}
 \usage{
-CalcTorporTimePd(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params,
-  bat.params))
+CalcTorporTimePd(Ta, pct.rh, areaPd, WNS, bat.params, fung.params)
 }
 \arguments{
 \item{Ta}{ambient temperature}
@@ -16,8 +15,9 @@ CalcTorporTimePd(Ta, pct.rh, areaPd, WNS, mod.params = c(fung.params,
 
 \item{WNS}{logical, if TRUE, considers the effect of Pd growth on EWL}
 
-\item{mod.params}{list of parameters output from \code{\link{BatLoad}}
-and \code{\link{FungLoad}}}
+\item{bat.params}{parameters returned by \code{bat.params}}
+
+\item{fung.params}{parameters returned by \code{fung.params}}
 }
 \description{
 \code{CalcTorporTime} Calculates time or torpor bout given ambient temperature or EWL, whichever comes first

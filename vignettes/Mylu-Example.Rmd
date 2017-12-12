@@ -38,7 +38,8 @@ Once you've selected the data you want to you it's time to set up the environmen
 ```{r}
 env <- BuildEnv(temp = c(0,20), #temperatures in degrees C
                 pct.rh = c(60, 100), #precent humidity
-                range.res = 1, #resolution of the temperature and humidity ranges
+                range.res.temp = 1, #resolution of the temperature
+                range.res.rh = 1, #resolution of the humidithy
                 twinter = 9, #maximal length of winter (in this case I have months)
                 winter.res = 24) #resolution of the time vector in vectors
 ```

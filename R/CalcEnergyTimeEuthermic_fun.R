@@ -12,7 +12,7 @@
 #'
 #' @seealso  \code{\link{CalcEnergyCool}}, \code{\link{CalcCoolTime}},
 #' \code{\link{CalcEnergyCool}}, \code{\link{CalcEnergyCool}},
-#' \code{\link{calcEnergyFlying}}, \code{\link{CalcTimeFlying}}
+#' \code{\link{CalcEnergyFlying}}, \code{\link{CalcTimeFlying}}
 #'
 #' @example ExampleScripts/CalcEnergyTimeEuthermic_ex.R
 #' @export

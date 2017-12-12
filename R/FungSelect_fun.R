@@ -33,6 +33,6 @@
 #' \code{\link{ScaleFungalGrowthRate}}
 #' @export
 FungSelect <- function(choose){
-  data("fung.params")
+  data("fung.params", package = "batwintor")
   as.list(fung.params[choose,])
 }

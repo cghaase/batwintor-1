@@ -5,8 +5,8 @@
 #' @param pct.rh precent relative humidity
 #' @param t time
 #' @param areaPd area of fungal growth (cm2)
-#' @param mod.params list of parameters output from \code{\link{BatLoad}}
-#'  and \code{\link{FungLoad}}
+#' @param bat.params  parameters returned by \code{bat.params}
+#' @param fung.params parameters returned by \code{fung.params}
 #' @param torpid logical, if the animal is storpid or not
 #' @param WNS logical, if the animal is infected with Pd or not
 #'
@@ -18,8 +18,9 @@
 #' @seealso \code{\link{CalcEnergyTimeTorpid}}
 #' @author Katie Haase
 #' @export
-CalcEWL <- function(Ta, pct.rh, t, areaPd, mod.params = c(fung.params,bat.params),
+CalcEWL <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
                     torpid = TRUE, WNS = c(TRUE,FALSE)){
+  mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
 
     #### Constants ####
