@@ -22,48 +22,32 @@ SurvPlotter <- function(surv.stk, WNS, dist.map, nights){
     surv <- surv.stk[[1]]
   }else{surv <- surv.stk[[2]]}
 
-  rex <- surv - nights
+  rex <- surv - ni#ghts
   tt.spec <- calc(rex, day.to.month)
-  spec.Pt = rasterToPoints(tt.spec)
+  sp.c <- mask(crop(tt.spec, dist.map), dist.map)
+  spec.Pt = rasterToPoints(sp.c)
   spec.df = data.frame(spec.Pt)
-  colnames(spec.df) <-c ("Longitude","Latitude","Months")
+  colnames(spec.df) <-c ("long","lat","Months")
 
 
-  worldmap = map_data("world")
-  setnames(worldmap, c("X","Y","PID","POS","region","subregion"))
-  worldmap = PBSmapping::clipPolys(worldmap,
-                       xlim=extent(surv)[1:2],
-                       ylim=extent(surv)[3:4],
-                       keepExtra=TRUE)
   g.spec <- ggplot(spec.df) +
-    aes(x=Longitude, y=Latitude) +
-    geom_polygon(data=worldmap, aes(X,Y,group=PID),
-                 alpha= .5,
-                 fill = "darkolivegreen2",
-                 color="grey20") +
-    geom_raster( aes(fill=Months), interpolate = TRUE) +
-    geom_polygon(data=worldmap, aes(X,Y,group=PID),
-                 alpha= .0001,
-                 fill = "snow",
-                 color="grey20") +
-    #geom_polygon(data = as.data.frame(dist.map), aes(long,lat), colour = "black", fill = NA) +
-    # geom_polygon(data = fortify(dist.map),
-    #              aes(long,lat,group=group),
-    #              colour = "black", fill = NA) +
-    scale_fill_gradient2(low="red4",mid = "white",high="midnightblue"
-      #limits=c((min(minValue(stack(surv.rasters))/720)-1)
-       #        ,(max(maxValue(stack(surv.rasters))/720)+1))
-      ) +
-    coord_fixed()
-  bkg <- theme(
-    panel.background = element_rect(fill = "lightblue",
-                                    colour = "lightblue",
-                                    size = 0.5, linetype = "solid"),
-    panel.grid.major = element_line(size = 0.5, linetype = 'solid',
-                                    colour = "white"),
-    panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
-                                    colour = "white")
-  )
+    coord_fixed()+
+    borders("world", xlim=extent(surv)[1:2],ylim=extent(surv)[3:4], colour = "grey20")+
+    geom_raster( aes_(~long, ~lat,fill=~Months), interpolate = TRUE)+
+    geom_polygon(data = fortify(dist.map),
+                 aes_(~long,~lat, group = ~group),
+                 colour = "black",
+                 fill = NA) +
+    scale_fill_gradientn("Survival\nCapacity\n(months)",colors = c("gold1", "steelblue3")) +
+    scale_x_continuous(expand = c(0,0))+
+    scale_y_continuous(expand = c(0,0))+
+    theme(plot.title = element_text(size = 18,  family="serif"),
+          axis.title = element_text(size = 16,  family="serif"),
+          axis.text = element_text(size = 16,  family="serif"),
+          legend.key.size = unit(42, "points"),
+          legend.title = element_text(size = 16,  family="serif"),
+          legend.text = element_text(size = 16,  family="serif"))
 
-  return(x <- g.spec + bkg)
+
+  return(x <- g.spec)
 }

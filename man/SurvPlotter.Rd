@@ -9,7 +9,7 @@ SurvPlotter(surv.stk, WNS, dist.map, nights)
 \arguments{
 \item{surv.stk}{raster result stack from \code{\link{SurvivalRaster}}}
 
-\item{WNS}{logical. Should bats have WNS}
+\item{WNS}{logical. Should the bats plotted be infected with WNS?}
 
 \item{dist.map}{shapefile representing the distribution you wish to map the
 results accross (generally speaking the entire distribution of the species)}
@@ -23,9 +23,6 @@ is filled in with the results from the model run.
 \description{
 \code{SurvPlotter} plots the results from \code{\link{SurvivalRaster}} and
 adds shapes of North America.
-}
-\note{
-This function will be removed/ remodeled with the next version
 }
 \seealso{
 \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
