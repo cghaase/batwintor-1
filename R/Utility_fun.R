@@ -17,6 +17,5 @@
 #' @importFrom rgdal readOGR
 #' @importFrom utils data read.csv
 #' @importFrom plyr ddply
-#' @importFrom PBSmapping clipPolys
 #' @importFrom rlang .data
 NULL
