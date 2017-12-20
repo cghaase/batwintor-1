@@ -1,6 +1,6 @@
 #' Load static bat metabolic parameters
 #'
-#' \code{BatLoad} Loads metabolic parameters for bats from dataframe.
+#' \code{batLoad} Loads metabolic parameters for bats from dataframe.
 #'
 #' @param x dataframe from which parameters are taken see \strong{Details}
 #' @param species character string for selected species from file above
@@ -10,10 +10,10 @@
 #' the entire distribution. Generally speaking it is suggested that you use
 #' \code{\link{bat.params}} which is built in.
 #'
-#' @example ExampleScripts/BatLoad_ex.R
+#' @example ExampleScripts/batLoad_ex.R
 #' @export
 
-BatLoad <- function(x, species){
+batLoad <- function(x, species){
   if(species%in%rownames(x)){
     pset <- x[species,]
   }else{

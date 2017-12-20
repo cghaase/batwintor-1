@@ -1,6 +1,6 @@
 #' Build an environmental space to run the model across
 #'
-#' \code{BuildEnv} builds the environmental parameters across which the
+#' \code{buildEnv} builds the environmental parameters across which the
 #' dynamic model will be applied. This does not necessairly need to
 #' represent real-world condtions but can instead be used to explore all of
 #' parameter space.
@@ -26,10 +26,10 @@
 #' \code{range.res} is especially fine, this may present computational
 #' challenges downstream.
 #' @family Model Engine
-#' @seealso \code{\link{DynamicEnergyPd}}
-#' @example ExampleScripts/BuildEnv_ex.R
+#' @seealso \code{\link{hibernationModel}}
+#' @example ExampleScripts/buildEnv_ex.R
 #' @export
-BuildEnv <- function(temp, pct.rh, range.res.temp = 1, range.res.rh = 1,  twinter, winter.res = 24){
+buildEnv <- function(temp, pct.rh, range.res.temp = 1, range.res.rh = 1,  twinter, winter.res = 24){
   #Raster methods
   if(methods::is(temp, "Raster") || methods::is(pct.rh, "Raster")){
     t <- setMinMax(temp)

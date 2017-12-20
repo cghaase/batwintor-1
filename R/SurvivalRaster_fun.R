@@ -1,6 +1,6 @@
 #' Converts model results dataframe into results raster.
 #'
-#' \code{SurvivalRaster} uses supplied environmental rasters to query model
+#' \code{survivalRaster} uses supplied environmental rasters to query model
 #' results and creating a raster filled with maximum hibernation estimates for
 #' hibernation without infection, with infection and the difference between the
 #' two.
@@ -19,11 +19,11 @@
 #' @note humidity rasters in the original Hayman et al. 2016 represent the average
 #' of the average humidities for the months Jan-Mar.
 #' @family Plot Functions
-#' @seealso \code{\link{DangerZone}}; \code{\link{MapFigs}}; \code{\link{SurvPlotter}};
-#' \code{\link{DiffHist}}
+#' @seealso \code{\link{dangerZone}}; \code{\link{survivalMultiplot}}; \code{\link{survivalPlotter}};
+#' \code{\link{survivalHistogram}}
 #' @export
 
-SurvivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
+survivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
   #Raster modifications for Kelvin temperatures
   if(summary(temp.rast)[1] > 200){
     temp.c <- temp.rast - 273

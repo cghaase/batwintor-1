@@ -2,9 +2,9 @@
 #' generation.
 #'
 #' \code{SurvDF} make a pretty dataframe from the output from
-#' \code{\link{SurvivalRaster}}
+#' \code{\link{survivalRaster}}
 #'
-#' @param surv.raster output from \code{\link{SurvivalRaster}}
+#' @param surv.raster output from \code{\link{survivalRaster}}
 #' @param dist.map shapefile containing the distribution of the species in
 #' question.
 #' @param nights a raster layer reprensenting the length of winter measured in nigths
