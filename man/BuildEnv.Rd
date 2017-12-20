@@ -54,6 +54,6 @@ m.env <- buildEnv(temp = c(1,100),
 \seealso{
 \code{\link{hibernationModel}}
 
-Other Model Engine: \code{\link{DetModel}},
+Other Model Engine: \code{\link{batDynamic}},
   \code{\link{hibernationModel}}
 }

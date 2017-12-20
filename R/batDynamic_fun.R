@@ -16,12 +16,12 @@
 #' @seealso \code{\link{hibernationModel}},  \code{\link{buildEnv}}
 #' @example ExampleScripts/hibernationModel_ex.R
 #' @export
-DetModel <- function(t,y, params){
+batDynamic <- function(t,y, params){
   with(c(as.list(y),params),{
     ttor <- torporTime(Ta = Tb, pct.rh = pct.rh, areaPd = FungalArea, WNS = WNS,
                            bat.params = params, fung.param = params)
     tar <- arousalTime(Ta = Tb, bat.params = params)
-    tc <- CalcCoolTime(Ta = Tb, bat.params = params)
+    tc <- coolTime(Ta = Tb, bat.params = params)
     tfl <- flyingTime(bat.params = params)
     tieu <- euthermicTime(bat.params = params) #time inactive euthermic
     # change in TorporProp (pT)/dt

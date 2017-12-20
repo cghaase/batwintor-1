@@ -49,6 +49,6 @@ bingo <- hibernationModel(env.df, my.params, fung.ch)
 \seealso{
 \code{\link{DetModel}}, \code{\link{buildEnv}}
 
-Other Model Engine: \code{\link{DetModel}},
+Other Model Engine: \code{\link{batDynamic}},
   \code{\link{buildEnv}}
 }

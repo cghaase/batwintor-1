@@ -44,7 +44,7 @@ hibernationModel <- function(env, bat.params, fung.params){
           values <- c(Tb = Tb, Ttor = Ttor, WNS = inf, pct.rh= pct.rh,
                       # Fungal growth area
                       growth = fungalGrowth(Tb = Tb, fung.params = mod.params)*
-                        ScalefungalGrowth(pct.rh = pct.rh, fung.params = mod.params),
+                        scaleFungalGrowth(pct.rh = pct.rh, fung.params = mod.params),
                       # Energy cost for euthermia
                       Eeu = euthermicEnergy(Ta = Ta, bat.params = mod.params),
                       # Energy costs for flying during euthermia
@@ -52,7 +52,7 @@ hibernationModel <- function(env, bat.params, fung.params){
                       # Energy cost for torpor
                       Etor = torporEnergy(Ta = Ta, bat.params = mod.params),
                       # Energy cost for arousal from torpor
-                      Ear = CalcEnergyArousal(Ta = Ttor, bat.params = mod.params),
+                      Ear = arousalEnergy(Ta = Ttor, bat.params = mod.params),
                       # Energy cost for cooling from euthermic
                       Ec = coolEnergy(Ta = Ttor, bat.params = mod.params),
                         mod.params)
@@ -67,7 +67,7 @@ hibernationModel <- function(env, bat.params, fung.params){
                                                 FungalArea = 0),
                                           # Time to solve across
                                           times = env[[2]],
-                                          func = DetModel,
+                                          func = batDynamic,
                                           parms = values))
           # Helper function for energy calculations
           # This is needed because the dif eqs solve for the change in (x)
