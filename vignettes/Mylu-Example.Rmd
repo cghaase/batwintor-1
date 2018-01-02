@@ -29,17 +29,23 @@ data("bat.params") ; data("fung.params")
 ```
 The structure and details of these data items are available though `?`. In summary, `bat.params` contains 22 parameters for 12 species and `fung.params` includes parameters for two different growth equations. Throughout this vignette we will be modeling the bat species *Myotis lucifugus* (coded as `mylu`) and using the `Chaturvedi` fungal parameters.
 ```{r}
-mylu.params <- BatLoad(bat.params, "mylu")
-fung.ch <- FungSelect("Chaturvedi")
+mylu.params <- batLoad(bat.params, "mylu")
+fung.ch <- fungalSelect("Chaturvedi")
 ```
 
 ## Model
 Once you've selected the data you want to you it's time to set up the environmental space to run the model across. **Note:** This step can be a major determinate in how long it the calculations will take. 
 ```{r}
-env <- BuildEnv(temp = c(0,20), #temperatures in degrees C
-                pct.rh = c(60, 100), #precent humidity
+env <- buildEnv(temp = c(5,5), #temperatures in degrees C
+                pct.rh = c(100, 100), #precent humidity
                 range.res.temp = 1, #resolution of the temperature
                 range.res.rh = 1, #resolution of the humidithy
-                twinter = 9, #maximal length of winter (in this case I have months)
-                winter.res = 24) #resolution of the time vector in vectors
+                twinter = 3, #maximal length of winter (in this case I have months)
+                winter.res = 1) #resolution of the time vector in vectors
 ```
+Now that the environmental parameters are set, we can run the actual model by simply calling `DynamicEnergryPd`. 
+```{r}
+ mylu.mod <- hibernationModel(env = env, bat.params = mylu.params, fung.params = fung.ch)
+ plot(mylu.mod$time, mylu.mod$Prop.Ar)
+```
+The object returned by this modeling call will be a data.table with columns representing results for both infected, and uninfected animals (denoted by `n.` in their column name). Many of the column names should look familar, `Ta` and `pct.rh` for instance are the parameters used to define the environmental space in `buildEnv` and the `time` column is the `twinter` vector created. The other columns in the datatable are values calculated for both infected and uninfected bats. Columns with the prefix of `n.` represent the `null` or uninfected values while columns without the prefix represent the infected animals. If you'd like to learn more about the product output please call `?hibernationModel`. Have fun and happy modeling!

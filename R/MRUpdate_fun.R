@@ -1,10 +1,10 @@
 #' Updates build-in metabolic parameter estimates using new data.
 #'
-#' \code{MRUpdate} updates paremeter estimates supplied in
+#' \code{mrUpdate} updates paremeter estimates supplied in
 #' \code{\link{bat.params}} with estimates obtained through the use of
-#' \code{\link{MRFromRaw}} for use throughout the package.
+#' \code{\link{mrRaw}} for use throughout the package.
 #'
-#' @param x object returned by \code{\link{MRFromRaw}}
+#' @param x object returned by \code{\link{mrRaw}}
 #' @param species a character vector of the species to be updated. This should
 #' be a row name from the \code{bat.params}
 #' @param params a dataframe of metabolic parameters (generally that returned
@@ -14,11 +14,11 @@
 #' in \code{\link{bat.params}} are updated at once, and therefore
 #' only those that have new estimates are updated.
 #'
-#' @seealso \code{\link{bat.params}}, \code{\link{MRFromRaw}},
-#' \code{\link{BatLoad}}
-#' @example ExampleScripts/MRUpdate_ex.R
+#' @seealso \code{\link{bat.params}}, \code{\link{mrRaw}},
+#' \code{\link{batLoad}}
+#' @example ExampleScripts/mrUpdate_ex.R
 #' @export
-MRUpdate <- function(x, species, params = data("bat.params", package = "batwintor")){
+mrUpdate <- function(x, species, params = data("bat.params", package = "batwintor")){
   bat.update <- params
   x.df <- x$df
   for(i in 1:length(names(x.df))){

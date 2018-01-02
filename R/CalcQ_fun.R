@@ -1,6 +1,6 @@
 #' Q10 scaling value as a function of ambient temperature
 #'
-#' \code{CalcQ} Scales metabolic rate with ambient temperature
+#' \code{calcQ} Scales metabolic rate with ambient temperature
 #'
 #' @param Ta ambient temperature in degrees C
 #' @param Q1 Q constant 1 = 1.6
@@ -9,10 +9,10 @@
 #' @return Returns the value of Q10 value for the given ambient temperature
 #'
 #' @examples
-#' CalcQ(4)
-#' CalcQ(6, 1.6, 0.26, 0.006)
+#' calcQ(4)
+#' calcQ(6, 1.6, 0.26, 0.006)
 #' @export
-CalcQ <- function( Ta, Q1 = 1.6, Q2 = 0.26, Q3 = 0.006){
+calcQ <- function( Ta, Q1 = 1.6, Q2 = 0.26, Q3 = 0.006){
   Q1 + Q2*Ta - Q3*Ta^2
 }
 

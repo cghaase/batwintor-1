@@ -8,7 +8,7 @@ generation.}
 SurvDF(surv.raster, dist.map = NULL, nights)
 }
 \arguments{
-\item{surv.raster}{output from \code{\link[pkg:batwintor]{SurvivalRaster}}}
+\item{surv.raster}{output from \code{\link{survivalRaster}}}
 
 \item{dist.map}{shapefile containing the distribution of the species in
 question.}
@@ -21,7 +21,7 @@ functions
 }
 \description{
 \code{SurvDF} make a pretty dataframe from the output from
-\code{\link[pkg:batwintor]{SurvivalRaster}}
+\code{\link{survivalRaster}}
 }
 \note{
 will be replaced in the next instance of the model so don't worry that

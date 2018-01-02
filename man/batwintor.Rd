@@ -33,8 +33,8 @@ responsable for WNS.
 
 The \code{Torpor Fucntions} are used to calculate
 how long a bat will maintain a torpid metabolic state
-(\code{\link{CalcTorporTimePd}}), which is dependent largley on
-\code{\link{CalcEWL}}, and \code{\link{CalcEnergyTimeTorpid}} is used to
+(\code{\link{torporTime}}), which is dependent largley on
+\code{\link{ewl}}, and \code{\link{torporEnergy}} is used to
 determine the energy expended during those bouts of torpor.
 }
 
@@ -42,26 +42,26 @@ determine the energy expended during those bouts of torpor.
 
 The \code{Arousal Functions} are designed to
 explane the energry expendatures between bouts of torpor.
-\code{\link{CalcArousalTime}} and \code{\link{CalcEnergyArousal}} document
+\code{\link{arousalTime}} and \code{\link{CalcEnergyArousal}} document
 the return from torpid body temperatures to euthermia. The functions
-\code{\link{CalcEnergyTimeEuthermic}} describes energy expendature during
-euthermia, and the \code{\link{CalcTimeFlying}} and
-\code{\link{CalcEnergyFlying}} functions describe ammendments made to encourperate
+\code{\link{euthermicEnergy}} describes energy expendature during
+euthermia, and the \code{\link{flyingTime}} and
+\code{\link{flyingEnergy}} functions describe ammendments made to encourperate
 the metabolic costs of flight during arousals. The \code{\link{CalcCoolTime}}
-and \code{\link{CalcEnergyCool}} functions handle the return from eutheria
+and \code{\link{coolEnergy}} functions handle the return from eutheria
 to torpid state and complete the arousal cycle.
 }
 
 \section{Model Functions}{
 
 The model functions are the heart of the package and are composed of:
-\code{\link{BuildEnv}}, \code{\link{DynamicEnergyPd}}, and
-\code{\link{DetModel}}. The \code{BuildEnv} function allows you to create your
+\code{\link{buildEnv}}, \code{\link{hibernationModel}}, and
+\code{\link{DetModel}}. The \code{buildEnv} function allows you to create your
 the parameter space that your model will run across in the form of
-environmental spave and a time vector. The \code{DynamicEnergyPd} takes
+environmental spave and a time vector. The \code{hibernationModel} takes
 the supplied environment, the parameters passed in and formats the data
 for the \code{DetMod} which solves the differential equations.
-\code{DynamicEnergyPD} then formats, and outputs the results for post-processing
+\code{hibernationModel} then formats, and outputs the results for post-processing
 and plotting
 }
 
