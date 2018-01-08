@@ -21,18 +21,38 @@
 #' @seealso \code{\link{dangerZone}}; \code{\link{survivalMultiplot}}; \code{\link{survivalPlotter}}
 #' @export
 survivalHistogram <- function(surv.stk, dist.map, species.name, nights, save.name=NULL, ...){
-  Comp1.df <- SurvDF(surv.stk$"max.null", dist.map, nights = nights)
-  Comp2.df <- SurvDF(surv.stk$"max.inf", dist.map, nights = nights)
-  dif.df<-data.frame(Months=c(Comp1.df$Months,Comp2.df$Months),
-                     WNS=factor(c(rep(paste0(species.name,"Pre"),nrow(Comp1.df)),
-                                  rep(paste0(species.name,"Post"),nrow(Comp2.df)))))
-  dif.hist.df <- plyr::ddply(dif.df, "WNS", summarise, Months.median= ~median(Months))
-  dif.Hist<-ggplot(dif.df, aes_(x=~Months, fill=~WNS)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-5,6) +
-    geom_vline(data=dif.hist.df, aes(xintercept=Months.median,  colour=WNS),
-               linetype="dashed", size=lsize)+
-    geom_vline(xintercept = 0)
-  dif.Hist<-dif.Hist
+  inf <- surv.stk[[1]] - nights
+  nul <- surv.stk[[2]] - nights
+  stk.cal <- stack(inf, nul); names(stk.cal) <- c("inf", "null")
+  tt.spec <- calc(stk.cal, day.to.month)
+  sp.c <- mask(crop(tt.spec, dist.map), dist.map)
+  spec.Pt = rasterToPoints(sp.c)
+  Comp1.df = as.data.frame(spec.Pt)
+  colnames(Comp1.df) <-c ("long","lat","inf", "null")
+
+  oz <- data.frame(Months = c(Comp1.df$inf, Comp1.df$null),
+                   WNS = c(rep("inf", nrow(Comp1.df)),
+                           rep("null", nrow(Comp1.df))))
+  med.inf <- oz %>%
+    group_by(WNS) %>%
+    summarise(med = median(Months))
+  dif.Hist<-ggplot(oz, aes_(x=~Months, fill = ~WNS, color=~WNS)) +
+    scale_color_manual(values=c("#5e3c99", "#e66101")) +
+    scale_fill_manual(values=c("#5e3c99", "#e66101")) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-8,4) +
+    geom_vline(data=med.inf, aes_(xintercept=~med,  colour= ~WNS),
+               linetype="dashed", size = 1)+
+    geom_vline(xintercept = 0) +
+    scale_y_continuous(expand = c(0,0))+
+    theme(plot.title = element_text(size = 18,  family="serif"),
+          axis.title = element_text(size = 16,  family="serif"),
+          axis.text = element_text(size = 16,  family="serif"),
+          legend.key.size = unit(42, "points"),
+          legend.title = element_text(size = 16,  family="serif"),
+          legend.text = element_text(size = 16,  family="serif"),
+          panel.background = element_blank(),
+          axis.line = element_line(colour = "black"))
+
 
   if(!is.null(save.name)){
     dev.print(width = 600, height = 600, png, paste0(save.name))
