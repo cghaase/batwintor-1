@@ -22,7 +22,7 @@ survivalPlotter <- function(surv.stk, WNS, dist.map, nights){
     surv <- surv.stk[[1]]
   }else{surv <- surv.stk[[2]]}
 
-  rex <- surv - ni#ghts
+  rex <- surv - nights#ghts
   tt.spec <- calc(rex, day.to.month)
   sp.c <- mask(crop(tt.spec, dist.map), dist.map)
   spec.Pt = rasterToPoints(sp.c)
