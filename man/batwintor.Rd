@@ -56,16 +56,28 @@ to torpid state and complete the arousal cycle.
 
 The model functions are the heart of the package and are composed of:
 \code{\link{buildEnv}}, \code{\link{hibernationModel}}, and
-\code{\link{DetModel}}. The \code{buildEnv} function allows you to create your
+\code{\link{DetModel}}. The \code{\link{buildEnv}} function allows you to create your
 the parameter space that your model will run across in the form of
-environmental spave and a time vector. The \code{hibernationModel} takes
+environmental spave and a time vector. The \code{\link{hibernationModel}} takes
 the supplied environment, the parameters passed in and formats the data
-for the \code{DetMod} which solves the differential equations.
-\code{hibernationModel} then formats, and outputs the results for post-processing
+for the \code{\link{DetMod}} which solves the differential equations.
+\code{\link{hibernationModel}} then formats, and outputs the results for post-processing
 and plotting
 }
 
 \section{Plot Tools}{
 
+The plotting tools built in are currently quite inflexable and more designed to
+generate consistant plots for publication. \code{\link{dangerZone}} plots the difference
+in maximal winter hibernation time between infected and uninfected individuals.
+\code{\link{survivalPlotter}} and \code{\link{survivalRaster}} used to infer the
+model microclimate results across the geographic range of the species. This
+function relies on the user supplying temperature and humidity data as well
+as a distributional range (see \code{\link{getDistribution}}) and a surface
+represing the length of witner. The \code{\link{survivalHistogram}} tallies
+the cell values within these rasters and plots how the a species median
+survival capasity will shift with the introduction of WNS. \code{\link{survialMultiplot}}
+combines \code{\link{survivalPlotter}} outputs of infected and uninfected along
+with \code{\link{survivalHistogram}} to make one nice picture.
 }
 

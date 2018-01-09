@@ -42,11 +42,7 @@ survivalPlotter <- function(surv.stk, WNS, dist.map, nights){
                  colour = "black",
                  fill = NA) +
     scale_fill_gradientn("Survival\nCapacity\n(months)",
-                         # colors = c("#fdbb2d", "#b21f1f", "#1a2a6c"), #purp tp red to orange
-                         # colors = c("#ff0080", "#ff8c00", "#40e0d0", "#1fa2ff"), #blue orange pink
-                         # colors = c("#ec008c", "#fc6767", "#26d0ce", "#1a2980"), # 2 BLUE 2PINK
-                         # colors = c("gold1", "grey95", "steelblue3"), #Dangerzone color pattern
-                         colors = c("#5e3c99", "#b2abd2", "#ffffff", "#fdb863", "#e66101"), ## BEST
+                         colors = c("#5e3c99", "#b2abd2", "#ffffff", "#fdb863", "#e66101"),
                          # values = scales::rescale(c(-10, -1,1, 10)),
                          limits=  c(-8,8))+
     scale_x_continuous(expand = c(0,0))+

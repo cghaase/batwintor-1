@@ -43,7 +43,7 @@ env <- buildEnv(temp = c(0,20), #temperatures in degrees C
                 twinter = 3, #maximal length of winter (in this case I have months)
                 winter.res = 1) #resolution of the time vector in vectors
 ```
-Now that the environmental parameters are set, we can run the actual model by simply calling `DynamicEnergryPd`. 
+Now that the environmental parameters are set, we can run the actual model by simply calling `hibernationModel`. 
 ```{r}
  mylu.mod <- hibernationModel(env = env, bat.params = mylu.params, fung.params = fung.ch)
  
