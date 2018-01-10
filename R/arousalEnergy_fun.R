@@ -12,7 +12,7 @@
 #'
 #' @family Arousal Functions
 #'
-#' @seealso  \code{\link{coolEnergy}}, \code{\link{CalcCoolTime}},
+#' @seealso  \code{\link{coolEnergy}}, \code{\link{coolTime}},
 #'  \code{\link{euthermicEnergry}},
 #' \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 #'
