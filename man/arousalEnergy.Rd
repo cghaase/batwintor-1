@@ -33,7 +33,7 @@ plot(e, r, xlab = "Temp (C)", ylab = "Energy Expended",
 McKechnie & Wolf 2004 equation 3
 }
 \seealso{
-\code{\link{coolEnergy}}, \code{\link{CalcCoolTime}},
+\code{\link{coolEnergy}}, \code{\link{coolTime}},
  \code{\link{euthermicEnergry}},
 \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 

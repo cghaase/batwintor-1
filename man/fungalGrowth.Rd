@@ -23,7 +23,7 @@ body temperautre of the infected animal.
 \examples{
 ##FungalGrowthRate
 data("fung.params")
-fung.param <- FungSelect("Chaturvedi")
+fung.param <- fungalSelect("Chaturvedi")
 
 e <- -10:20
 

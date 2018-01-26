@@ -15,5 +15,5 @@
 #' @export
 flyingEnergy <- function(Ta, bat.params){
   with(bat.params,{
-    (RMR * 16.5) + (Tlc-Ta)*Ceu
+    (RMR * 16.5)
   })}
