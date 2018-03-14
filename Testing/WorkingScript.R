@@ -2,13 +2,11 @@ library(batwintor)
 library(grofit)
 library(ggplot2)
 library(testthat)
-library(devtools)
-#devtools::document()
-
 library(deSolve)
 library(data.table)
 library(dplyr)
-library(beepr)
+library(beepr)library(devtools)
+#devtools::document()
 
 #Read in bat data
 data("bat.params")
@@ -39,6 +37,11 @@ for(f in s){
                        g.fat.consumed = mylu.mod.inf$g.fat.consumed, InfectTime = mylu.mod.inf$time)
   df <- rbind(df, all.df)
 }
+
+#Plot survival over prop flying
+plot(df$pFly, df$InfectTime/24, col = "white", xlab = "Proportion Spent Flying", ylab = "Predicted Survival (days)", cex.axis = 1.5, cex.lab = 1.5)
+lines(df$pFly, df$InfectTime/24, lwd = 2)
+lines(df$pFly, rep(114, length(df$pFly)), lwd = 2, lty = 2, col = "red")
 
 ################################################################################
 #### Fit species-specific lines to rEWL & body mass (revist with more data) ####
@@ -191,7 +194,7 @@ dimnames(hypercubeadj)[[2]]=c(
 paramset<-hypercubeadj
 
 #Determine environment to run model over
-env.df  <- BuildEnv(temp = c(2,20), pct.rh = c(60,100), range.res = 5, twinter = 10, winter.res = 1)
+env.df  <- BuildEnv(temp = c(2,20), pct.rh = c(60,100), range.res.temp = 5, range.res.rh = 5, twinter = 10, winter.res = 1)
 
 #Create matrix of parameter values over environment
 paramset.H <- env.df
@@ -209,7 +212,7 @@ for (i in 1:length(paramset[,1])){
   for (j in 1:nrow(paramset.H$env)) {
     #Calculate survival time
     env <- paramset.H$env[j,]
-    env.df  <- BuildEnv(temp = c(env$Ta,env$Ta), pct.rh = c(env$pct.rh,env$pct.rh), range.res = 1, twinter = 10, winter.res = 1)
+    env.df  <- BuildEnv(temp = c(env$Ta,env$Ta), pct.rh = c(env$pct.rh,env$pct.rh), range.res.temp = 1, range.res.rh = 1, twinter = 10, winter.res = 1)
     res.a = DynamicEnergyPd(env = env.df, bat.params = paramset[i,], fung.params = paramset[i,])
 
     #Subset results to single values
@@ -234,9 +237,9 @@ for (i in 1:length(paramset[,1])){
   sen.results.b[i,]<-as.vector(t(res_out.b))
   sen.results.c[i,]<-as.vector(t(res_out.c))
 }
-save(sen.results.a, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv.RData")
-save(sen.results.b, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl.RData")
-save(sen.results.c, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor.RData")
+save(sen.results.a, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv_12Dec2017.RData")
+save(sen.results.b, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl_12Dec2017.RData")
+save(sen.results.c, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor_12Dec2017.RData")
 load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv.RData")
 load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl.RData")
 load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor.RData")
@@ -262,42 +265,34 @@ means.b <- data.frame(rowMeans(df.b))
 means.c <- data.frame(rowMeans(df.c))
 
 #Reorganize df for plotting purposes (ie remove variables that aren't within actual function)
-means.a <- data.frame(means=PRCCresults.a[[1]][,1])
-means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,10,14:17,23:27),1])
-means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3:6,10,14:19,23:27),1])
-
-means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,9,13:16,22:26),1])
-means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3:6,9,13:18,22:26),1])
+#means.a <- data.frame(means=PRCCresults.a[[1]][,1])
+means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,6,13:16,22:26),1])
+means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3,6,9,13:18,20,22:26),1])
 
 #Plot mean with significance
 op <- par(family = "serif")
 names.a = expression("Body Mass","RMR","TMR"[min],"T"[eu],"T"[lc],"T"[tormin],"C"[eu],"C"[tor],"t"[tormax],"t"[eu],"Warming Rate","Cooling Rate","Rate of EWL",
-          "TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Euthermia Spent Flying","% Body Mass at Lean","% Body Mass as Fat",beta[1],beta[2],beta[3],mu[1],mu[2])
-names.b = expression("Body Mass","TMR"[min],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd",beta[1],beta[2],beta[3],mu[1],mu[2])
-names.c = expression("Body Mass","TMR"[min],"T"[eu],"T"[lc],"T"[tormin],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],beta[1],beta[2],beta[3],mu[1],mu[2])
+          "TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Euthermia Spent Flying","% Body Mass as Lean","% Body Mass as Fat",beta[1],beta[2],beta[3],mu[1],mu[2])
+names.b = expression("Body Mass","TMR"[min],"T"[tormin],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd",beta[1],beta[2],beta[3],mu[1],mu[2])
+names.c = expression("Body Mass","TMR"[min],"T"[tormin],"t"[tormax],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold"[infected],"EWL Threshold"[healthy],"% Body Mass as Lean",beta[1],beta[2],beta[3],mu[1],mu[2])
 
 par(mar=c(5.1,15,4.1,2.1))
-barplot(means.a[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.a, horiz=TRUE, col = "grey85", main = "Survival")
 t.cutoff=qt(0.05/2,df=100-2)
 sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
                (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+
+barplot(means.a[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
+        names.arg= names.a, horiz=TRUE, col = ifelse(means.a > sig.cutoffs[1] & means.a < sig.cutoffs[2], "grey85", "steelblue3"), main = "Survival")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
 barplot(means.b[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.b, horiz=TRUE, col = "grey85", main = "Total Evaporative Water Loss")
-t.cutoff=qt(0.05/2,df=100-2)
-sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
-               (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+        names.arg= names.b, horiz=TRUE, col = ifelse(means.b > sig.cutoffs[1] & means.b < sig.cutoffs[2], "grey85", "steelblue3"), main = "Total Evaporative Water Loss")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
 barplot(means.c[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-        names.arg= names.c, horiz=TRUE, col = "grey85", main = "Torpor Bout Duration")
-t.cutoff=qt(0.05/2,df=100-2)
-sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
-               (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
+        names.arg= names.c, horiz=TRUE, col = ifelse(means.c > sig.cutoffs[1] & means.c < sig.cutoffs[2], "grey85", "steelblue3"), main = "Torpor Bout Duration")
 abline(v=sig.cutoffs,lty=2,col="red")
 abline(v=0,lty=1,col="black")
 
@@ -452,4 +447,137 @@ p15 = plotEnvSpace(df.months,s="pesu","Perimyotis subflavus - healthy", WNS=FALS
 
 multiplot(p1,p3,p11,p13, cols = 2)
 multiplot(p2,p4,p12,p14, cols = 2)
+
+#Use Danger Zone plotting
+surv.mylu <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/myluDNEpd.csv")
+surv.myve <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/myveDNEpd.csv")
+surv.epfu <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/Reeds Runs/epfuDNEpd.csv")
+DangerZone(surv.mylu, title = "Myotis lucifigus")
+DangerZone(surv.myve, title = "Myotis velifer")
+DangerZone(surv.epfu, title = "Eptesicus fuscus")
+
+################################################################################
+#### Validate torpor duration                                               ####
+################################################################################
+
+#Read in and organize files
+setwd("C:/Users/Katie Haase/Desktop/Data/Skin Temp Data from Liam/")
+# files <- list.files("C:/Users/Katie Haase/Desktop/Data/Skin Temp Data from Liam/")
+#
+# df <- data.frame()
+# for(i in files){
+#   csv <- read.csv(i, header= TRUE, skip = 19)
+#   csv$Date.Time <- format(as.character(csv$Date.Time), format = "%d/%m/%Y %I:%M:%S %p")
+#   csv$Date.Time <- as.POSIXct(csv$Date.Time, format = "%d/%m/%y %I:%M:%S %p")
+#   csv$iButtonID <- strsplit(i, "_")[[1]][1]
+#   csv$Bat.Type <- ifelse(strsplit(i, "_")[[1]][2] == "fungus control", "fungus", "control")
+#   df <- rbind(df,csv)
+# }
+
+#Assign phase
+# df$Phase[1] <- "Torpor"
+# for(n in 2:nrow(df)){
+#   df$Phase[n] <- ifelse(df$iButtonID[n]==df$iButtonID[n-1],
+#                         ifelse(df$Value[n] <= 6.5, "Torpor",
+#                                ifelse(df$Value[n] >= 25, "Euthermia",
+#                                       ifelse(df$Value[n] <= df$Value[n-1], "Cooling",
+#                                              ifelse(df$Value[n] >= df$Value[n-1], "Arousal", "Ignore")
+#                                       )
+#                                )
+#                         ), "Ignore")
+# }
+
+#Check by hand
+# write.csv(df, "offload_data.csv")
+
+#Read in all temperature data after it is checked and compiled
+temp.data <- read.csv("offload_data.csv", header=TRUE)
+temp.data$Date.Time <- as.POSIXct(strptime(temp.data$Date.Time, format = "%m/%d/%Y %H:%M"))
+temp.data <- temp.data[temp.data$Phase != "Ignore",]
+
+#Cut to cumulative temperature data (amount of time within each phase)
+temp.times <- subset(temp.data, temp.data$Subset > 0 & temp.data$Phase != "Ignore")
+temp.times.NoCA <- subset(temp.data, temp.data$Subset.NoCA > 0 & temp.data$Phase != "Ignore")
+
+#Assign first date to each file (in order to calculate Pd growth)
+for(i in unique(temp.times$iButtonID)){
+  temp.times$First.Date[temp.times$iButtonID == i] <- min(temp.data$Date.Time[temp.data$iButtonID == i])
+  temp.times.NoCA$First.Date[temp.times.NoCA$iButtonID == i] <- min(temp.data$Date.Time[temp.data$iButtonID == i])
+}
+temp.times$First.Date <- as.POSIXct(temp.times$First.Date, origin =  "1970-01-01")
+temp.times.NoCA$First.Date <- as.POSIXct(temp.times.NoCA$First.Date, origin =  "1970-01-01")
+
+#Calculate amount of time since beginning of measurements (for fungal growth estimation)
+temp.times$diff.time <- as.numeric(difftime(temp.times$Date.Time, temp.times$First.Date, units = "hours"))
+temp.times.NoCA$diff.time <- as.numeric(difftime(temp.times.NoCA$Date.Time, temp.times.NoCA$First.Date, units = "hours"))
+
+#Change time in phase to hours
+temp.times$TimeinPhase = temp.times$Subset/60
+temp.times.NoCA$TimeinPhase = temp.times.NoCA$Subset.NoCA/60
+
+#Subset to torpor only
+tor.data <- temp.times[temp.times$Phase == "Torpor" & temp.times$TimeinPhase > 24,]
+tor.data.NoCA <- temp.times.NoCA[temp.times.NoCA$Phase == "Torpor" & temp.times.NoCA$TimeinPhase > 24,]
+
+#Read in bat parameter files
+data("bat.params")
+mylu.params <- BatLoad(bat.params, species = "mylu")
+mylu.params$pMass = 0.007
+
+#Load fungal parameters
+fung.params <- FungSelect("Chaturvedi")
+
+#Calculate torpor bout duration
+for(i in 1:nrow(tor.data.NoCA)){
+  area = tor.data.NoCA$diff.time[i]*FungalGrowthRate(Tb = 7, fung.params = fung.params, t.min = 0)*ScaleFungalGrowthRate(pct.rh = 98, fung.params = fung.params)
+  EWL <- CalcEWL(Ta = 7, pct.rh = 98, t = tor.data.NoCA$TimeinPhase[i], areaPd = area, mod.params = c(fung.params,mylu.params), torpid = TRUE,  WNS = ifelse(tor.data.NoCA$Bat.Type[i] == "fungus", TRUE, FALSE))
+  tor.data.NoCA$areaPd[i] = area
+  tor.data.NoCA$TotalEWL[i] = EWL$TotalEWL
+  tor.data.NoCA$TBD.EWL[i]   <- CalcTorporTimePd(Ta = 7, pct.rh = 98, areaPd = area, WNS = ifelse(tor.data.NoCA$Bat.Type[i] == "fungus", TRUE, FALSE), mod.params = c(fung.params,mylu.params))
+}
+
+summary(tor.data.NoCA[tor.data.NoCA$Bat.Type == "control",])
+summary(tor.data.NoCA[tor.data.NoCA$Bat.Type == "fungus",])
+
+#Perform t-test to determine significant difference
+t.test(tor.data.NoCA$TimeinPhase[tor.data.NoCA$Bat.Type == "fungus"],  tor.data.NoCA$TBD.EWL[tor.data.NoCA$Bat.Type == "fungus"])
+t.test(tor.data.NoCA$TimeinPhase[tor.data.NoCA$Bat.Type == "control"], tor.data.NoCA$TBD.EWL[tor.data.NoCA$Bat.Type == "control"])
+
+#Define pmass threshold from data
+#(TBD*EWL)/(lean*1000)
+tor.data.NoCA$EWLhrly <- tor.data.NoCA$TotalEWL/tor.data.NoCA$TimeinPhase
+tor.data.NoCA$Threshold = (tor.data.NoCA$TimeinPhase*tor.data.NoCA$EWLhrly)/((tor.data.NoCA$Mass*mylu.params$pLean)*1000)
+
+#Plot pmass thresold against Pd growth per individual to determine any relationship
+id = unique(tor.data.NoCA$iButtonID)[16]
+plot(tor.data.NoCA$areaPd[tor.data.NoCA$iButtonID == id], tor.data.NoCA$Threshold[tor.data.NoCA$iButtonID == id])
+plot(tor.data.NoCA$areaPd[tor.data.NoCA$Bat.Type == "fungus"], tor.data.NoCA$Threshold[tor.data.NoCA$Bat.Type == "fungus"])
+plot(tor.data.NoCA$areaPd[tor.data.NoCA$Bat.Type == "control"], tor.data.NoCA$Threshold[tor.data.NoCA$Bat.Type == "control"])
+
+################################################################################
+#### Validate EWL model with new data                                       ####
+################################################################################
+#Read in data and subset to dry EWL data only
+measured.EWL <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Input Files/TMR.csv")
+measured.EWL <- measured.EWL[measured.EWL$Treatment == "dry" & is.na(measured.EWL$EWL) == FALSE,]
+
+#Determine species
+measured.species <- unique(measured.EWL$Bat.Species)
+species <- c("myve","pesu","coto","epfu","mylu")
+
+#Calculate EWL for each individual measurement
+ewl.df <- data.frame()
+for(s in 1:5){
+  s.params <- BatLoad(bat.params, species = species[s])
+
+  s.data <- measured.EWL[measured.EWL$Bat.Species == measured.species[s],]
+
+  df <- data.frame(Species = species[s], Measured.EWL = s.data$EWL, CalcEWL(Ta = s.data$Actual.Temperature, pct.rh = 0, t = 1, areaPd = 0, torpid = TRUE, WNS = FALSE, mod.params = c(fung.params, s.params)))
+
+  ewl.df <- rbind(ewl.df, df)
+}
+
+#Compare measured and modeled EWL with a t-test to test significant difference
+t.test(ewl.df$Measured.EWL, ewl.df$TotalEWL)
+
 
