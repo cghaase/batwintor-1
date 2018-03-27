@@ -23,7 +23,7 @@
 coolEnergy<- function(Ta, bat.params){
   with(bat.params,{
     ifelse(Ta > Ttormin,
-           ((((Ceu + Ct)/2)*(Teu-Ta)*mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ta)/CR),
-           ((((Ceu + Ct)/2)*(Teu-Ttormin)*mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ttormin)/CR))
+           ((((Ceu + Ct)/2)*(Teu-Ta)*Mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ta)/CR),
+           ((((Ceu + Ct)/2)*(Teu-Ttormin)*Mass) + (TMRmin + ((RMR - TMRmin)/2)))*((Teu - Ttormin)/CR))
   })
 }

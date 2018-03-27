@@ -33,7 +33,7 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
     k  = 10               #Meeh factor
 
     #### Surface area ####
-    SA <- k*(mass^(2/3))
+    #SA <- k*(mass^(2/3))
 
     #### Water vapor presure ####
     #Calculate water vapor pressure differential
@@ -70,12 +70,12 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
 
     #### EWL ####
     #Calculate cutaneous EWL (mg/hr)
-    cEWL <- SA * rEWL * t * dWVP
+    cEWL <- SA.wing * rEWL * t * dWVP
 
     #Calculate pulmonary EWL (mg/hr)
     vol <- ifelse(torpid == TRUE,
-                  (TMRmin * t * mass)/(pO2 * O2.coef * 1000),
-                  (RMR * t * mass)/(pO2 * O2.coef * 1000))
+                  (TMRmin * t * Mass)/(pO2 * O2.coef * 1000),
+                  (RMR * t * Mass)/(pO2 * O2.coef * 1000))
     pEWL <- vol * sat.def
 
     #Calculate total EWL (TEWL; mg/hr)
@@ -86,15 +86,15 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
 
       #Calculate new growth of Pd for hour
       #proportion of wing surface area covered in Pd growth
-      p.areaPd = areaPd/SA*100
+      p.areaPd = areaPd/SA.plagio*100
 
       #Calculate cutaneous EWL (mg/hr)
-      cEWL.pd <- SA * (rEWL*rPd) * t * dWVP
+      cEWL.pd <- SA.wing * (rEWL*rPd) * t * dWVP
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
       vol.pd <- ifelse(torpid == TRUE,
-                       (TMRmin * t * mass)/(pO2 * O2.coef * 1000),
-                       (RMR * t * mass)/(pO2 * O2.coef * 1000))
+                       (TMRmin * t * Mass)/(pO2 * O2.coef * 1000),
+                       (RMR * t * Mass)/(pO2 * O2.coef * 1000))
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
