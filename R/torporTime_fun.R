@@ -28,9 +28,6 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     aPd = 0.21
     rPd = 1.525
 
-    #Caculate surface area
-    SA <- k * (mass^(2/3))
-
     #Calculate water vapor pressure differential
     WVP.skin <- ifelse(Ta > Ttormin,
                        (a * exp((b * Ta)/(Ta + c))),
@@ -49,18 +46,18 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
 
     sat.def <- mgL.skin - mgL.air
 
-    #Calculate cutaneous EWL (mg/hr)
-    cEWL <- SA * rEWL * dWVP
+    #Calculate cutaneous EWL (mg/hr) from the wing surface
+    cEWL <- SA.wing * rEWL * dWVP
 
     #Calculate pulmonary EWL (mg/hr)
-    vol  <- (TMRmin * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+    vol  <- (as.numeric(TMRmin) * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
     pEWL <- vol * sat.def
 
     #Calculate total EWL (TEWL; mg/hr)
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- (pLean*mass*1000)*pMass
+    threshold <- (pLean*Mass*1000)*pMass
 
 
     #Calculate how long until threshold is reached
@@ -74,13 +71,13 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     if(WNS == FALSE){
       return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
     } else if(WNS == TRUE){
-      p.areaPd = areaPd/SA*100                   #proportion of wing surface area covered in Pd growth
+      p.areaPd = areaPd/SA.plagio*100                   #proportion of plagiopatagium surface area covered in Pd growth
 
-      #Calculate cutaneous EWL (mg/hr)
-      cEWL.pd <- SA * ((rEWL*rPd)) * dWVP
+      #Calculate cutaneous EWL (mg/hr) from wing surface area
+      cEWL.pd <- SA.wing * ((rEWL*rPd)) * dWVP
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
-      vol.pd  <- (TMRmin * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+      vol.pd  <- (TMRmin * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
@@ -90,7 +87,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8.
       #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
       TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
-      threshold.pd <- (pLean*mass*1000)*pMass.i
+      threshold.pd <- (pLean*Mass*1000)*pMass.i
       Pd.time <- threshold.pd/TEWL.pd
 
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
