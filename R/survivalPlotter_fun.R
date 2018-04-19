@@ -17,7 +17,7 @@
 #' \code{\link{survivalHistogram}}
 #' @export
 
-survivalPlotter <- function(surv.stk, WNS, dist.map, nights){
+survivalPlotter <- function(surv.stk, WNS, dist.map, nights, save.name = NULL, ...){
   if(WNS == T){
     surv <- surv.stk[[1]]
   }else{surv <- surv.stk[[2]]}
@@ -43,7 +43,6 @@ survivalPlotter <- function(surv.stk, WNS, dist.map, nights){
                  fill = NA) +
     scale_fill_gradientn("Survival\nCapacity\n(months)",
                          colors = c("#5e3c99", "#b2abd2", "#ffffff", "#fdb863", "#e66101"),
-                         # values = scales::rescale(c(-10, -1,1, 10)),
                          limits=  c(-8,8))+
     scale_x_continuous(expand = c(0,0))+
     scale_y_continuous(expand = c(0,0))+
@@ -56,6 +55,11 @@ survivalPlotter <- function(surv.stk, WNS, dist.map, nights){
           panel.background = element_rect(fill = "lightblue", colour = "lightblue",size = 0.5, linetype = "solid"),
           panel.grid.major = element_line(size = 0.5, linetype = 'solid',colour = "white"),
           panel.grid.minor = element_line(size = 0.25, linetype = 'solid',colour = "white"))
+
+  if(!is.null(save.name)){
+    ggsave( filename = save.name, ...)
+    return(invisible(NULL))
+  }
 
 
   return(g.spec)

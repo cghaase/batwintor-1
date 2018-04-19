@@ -39,7 +39,7 @@ survivalHistogram <- function(surv.stk, dist.map, species.name, nights, save.nam
   dif.Hist<-ggplot(oz, aes_(x=~Months, fill = ~WNS, color=~WNS)) +
     scale_color_manual(values=c("#5e3c99", "#e66101")) +
     scale_fill_manual(values=c("#5e3c99", "#e66101")) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-8,4) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-8,8) +
     geom_vline(data=med.inf, aes_(xintercept=~med,  colour= ~WNS),
                linetype="dashed", size = 1)+
     geom_vline(xintercept = 0) +
@@ -51,12 +51,15 @@ survivalHistogram <- function(surv.stk, dist.map, species.name, nights, save.nam
           legend.title = element_text(size = 16,  family="serif"),
           legend.text = element_text(size = 16,  family="serif"),
           panel.background = element_blank(),
-          axis.line = element_line(colour = "black"))
+          axis.line = element_line(colour = "black"),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text.y = element_blank())
 
 
   if(!is.null(save.name)){
-    dev.print(width = 600, height = 600, png, paste0(save.name))
-    dev.off()
+    ggsave( filename = save.name, ...)
+    return(invisible(NULL))
   }
   return(dif.Hist)
 }

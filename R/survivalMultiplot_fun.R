@@ -17,7 +17,7 @@
 #' @seealso \code{\link{survivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{survivalHistogram}};
 #' \code{\link{dangerZone}}
 #' @export
-survivalMultiplot <- function(surv.stk, dist.map, nights, species.name, save.name){
+survivalMultiplot <- function(surv.stk, dist.map, nights, species.name, save.name, ...){
   ##function for creating super cool strip plots of the SurvivalMaps and Diff hist all in one.
   no.inf <- survivalPlotter(surv.stk = surv.stk, WNS = F, dist.map = dist.map, nights = nights)
   yes.inf <- survivalPlotter(surv.stk = surv.stk, WNS = T, dist.map = dist.map, nights = nights)
@@ -27,9 +27,16 @@ survivalMultiplot <- function(surv.stk, dist.map, nights, species.name, save.nam
                                nights = nights)
 
   if(!is.null(save.name)){
-    pdf(save.name ,width = 12, height = 4)
-    grid.arrange(no.inf, yes.inf, sp.diff,
-               ncol=3)
-    dev.off()}
+    multi.plot <- gridExtra::grid.arrange(no.inf, yes.inf, sp.diff,
+                                          ncol=3)
+    ggsave( filename = save.name,
+            plot = multi.plot,
+            device = "pdf",
+            width = 11,
+            height = 6,
+            units = "in",
+            ...)
+    return(invisible(NULL))}
+
   return(fig.list <- c(no.inf, yes.inf, sp.diff))
 }

@@ -41,7 +41,7 @@ mrRaw <- function(x, species.option){
   dat.out <- data.frame(RMR = ddf[which(ddf$Ta == 35),]$MR,
                         TMRmin = min(ddf$MR),
                         Ttormin = ddf[which(ddf$MR == min(ddf$MR)),]$Ta,
-                        mass = weighted.mean(ddf$mass, sapply(ddf$n, FUN =
+                        Mass = weighted.mean(ddf$mass, sapply(ddf$n, FUN =
                                                     function(x){x/max(ddf$n)})))
 
   out <- list(df = dat.out, spEM = sp.l)
