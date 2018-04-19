@@ -64,7 +64,7 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
                          ((WVP.skin * 0.00986923)/(GC * (Tlc + 273.15)))*18015.28)
     }
     #convert pct.rh to fraction; convert kPa to atm; C to Kelvin; moles to mg
-    mgL.air <- (((pct.rh *0.01) * WVP.air * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28
+    mgL.air <- (((pct.rh *0.01) * WVP.air * 0.00986923)/(GC * (Ta + 273.15)))*18015.28
 
     sat.def <- mgL.skin - mgL.air
 
