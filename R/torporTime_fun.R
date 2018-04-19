@@ -42,7 +42,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                        ((WVP.skin * 0.00986923)/(GC * (Ta + 273.15)))*18015.28,           #convert kPa to atm; C to Kelvin; moles to mg
                        ((WVP.skin * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28)
 
-    mgL.air <- (((Hd *0.01) * WVP.air * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28    #convert Hd to fraction; convert kPa to atm; C to Kelvin; moles to mg
+    mgL.air <- (((Hd *0.01) * WVP.air * 0.00986923)/(GC * (Ta + 273.15)))*18015.28    #convert Hd to fraction; convert kPa to atm; C to Kelvin; moles to mg
 
     sat.def <- mgL.skin - mgL.air
 
