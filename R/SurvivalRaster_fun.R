@@ -42,7 +42,7 @@ survivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
   mod.dif <- mod.df %>%
     group_by_(~Ta, ~pct.rh) %>%
     summarise_(max.null = ~hour.to.day(max(time*surv.null)), max.inf = ~hour.to.day(max(time*surv.inf))) %>%
-    mutate_(diff = ~hour.to.day(max.null-max.inf)) %>%
+    mutate_(diff = ~(max.null-max.inf)) %>%
     ungroup %>% data.table
 
   ####Look Up Table ####
@@ -59,7 +59,7 @@ survivalRaster <- function(mod.df, pct.rh.rast, temp.rast){
   #Fill look up table
   for (i in seq_len(nrow(mod.dif))) {
     d <- mod.dif[i,]
-    if (i %% 1000 == 0) {
+    if (i %% 10000 == 0) {
       cat("up to", i, "of", nrow(mod.dif), "\n")
     }
     lut[as.character(d$Ta), as.character(d$pct.rh),] <- c(d$max.inf,

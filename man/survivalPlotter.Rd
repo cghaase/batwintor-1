@@ -4,7 +4,7 @@
 \alias{survivalPlotter}
 \title{Plots survival raster results including a nice outline of North America.}
 \usage{
-survivalPlotter(surv.stk, WNS, dist.map, nights)
+survivalPlotter(surv.stk, WNS, dist.map, nights, save.name = NULL, ...)
 }
 \arguments{
 \item{surv.stk}{raster result stack from \code{\link{survivalRaster}}}

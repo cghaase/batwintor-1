@@ -4,7 +4,7 @@
 \alias{survivalMultiplot}
 \title{survivalMultiplot}
 \usage{
-survivalMultiplot(surv.stk, dist.map, nights, species.name, save.name)
+survivalMultiplot(surv.stk, dist.map, nights, species.name, save.name, ...)
 }
 \arguments{
 \item{surv.stk}{raster result stack from \code{\link{survivalRaster}}}
