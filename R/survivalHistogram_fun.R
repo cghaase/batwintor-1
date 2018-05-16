@@ -37,8 +37,8 @@ survivalHistogram <- function(surv.stk, dist.map, species.name, nights, save.nam
     group_by(WNS) %>%
     summarise(med = median(Months))
   dif.Hist<-ggplot(oz, aes_(x=~Months, fill = ~WNS, color=~WNS)) +
-    scale_color_manual(values=c("#5e3c99", "#e66101")) +
-    scale_fill_manual(values=c("#5e3c99", "#e66101")) +
+    scale_color_manual(values=c("#e66101", "#5e3c99")) +
+    scale_fill_manual(values=c("#e66101", "#5e3c99")) +
     geom_histogram(binwidth=.5, alpha=.5, position="identity") +xlim(-8,8) +
     geom_vline(data=med.inf, aes_(xintercept=~med,  colour= ~WNS),
                linetype="dashed", size = 1)+

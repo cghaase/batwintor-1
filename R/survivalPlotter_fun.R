@@ -42,7 +42,7 @@ survivalPlotter <- function(surv.stk, WNS, dist.map, nights, save.name = NULL, .
                  colour = "black",
                  fill = NA) +
     scale_fill_gradientn("Survival\nCapacity\n(months)",
-                         colors = c("#5e3c99", "#b2abd2", "#ffffff", "#fdb863", "#e66101"),
+                         colors = c("#e66101", "#fdb863","#ffffff", "#b2abd2", "#5e3c99"),
                          limits=  c(-8,8))+
     scale_x_continuous(expand = c(0,0))+
     scale_y_continuous(expand = c(0,0))+
