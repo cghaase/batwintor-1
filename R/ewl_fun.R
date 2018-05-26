@@ -33,7 +33,7 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
     k  = 10               #Meeh factor
 
     #### Surface area ####
-    #SA <- k*(mass^(2/3))
+    SA <- k*(mass^(2/3))
 
     #### Water vapor presure ####
     #Calculate water vapor pressure differential
@@ -64,7 +64,7 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
                          ((WVP.skin * 0.00986923)/(GC * (Tlc + 273.15)))*18015.28)
     }
     #convert pct.rh to fraction; convert kPa to atm; C to Kelvin; moles to mg
-    mgL.air <- (((pct.rh *0.01) * WVP.air * 0.00986923)/(GC * (Ta + 273.15)))*18015.28
+    mgL.air <- (((pct.rh *0.01) * WVP.air * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28
 
     sat.def <- mgL.skin - mgL.air
 
@@ -74,8 +74,8 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
 
     #Calculate pulmonary EWL (mg/hr)
     vol <- ifelse(torpid == TRUE,
-                  (TMRmin * t * Mass)/(pO2 * O2.coef * 1000),
-                  (RMR * t * Mass)/(pO2 * O2.coef * 1000))
+                  (TMRmin * t * mass)/(pO2 * O2.coef * 1000),
+                  (RMR * t * mass)/(pO2 * O2.coef * 1000))
     pEWL <- vol * sat.def
 
     #Calculate total EWL (TEWL; mg/hr)
@@ -93,8 +93,8 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
       vol.pd <- ifelse(torpid == TRUE,
-                       (TMRmin * t * Mass)/(pO2 * O2.coef * 1000),
-                       (RMR * t * Mass)/(pO2 * O2.coef * 1000))
+                       (TMRmin * t * mass)/(pO2 * O2.coef * 1000),
+                       (RMR * t * mass)/(pO2 * O2.coef * 1000))
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
