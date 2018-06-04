@@ -22,7 +22,6 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     b  = 17.502
     c  = 240.97
     GC = 0.0821           #universal gas constant
-    k  = 10               #Meeh factor
     Q=calcQ(Ta)
     mrPd = 1.4
     aPd = 0.21
@@ -47,17 +46,19 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     sat.def <- mgL.skin - mgL.air
 
     #Calculate cutaneous EWL (mg/hr) from the wing surface
-    cEWL <- SA.wing * rEWL * dWVP
+    cEWL.body <- SA.body * rEWL.body * dWVP
+    cEWL.wing <- SA.wing * rEWL.wing * dWVP
+    cEWL = cEWL.body + cEWL.wing
 
     #Calculate pulmonary EWL (mg/hr)
-    vol  <- (as.numeric(TMRmin) * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+    vol  <- (as.numeric(TMRmin) * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
     pEWL <- vol * sat.def
 
     #Calculate total EWL (TEWL; mg/hr)
     TEWL <- cEWL + pEWL
 
     #Calculate % of body mass (in mg) and compare to TEWL
-    threshold <- (pLean*mass*1000)*pMass
+    threshold <- (pLean*Mass*1000)*pMass
 
 
     #Calculate how long until threshold is reached
@@ -74,10 +75,12 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       p.areaPd = areaPd/SA.plagio*100                   #proportion of plagiopatagium surface area covered in Pd growth
 
       #Calculate cutaneous EWL (mg/hr) from wing surface area
-      cEWL.pd <- SA.wing * ((rEWL*rPd)) * dWVP
+      cEWL.body.pd <- SA.body * (rEWL.body*aPd*p.areaPd) * dWVP
+      cEWL.wing.pd <- SA.wing * (rEWL.wing*aPd*p.areaPd) * dWVP
+      cEWL.pd = cEWL.body.pd + cEWL.wing.pd
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
-      vol.pd  <- (TMRmin * mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+      vol.pd  <- (TMRmin * mrPd * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
@@ -86,8 +89,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       #In Liam's paper, the relationship between EWL and Pd growth was EWL = (p.areaPd*0.21) + 12.80
       #So, when area = 0 (no Pd), EWL for this temp/humidity was 12.8.
       #Therefore the addition of 0.21*area would be added to whatever the EWL was at any temp/humdity relationship as both temp/humidity are included in Pd growth estimates?
-      TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
-      threshold.pd <- (pLean*mass*1000)*pMass.i
+      threshold.pd <- (pLean*Mass*1000)*pMass.i
       Pd.time <- threshold.pd/TEWL.pd
 
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
