@@ -41,7 +41,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                        ((WVP.skin * 0.00986923)/(GC * (Ta + 273.15)))*18015.28,           #convert kPa to atm; C to Kelvin; moles to mg
                        ((WVP.skin * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28)
 
-    mgL.air <- (((Hd *0.01) * WVP.air * 0.00986923)/(GC * (Ttormin + 273.15)))*18015.28    #convert Hd to fraction; convert kPa to atm; C to Kelvin; moles to mg
+    mgL.air <- (((Hd *0.01) * WVP.air * 0.00986923)/(GC * (Ta + 273.15)))*18015.28    #convert Hd to fraction; convert kPa to atm; C to Kelvin; moles to mg
 
     sat.def <- mgL.skin - mgL.air
 
@@ -60,7 +60,6 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     #Calculate % of body mass (in mg) and compare to TEWL
     threshold <- (pLean*Mass*1000)*pMass
 
-
     #Calculate how long until threshold is reached
     EWL.time <- threshold/TEWL
 
@@ -70,7 +69,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                       ttormax/(1+(Ttormin-Ta)*Ct/(TMRmin)))
 
     if(WNS == FALSE){
-      return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
+      return(ifelse(TEWL == 0, Ta.time, ifelse(Ta.time < EWL.time, Ta.time, EWL.time)))
     } else if(WNS == TRUE){
       p.areaPd = areaPd/SA.plagio*100                   #proportion of plagiopatagium surface area covered in Pd growth
 
@@ -97,7 +96,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                            ttormax/Q^((Ta-Ttormin)/10),
                            ttormax/(1+(Ttormin-Ta)*Ct/TMRmin*mrPd))
 
-      return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))
+      return(ifelse(TEWL.pd == 0, Ta.time.pd, ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time)))
     }
   })
 }
