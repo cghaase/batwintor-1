@@ -9,7 +9,7 @@ scaleFungalGrowth(pct.rh, fung.params)
 \arguments{
 \item{pct.rh}{precent relative humidity}
 
-\item{fung.params}{list of parameters passed through \code{\link{FungLoad}}}
+\item{fung.params}{list of parameters passed through \code{\link{fungalLoad}}}
 }
 \value{
 returns scaled humidity scaled fungal growth rate

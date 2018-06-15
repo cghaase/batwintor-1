@@ -24,16 +24,15 @@ energy consumed under specified environmental conditions.
 }
 \details{
 This function formats, data going into, and processes data coming out of
-\code{\link{DetModel}}, and is the main main function of the package.
+\code{\link{batDynamic}}, and is the main main function of the package.
 Outputs from ths function can be exceedingly large, and take a heckin' long time
 so please plan accordingly.
 }
 \examples{
 ## DynamicEnegryPd_ex
-data("bat.params")
+data("mylu.params")
 data("fung.params")
 
-my.params <- bat.params["myca",]
 fung.ch <- fungalSelect("Chaturvedi")
 
 
@@ -44,10 +43,10 @@ env.df <- buildEnv(temp = c(1:10),
                 twinter = 9,
                 winter.res = 4)
 
-bingo <- hibernationModel(env.df, my.params, fung.ch)
+bingo <- hibernationModel(env.df, mylu.params, fung.ch)
 }
 \seealso{
-\code{\link{DetModel}}, \code{\link{buildEnv}}
+\code{\link{batDynamic}}, \code{\link{buildEnv}}
 
 Other Model Engine: \code{\link{batDynamic}},
   \code{\link{buildEnv}}

@@ -27,7 +27,7 @@
 #'
 #' @family Fungal funcitons
 #' @seealso \code{\link{fungalGrowth}},  \code{\link{fungalSelect}},
-#' \code{\link{ScalefungalGrowth}}
+#' \code{\link{scaleFungalGrowth}}
 #' @example ExampleScripts/fungalLoad_ex.R
 #' @export
 fungalLoad <- function(path.to.params, growth.option){

@@ -18,9 +18,9 @@ energy expended during a time unit of flight
 \code{flyingEnergy} calculates energry expended during a unit of light
 }
 \seealso{
-\code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+\code{\link{arousalEnergy}}, \code{\link{coolTime}},
 \code{\link{coolEnergy}}, \code{\link{euthermicTime}},
-\code{\link{CalcEnergyArousal}}, \code{\link{euthermicEnergy}},
+\code{\link{euthermicEnergy}},
 \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 
 Other Arousal Functions: \code{\link{arousalEnergy}},

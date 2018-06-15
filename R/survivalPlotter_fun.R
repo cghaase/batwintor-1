@@ -8,12 +8,15 @@
 #' @param dist.map shapefile representing the distribution you wish to map the
 #' results accross (generally speaking the entire distribution of the species)
 #' @param nights a raster layer reprensenting the length of winter measured in nigths
+#' @param save.name file path and naming convention for \code{\link[ggplot2]{ggsave}}
+#' defults to `NULL` which plots to device
+#' @param ... paraeters for \code{\link[ggplot2]{ggsave}}
 #'
 #' @return returns a map of North America in which the distribution supplied
 #' is filled in with the results from the model run.
 #'
 #' @family Plot Functions
-#' @seealso \code{\link{dangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
+#' @seealso \code{\link{dangerZone}}; \code{\link{survivalMultiplot}}; \code{link{survialRaster}};
 #' \code{\link{survivalHistogram}}
 #' @export
 

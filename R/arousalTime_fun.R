@@ -9,7 +9,7 @@
 #' @example ExampleScripts/arousalTime_ex.R
 #'
 #' @family Arousal Functions
-#' @seealso \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+#' @seealso \code{\link{arousalEnergy}}, \code{\link{coolTime}},
 #' \code{\link{coolEnergy}}, \code{\link{euthermicEnergy}},
 #' \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 #'

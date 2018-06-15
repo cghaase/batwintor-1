@@ -12,12 +12,12 @@
 #' conditions at each time point.
 #'
 #' @details This function formats, data going into, and processes data coming out of
-#' \code{\link{DetModel}}, and is the main main function of the package.
+#' \code{\link{batDynamic}}, and is the main main function of the package.
 #' Outputs from ths function can be exceedingly large, and take a heckin' long time
 #' so please plan accordingly.
 #'
 #' @family Model Engine
-#' @seealso \code{\link{DetModel}}, \code{\link{buildEnv}}
+#' @seealso \code{\link{batDynamic}}, \code{\link{buildEnv}}
 #' @example ExampleScripts/hibernationModel_ex.R
 #' @export
 hibernationModel <- function(env, bat.params, fung.params){

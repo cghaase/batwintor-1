@@ -15,6 +15,11 @@ survivalPlotter(surv.stk, WNS, dist.map, nights, save.name = NULL, ...)
 results accross (generally speaking the entire distribution of the species)}
 
 \item{nights}{a raster layer reprensenting the length of winter measured in nigths}
+
+\item{save.name}{file path and naming convention for \code{\link[ggplot2]{ggsave}}
+defults to `NULL` which plots to device}
+
+\item{...}{paraeters for \code{\link[ggplot2]{ggsave}}}
 }
 \value{
 returns a map of North America in which the distribution supplied
@@ -25,7 +30,7 @@ is filled in with the results from the model run.
 adds shapes of North America.
 }
 \seealso{
-\code{\link{dangerZone}}; \code{\link{MapFigs}}; \code{link{survialRaster}};
+\code{\link{dangerZone}}; \code{\link{survivalMultiplot}}; \code{link{survialRaster}};
 \code{\link{survivalHistogram}}
 
 Other Plot Functions: \code{\link{dangerZone}},

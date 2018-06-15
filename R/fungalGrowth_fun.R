@@ -10,7 +10,7 @@
 #'
 #' @family Fungal functions
 #' @seealso \code{\link{fungalLoad}},  \code{\link{fungalSelect}},
-#' \code{\link{ScalefungalGrowth}}
+#' \code{\link{scaleFungalGrowth}}
 #' @example ExampleScripts/fungalGrowth_ex.R
 #' @export
 fungalGrowth <- function(Tb, fung.params, t.min = 0){

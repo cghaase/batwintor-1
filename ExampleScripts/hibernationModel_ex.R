@@ -1,8 +1,7 @@
 ## DynamicEnegryPd_ex
-data("bat.params")
+data("mylu.params")
 data("fung.params")
 
-my.params <- bat.params["myca",]
 fung.ch <- fungalSelect("Chaturvedi")
 
 
@@ -13,4 +12,4 @@ env.df <- buildEnv(temp = c(1:10),
                 twinter = 9,
                 winter.res = 4)
 
-bingo <- hibernationModel(env.df, my.params, fung.ch)
+bingo <- hibernationModel(env.df, mylu.params, fung.ch)
