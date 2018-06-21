@@ -4,7 +4,7 @@
 \alias{torporEnergy}
 \title{Calculate energy per time at toprid body temp given ambient temperature}
 \usage{
-torporEnergy(Ta, bat.params, q = calcQ(Ta))
+torporEnergy(Ta, bat.params, WNS, area, q = calcQ(Ta))
 }
 \arguments{
 \item{Ta}{ambient emperature}
