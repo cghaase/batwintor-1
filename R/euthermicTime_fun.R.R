@@ -8,6 +8,6 @@
 #' @export
 euthermicTime <- function(bat.params){
   with(bat.params,{
-    (1-pFly)*teu
+    teu
   })
 }
