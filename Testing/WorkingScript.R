@@ -1,25 +1,27 @@
 library(batwintor)
-library(grofit)
 library(ggplot2)
-library(testthat)
-library(deSolve)
 library(data.table)
+library(deSolve)
 library(dplyr)
 library(beepr)
-library(devtools)
 library(gridExtra)
-#devtools::document()
 
 #Read in bat data
 data("bat.params")
-bat.params$pFly = 0.00000001
+bat.params$pFly = 0.00001
 bat.params$Ct = 0.2
-bat.params$SA.wing <- bat.params$SA.wing*2
-bat.params$SA.plagio <- bat.params$SA.plagio*2
-bat.params$rEWL = bat.params$rEWL*(10*(bat.params$Mass^0.67))/bat.params$SA.wing
 
 #Load fungal growth
 fung.params <- fungalSelect("Chaturvedi")
+
+################################################################################
+#### Figure out increase to TMR due to Pd growth                            ####
+################################################################################
+#days = 113
+tmr = c(3.2, 3.80137)
+max = fungalGrowth(Tb = 7, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 98, fung.params = fung.params)*113*24
+df <- data.frame(Treatment = c("Begin", "End"), Growth = c(0,max/8.66003080581862), TMR = tmr)
+summary(lm(df$TMR~df$Growth))
 
 ################################################################################
 #### Determine thermal conductance during torpor                            ####
@@ -429,28 +431,68 @@ lines(WVP, predict.MM, col = "blue")
 #### Run dynamic energy function over environmental space                   ####
 ################################################################################
 #Create dataframe of environmental parameters (taken from our microclimate data)
-env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(20,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
+env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(60,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
 
 #Create vector of species
-species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
+# species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 
 #Run model over parameter space per species
 surv.out <- data.frame()
-for(s in species){
+#for(s in species){
 
   #Assign bat parameters
-  s.params <- batLoad(bat.params, s)
+  s.params <- batLoad(bat.params, "MYLU")
+
+  #Fix those for MYLU
+  s.params$ttormax = 30*24
+  s.params$SA.per = 0.6563
+  s.params$SA.body = 39.2632638
+  s.params$SA.wing = 25.76848
+  s.params$rEWL.body = 0.11
+  s.params$rEWL.wing = 0.19
+  s.params$SA.plagio = 14.94572
 
   #Calculate dynamic energy over range of environmental conditions
   de.df <- data.frame(hibernationModel(env = env.df, bat.params = s.params, fung.params = fung.params))
 
   #Append to data frame and remove parameter names
   surv.out <- rbind(surv.out, data.frame(species=rep(s,dim(de.df)[1]),de.df))
-  print(s)
-}
-beep()
-save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_22March2018.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_22March2018.RData")
+#  print(s)
+#}
+
+save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_MYLU_7June2018.RData")
+
+#Danger Zone
+mod.dif <- mod.df %>%
+  group_by_(~Ta, ~pct.rh) %>%
+  summarise_(max.null = ~max(time*surv.null),max.inf = ~max(time*surv.inf)) %>%
+  mutate_(diff = ~hour.to.month(max.inf - max.null))
+ungroup %>% data.table
+# mod.dif$max.inf[mod.dif$Ta == 2 & mod.dif$pct.rh < 96]= mod.dif$max.inf[mod.dif$Ta == 1 & mod.dif$pct.rh < 96]
+mod.dif$contour = ifelse(mod.dif$max.inf>=6*30*24,1,0)
+
+dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~diff))  +
+  scale_fill_gradientn("Difference\n(months)",
+                       colors = c("#e66101", "#fdb863","#ffffff", "#b2abd2", "#5e3c99"), #purp low orange hi
+                       limits = c(-10,0)
+  ) +
+  geom_raster(aes_(fill = ~diff), interpolate = T) +
+  scale_x_continuous(expand = c(0,0))+
+  scale_y_continuous(expand = c(0,0))+
+  # geom_contour(binwidth = 1,
+  #              colour = "grey15") +
+  geom_contour(aes(z = contour), binwidth = 1, colour = "grey15") +
+  # ggtitle(title) +
+  xlab("Temperature (C)") +
+  ylab("Relative Humidity (%)")+
+  theme_minimal()+
+  theme(plot.title = element_text(size = 18,  family="serif"),
+        axis.title = element_text(size = 16,  family="serif"),
+        axis.text = element_text(size = 16,  family="serif"),
+        aspect.ratio = 1,
+        legend.key.size = unit(42, "points"),
+        legend.title = element_text(size = 16,  family="serif"),
+        legend.text = element_text(size = 16,  family="serif"))
 
 ################################################################################
 #### Trade-offs figures                                                     ####
@@ -488,22 +530,22 @@ for(t in temps){
   }
 }
 
-plot(df.days$Ta[df.days$pct.rh == 100], df.days$days.null[df.days$pct.rh == 100], col = "white", ylim = c(50,350))
-lines(df.days$Ta[df.days$pct.rh == 100], df.days$days.null[df.days$pct.rh == 100], lwd = 2, col = "blue")
-lines(df.days$Ta[df.days$pct.rh == 100], df.days$days.inf[df.days$pct.rh == 100], lty = 2, lwd =2, col = "blue")
-lines(df.days$Ta[df.days$pct.rh == 85], df.days$days.null[df.days$pct.rh == 85],  lwd =2)
-lines(df.days$Ta[df.days$pct.rh == 85], df.days$days.inf[df.days$pct.rh == 85], lty = 2, lwd =2)
+plot(df.days$Ta[df.days$pct.rh == 99], df.days$days.null[df.days$pct.rh == 99], col = "white", ylim = c(50,350))
+lines(df.days$Ta[df.days$pct.rh == 99], df.days$days.null[df.days$pct.rh == 99], lwd = 2, col = "blue")
+lines(df.days$Ta[df.days$pct.rh == 99], df.days$days.inf[df.days$pct.rh == 99], lty = 2, lwd =2, col = "blue")
+lines(df.days$Ta[df.days$pct.rh == 60], df.days$days.null[df.days$pct.rh == 60],  lwd =2)
+lines(df.days$Ta[df.days$pct.rh == 60], df.days$days.inf[df.days$pct.rh == 60], lty = 2, lwd =2)
 
-plot(df.days$Ta[df.days$pct.rh == 100], df.days$days.inf[df.days$pct.rh == 100], col = "white")
-lines(df.days$Ta[df.days$pct.rh == 100], df.days$days.inf[df.days$pct.rh == 100], lty = 2, lwd =2, col = "blue")
+plot(df.days$Ta[df.days$pct.rh == 99], df.days$days.inf[df.days$pct.rh == 99], col = "white")
+lines(df.days$Ta[df.days$pct.rh == 99], df.days$days.inf[df.days$pct.rh == 99], lty = 2, lwd =2, col = "blue")
 lines(df.days$Ta[df.days$pct.rh == 85], df.days$days.inf[df.days$pct.rh == 85], lty = 2, lwd =2)
 
 ggplot(df.days[df.days$pct.rh == 100,], aes(x = Ta, y = days.null)) +
   #theme_classic() +
   geom_line(aes(x = Ta, y = days.null),  size = 1, color = "blue") +
   geom_line(aes(x = Ta, y = days.inf), linetype = 2, size = 1, color = "blue") +
-  geom_line(data = df.days[df.days$pct.rh == 85,], aes(x = Ta, y = days.null), size = 1) +
-  geom_line(data = df.days[df.days$pct.rh == 85,], aes(x = Ta, y = days.inf), linetype = 2, size = 1) +
+  geom_line(data = df.days[df.days$pct.rh == 80,], aes(x = Ta, y = days.null), size = 1) +
+  geom_line(data = df.days[df.days$pct.rh == 80,], aes(x = Ta, y = days.inf), linetype = 2, size = 1) +
   theme(panel.border = element_rect( fill = NA, color = "black")) +
   xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
   ylab("Survival (days until fat consumed)") +
@@ -564,9 +606,9 @@ hist(LCC$temp[LCC$temp < 5])
 ################################################################################
 #### Plot monthly survival over parameter space                             ####
 ################################################################################
-library(ggplot2)
-
 #load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_28Feb2018.RData")
+
+df.months$Months.inf[df.months$Ta == 2 & df.months$pct.rh < 96]=  df.months$Months.inf[df.months$Ta == 1 & df.months$pct.rh < 96]
 
 #Create vectors of environmental and species data
 temps <- seq(-5,20,1)
@@ -577,24 +619,25 @@ species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 df.months <- data.frame()
 for(t in temps){
   for(h in hd){
-    for(s in species){
+   # for(s in species){
       s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
       months.inf  <- max(s.data$time[s.data$surv.inf == 1])/24/30
       months.null <- max(s.data$time[s.data$surv.null == 1])/24/30
       df <- data.frame(Species = s, Ta = t, pct.rh = h, Months.inf = months.inf, Months.null = months.null)
       df.months = rbind(df.months,df)
-    }
+   # }
   }
 }
 
-save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_22March2018.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_22March2018.RData")
+save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_7June2018.RData")
+
+#load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_4June2018.RData")
 
 #Create functions for plotting over space
 plot.data <- data.frame(Species = rep(df.months$Species,2), Ta = rep(df.months$Ta,2), pct.rh = rep(df.months$pct.rh,2),
                         Survival = c(df.months$Months.null,df.months$Months.inf),
                         Treatment = c(rep("Healthy", length(df.months$Months.inf)),rep("WNS",length(df.months$Months.inf))))
-plot.data$Contour <- ifelse(plot.data$Survival >= 6,1,0)
+plot.data$Contour <- ifelse(plot.data$Survival >=6,1,0)
 
 plotEnvSpace <- function(plot.data, s){
   plot.sub <- plot.data[plot.data$Species == s & plot.data$pct.rh >= 60, ]
@@ -603,6 +646,7 @@ plotEnvSpace <- function(plot.data, s){
     facet_wrap(~Treatment, ncol = 2) +
     geom_raster(aes(fill = Survival), interpolate = TRUE) +
     geom_contour(aes(z = Contour), binwidth = 1, colour = "grey15") +
+    geom_rect(aes(xmin = 4, xmax = 6, ymin = 90,  ymax = 100), linetype = 2, color = "black", fill = "NA") +
     theme(panel.border = element_rect( fill = NA, color = "black")) +
     xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
     ylab("Relative Humidity (%)") +
@@ -616,11 +660,10 @@ plotEnvSpace <- function(plot.data, s){
     scale_y_continuous(expand = c(0,0)) +
     theme(axis.title.x = element_text(margin = margin(t = 12, r = 0, b = 0, l = 0))) +
     theme(strip.text.x = element_text(size = 13)) +
-    #theme(strip.background =element_rect(fill="white"))+
     theme(panel.spacing = unit(1, "lines")) +
     theme(axis.ticks = element_line(color = "black"))+
 
-    scale_fill_gradientn("Months", colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"), limits = c(0, 12))
+    scale_fill_gradientn("Months", colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"))
 }
 
 #Apply function to all species
@@ -709,10 +752,21 @@ env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(20,100), range.res.temp = 1, ran
 species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 
 #Run EWL/TBD models over parameter space per species
-for(s in species){
+#for(s in species){
 
   #Assign bat parameters
-  s.params <- batLoad(bat.params, s)
+ # s.params <- batLoad(bat.params, s)
+
+  s.params <- batLoad(bat.params, "MYLU")
+
+  #Fix those for MYLU
+  s.params$ttormax = 480
+  s.params$SA.per = 0.6563
+  s.params$SA.body = 39.2632638
+  s.params$SA.wing = 25.76848
+  s.params$rEWL.body = 0.11
+  s.params$rEWL.wing = 0.19
+  s.params$SA.plagio = s.params$SA.wing*.58
 
   s.out = data.frame()
 
@@ -732,66 +786,47 @@ for(s in species){
     s.out <- rbind(s.out, data.frame(Species = s, Time = t, Ta = ewl.inf$Ta, pct.rh = ewl.inf$pct.rh, areaPd = areaPd, TotalEWL.inf = ewl.inf$TotalEWL, CEWL.inf = ewl.inf$CutaneousEWL, PEWL.inf = ewl.inf$PulmonaryEWL,
                         TBD.inf = tbd.inf, TotalEWL.null = ewl.null$TotalEWL, CEWL.null = ewl.null$CutaneousEWL, PEWL.null = ewl.null$PulmonaryEWL, TBD.null = tbd.null))
   }
-  save(s.out, file = paste("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_",s,"_27March2018.RData", sep = ""))
-}
+  save(s.out, file = paste("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_mylu_7June2018.RData", sep = ""))
+#}
 
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_MYLU_27March2018.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_MYLU_26April2018.RData")
 
 #Plot over space
-plot.EWL <- data.frame(Ta = rep(s.out$Ta,2), pct.rh = rep(s.out$pct.rh,2), TEWL = c(s.out$TotalEWL.null, s.out$TotalEWL.inf), CEWL = c(s.out$CEWL.null, s.out$CEWL.in),
-                          PEWL = c(s.out$PEWL.null, s.out$PEWL.inf), Treatment = c(rep("Healthy", length(s.out$Ta)), rep("WNS", length(s.out$Ta))))
+mylu.EWL <- s.out[s.out$Time == 24*14 & s.out$Species == "MYLU",]
+plot.EWL <- data.frame(Ta = rep(mylu.EWL$Ta, 2), pct.rh = rep(mylu.EWL$pct.rh,2), TEWL = c(mylu.EWL$TotalEWL.null, mylu.EWL$TotalEWL.inf),
+                       Treatment = c(rep("Healthy", length(mylu.EWL$Ta)), rep("WNS", length(mylu.EWL$Ta))))
+plot.EWL <- plot.EWL[plot.EWL$pct.rh >= 60,]
+plot.EWL$TEWL = plot.EWL$TEWL/14
 
-# plotEnvSpace <- function(s.out, s, WNS){
-#   plot.sub <- s.out[s.out$Species == s, ]
-#   if(WNS == TRUE){fill=plot.sub$TotalEWL.inf}else{fill=plot.sub$TotalEWL.null}
-#   p <- ggplot(plot.sub, aes(Ta, pct.rh)) + theme_classic() +
-#     geom_raster(aes(fill = fill), interpolate = TRUE) +
-#     #ggtitle(title) +
-#     theme(panel.border = element_rect( fill = NA)) +
-#     theme(plot.title = element_text(face="italic")) +
-#     xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
-#     ylab("Relative Humidity (%)") +
-#     theme(axis.title = element_text(size = 14, color = "black"),
-#           axis.text = element_text(size = 14, color = "black"),
-#           #plot.title = element_text(size = 18,  family="serif"),
-#           #aspect.ratio = 1,
-#           legend.key.size = unit(42, "points"),
-#           legend.title = element_text(size = 14),
-#           legend.text = element_text(size = 14)) +
-#     scale_x_continuous(expand = c(0,0))+
-#     scale_y_continuous(expand = c(0,0))+
-#     scale_fill_gradientn(expression(paste("EWL (mg ",day^-1,")")), colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"))
-# }
-#
-# plot(plotEnvSpace(s.out, "MYLU", WNS =TRUE))
 
 ggplot(plot.EWL, aes(Ta, pct.rh)) +
   theme_bw() +
-  theme(strip.text.x = element_text(size = 13)) +
-  theme(panel.spacing = unit(1, "lines")) +
   facet_wrap(~Treatment) +
   geom_raster(aes(fill = TEWL), interpolate = TRUE) +
-  #ggtitle(title) +
   theme(panel.border = element_rect( fill = NA)) +
+  geom_rect(aes(xmin = 4, xmax = 6, ymin = 90,  ymax = 100), linetype = 2, color = "black", fill = "NA") +
   xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
   ylab("Relative Humidity (%)") +
   theme(axis.title = element_text(size = 14, color = "black"),
         axis.text = element_text(size = 14, color = "black"),
-        #plot.title = element_text(size = 18,  family="serif"),
-        #aspect.ratio = 1,
-        # legend.key.size = unit(42, "points"),
+        aspect.ratio = 1,
+        legend.key.size = unit(30, "points"),
         legend.title = element_text(size = 14),
         legend.text = element_text(size = 14)) +
-  #theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
+  theme(strip.text.x = element_text(size = 13)) +
+  theme(panel.spacing = unit(1, "lines")) +
   scale_x_continuous(expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
-  scale_fill_gradientn(expression(paste("EWL (mg ",day^-1,")")), colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"), guide = FALSE)
-  #theme(plot.margin=unit(c(1,1,2,1.2),"cm"))
+  scale_fill_gradientn(expression(paste("EWL (mg ",day^-1,")")), colours = c("dodgerblue4","cadetblue1","lightgoldenrod1", "darkgoldenrod1"))  +
+  theme(plot.margin=unit(c(1,2,2,1.2),"cm"))
 
 #Plot PEWL & CEWL
-plot.EWL.95 <- subset(s.out, s.out$Species == "MYLU" & s.out$Ta >=0 & s.out$pct.rh == "95" & s.out$Time == 24)
-plot.EWL.95 <- data.frame(Ta = rep(plot.EWL.95$Ta,2), pct.rh = rep(plot.EWL.95$pct.rh,2), CEWL = c(plot.EWL.95$CEWL.null, plot.EWL.95$CEWL.in),
-                          PEWL = c(plot.EWL.95$PEWL.null, plot.EWL.95$PEWL.inf), Treatment = c(rep("Healthy", length(plot.EWL.95$Ta)), rep("WNS", length(plot.EWL.95$Ta))))
+mylu.EWL <- s.out[s.out$Time == 24*14 & s.out$Species == "MYLU",]
+plot.EWL <- data.frame(Ta = rep(mylu.EWL$Ta, 2), pct.rh = rep(mylu.EWL$pct.rh,2), TEWL = c(mylu.EWL$TotalEWL.null, mylu.EWL$TotalEWL.inf),
+                       CEWL = c(mylu.EWL$CEWL.null, mylu.EWL$CEWL.inf), PEWL = c(mylu.EWL$PEWL.null, mylu.EWL$PEWL.inf),
+                       Treatment = c(rep("Healthy", length(mylu.EWL$Ta)), rep("WNS", length(mylu.EWL$Ta))))
+plot.EWL.95 <- plot.EWL[plot.EWL$pct.rh==98,]
+plot.EWL.95$TEWL = plot.EWL.95$TEWL/14
 
 ggplot(plot.EWL.95, aes(x=Ta, y=CEWL)) +
   facet_wrap(~Treatment, ncol = 2) +
@@ -807,7 +842,7 @@ ggplot(plot.EWL.95, aes(x=Ta, y=CEWL)) +
         axis.text = element_text(size = 14, color = "black")) +
   labs(y = expression(paste("Evaporative Water Loss (mg",phantom(1),day^-1,")"))) + labs(x = expression(paste("Temperature (",degree,phantom(),C,")"))) +
   scale_x_continuous(expand = c(0,0))+
-  scale_y_continuous(expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,2000), expand = c(0,0)) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
   #theme(strip.background =element_rect(fill="slategray1")) +
   theme(strip.text.x = element_text(size = 13)) +
@@ -815,34 +850,33 @@ ggplot(plot.EWL.95, aes(x=Ta, y=CEWL)) +
   theme(plot.margin=unit(c(1,1,2,1.2),"cm"))
 
 #Plot torpor bout duration
+plot.TBD <- s.out[s.out$Time == 24*30,]
+plot.TBD <- data.frame(Ta = rep(plot.TBD$Ta,2), pct.rh = rep(plot.TBD$pct.rh,2), TBD = c(plot.TBD$TBD.null, plot.TBD$TBD.inf), Treatment = c(rep("Healthy", length(plot.TBD$Ta)), rep("WNS", length(plot.TBD$Ta))))
+plot.TBD$TBD <- plot.TBD$TBD/24
+plot.TBD$Contour <- ifelse(plot.TBD$TBD <= 7, 7, ifelse(plot.TBD$TBD <= 14,14,30))
+plot.TBD <- plot.TBD[plot.TBD$pct.rh >= 60,]
 
-
-
-
-
-
-
-
-# par(mfrow=(c(2,1)))
-# plot(plot.EWL$Ta, plot.EWL$CEWL.null, cex.lab = 1.1, ylim = c(0,60), col = "white", xlab = "", ylab = "Evaporative Water Loss (mg/day)")
-# polygon(c(min(plot.EWL$Ta), plot.EWL$Ta, max(plot.EWL$Ta)),
-#         c(0, plot.EWL$CEWL.null, 0),  col = "grey70")
-# #lines(plot.EWL$Ta, plot.EWL$CEWL.null, lwd = 2)
-# polygon(c(min(plot.EWL$Ta), plot.EWL$Ta, max(plot.EWL$Ta)),
-#         c(0, plot.EWL$PEWL.null, 0),  col = "grey20")
-# #lines(plot.EWL$Ta, plot.EWL$PEWL.null, lwd=2)
-# legend(locator(1), cex = 1.2, c("Cutaneous", "Pulmonary"), bty = "n", pch =c(15,15),col=c("grey55","grey10"))
-# #text(locator(1), cex=1.6, "Hd = 90%")
-#
-# plot(plot.EWL$Ta, plot.EWL$CEWL.in, cex.lab = 1.1, ylim = c(0,60), col = "white", xlab = expression(paste("Temperature (",degree,phantom(),C,")")), ylab = "Evaporative Water Loss (mg/day)")
-# polygon(c(min(plot.EWL$Ta), plot.EWL$Ta, max(plot.EWL$Ta)),
-#         c(0, plot.EWL$CEWL.in, 0),  col = "grey70")
-# #lines(plot.EWL$Ta, plot.EWL$CEWL.inf, lwd = 2)
-# polygon(c(min(plot.EWL$Ta), plot.EWL$Ta, max(plot.EWL$Ta)),
-#         c(0, plot.EWL$PEWL.inf, 0),  col = "grey20")
-# #lines(plot.EWL$Ta, plot.EWL$PEWL.inf, lwd=2)
-# legend(locator(1), cex = 1.2, c("Cutaneous", "Pulmonary"), bty = "n", pch =c(15,15),col=c("grey55","grey10"))
-# #text(locator(1), cex=1.6, "Hd = 90%")
+ggplot(plot.TBD, aes(Ta, pct.rh, z = Contour)) +
+  theme_bw() +
+  facet_wrap(~Treatment) +
+  geom_raster(aes(fill = TBD), interpolate = TRUE) +
+  stat_contour(bins = 3, color = "grey10") +
+  theme(panel.border = element_rect( fill = NA)) +
+  #geom_rect(aes(xmin = 4, xmax = 6, ymin = 90,  ymax = 100), linetype = 2, color = "black", fill = "NA") +
+  xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
+  ylab("Relative Humidity (%)") +
+  theme(axis.title = element_text(size = 14, color = "black"),
+        axis.text = element_text(size = 14, color = "black"),
+        aspect.ratio = 1,
+        legend.key.size = unit(30, "points"),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 14)) +
+  theme(strip.text.x = element_text(size = 13)) +
+  theme(panel.spacing = unit(1, "lines")) +
+  scale_x_continuous(expand = c(0,0))+
+  scale_y_continuous(expand = c(0,0))+
+  scale_fill_gradientn("TBD (days)", colours = c("dodgerblue4","cadetblue1","lightgoldenrod1", "darkgoldenrod1")) +
+  theme(plot.margin=unit(c(1,2.9,2,1.2),"cm"))
 
 
 ################################################################################
@@ -904,63 +938,66 @@ tor.data <- temp.times[temp.times$Phase == "Torpor" & temp.times$TimeinPhase > 2
 
 #Read in bat parameter files
 mylu.params <- batLoad(bat.params, species = "MYLU")
-mylu.params$ttormax = 14*24
-mylu.params$pMass.i <- 0.035
+mylu.params$ttormax = 16*24
+mylu.params$rEWL.body = .1
+mylu.params$rEWL.wing = .19
+mylu.params$pMass.i = 0.045
 
 #Calculate torpor bout duration
 for(i in 1:nrow(tor.data)){
-  area = tor.data$diff.time[i]*fungalGrowth(Tb = 7, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 95, fung.params = fung.params)
-  EWL <- ewl(Ta = 7, pct.rh = 98, t = tor.data$TimeinPhase[i], areaPd = area, fung.params = fung.params, bat.params = mylu.params, torpid = TRUE,  WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE))
-  tor.data$areaPd[i] = area
+  mylu.params$Mass = tor.data$Mass[i]
+  mylu.params$SA.body = 10*(mylu.params$Mass^0.67)
+  mylu.params$SA.wing = mylu.params$SA.body*0.6563
+  tor.data$areaPd[i] = tor.data$diff.time[i]*fungalGrowth(Tb = 7, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 99, fung.params = fung.params)
+  EWL <- ewl(Ta = 7, pct.rh = 99, t = tor.data$TimeinPhase[i], areaPd = tor.data$areaPd[i], fung.params = fung.params, bat.params = mylu.params, torpid = TRUE,  WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE))
   tor.data$TotalEWL[i] = EWL$TotalEWL
-  tor.data$TBD.EWL[i]   <- torporTime(Ta = 7, pct.rh = 98, areaPd = area, WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE), fung.params = fung.params, bat.params = mylu.params)
+  tor.data$TBD.EWL[i]   <- torporTime(Ta = 7, pct.rh = 99, areaPd = tor.data$areaPd[i], WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE), fung.params = fung.params, bat.params = mylu.params)
 }
 
 summary(tor.data[tor.data$Bat.Type == "control",])
 summary(tor.data[tor.data$Bat.Type == "fungus",])
 
-#Perform t-test to determine significant difference
-t.test(tor.data$TimeinPhase[tor.data$Bat.Type == "control"], tor.data$TBD.EWL[tor.data$Bat.Type == "control"])
-t.test(tor.data$TimeinPhase[tor.data$Bat.Type == "fungus"],  tor.data$TBD.EWL[tor.data$Bat.Type == "fungus"])
+#Repeated measures ANOVA to test for difference
+df <- data.frame(ID=rep(tor.data$iButtonID,2), Time=c(tor.data$TimeinPhase, tor.data$TBD.EWL), Treatment=c(rep("Measured", length(tor.data$iButtonID)), rep("Modeled", length(tor.data$iButtonID))))
+summary(aov(Time ~ Treatment + Error(ID/Treatment), data=df))
 
-#Define pmass threshold from data
-#(TBD*EWL)/(lean*1000)
-tor.data$EWLhrly <- tor.data$TotalEWL/tor.data$TimeinPhase
-tor.data$Threshold = tor.data$TotalEWL/((tor.data$Mass)*1000)
+summary(lm(df$Time~df$Treatment*df$ID))
 
-#Plot pmass thresold against Pd growth per individual to determine any relationship
-id = unique(tor.data$iButtonID)[16]
-plot(tor.data$areaPd[tor.data$iButtonID == id], tor.data$Threshold[tor.data$iButtonID == id])
-plot(tor.data$areaPd[tor.data$Bat.Type == "fungus"], tor.data$Threshold[tor.data$Bat.Type == "fungus"])
-plot(tor.data$areaPd[tor.data$Bat.Type == "control"], tor.data$Threshold[tor.data$Bat.Type == "control"])
 
 ################################################################################
 #### Validate EWL model with new data                                       ####
 ################################################################################
 #Read in data and subset to dry EWL data only
-measured.EWL <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Input Files/TMR.csv")
-measured.EWL <- measured.EWL[measured.EWL$Treatment == "dry" & is.na(measured.EWL$EWL) == FALSE,]
+measured.EWL <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Input Files/mylu_wvp.csv")
+measured.EWL <- measured.EWL[measured.EWL$Treatment == "dry" & is.na(measured.EWL$EWL) == FALSE  & measured.EWL$pct.rh<.20 & measured.EWL$pct.rh>0.01 & measured.EWL$Ta <10,]
+measured.EWL <- measured.EWL[measured.EWL$batid != "MYLU28",]
+
 
 #Determine species
 species <- c("MYVE","PESU","COTO","EPFU","MYLU")
 #bat.params$rEWL = (bat.params$rEWL*(10*(bat.params$mass^0.67)))/bat.params$SA.wing
 
 #Calculate EWL for each individual measurement
-ewl.df <- data.frame()
-for(s in 1:5){
+#ewl.df <- data.frame()
+#for(s in 1:5){
   s.params <- batLoad(bat.params, species = species[s])
   s.params$TMRmin = measured.EWL$TMRO2.g
+  s.params$Mass = measured.EWL$Mass
+  s.params$SA.body = measured.EWL$SA.body
+  s.params$SA.wing = measured.EWL$SA.wing
+  s.params$rEWL.body = measured.EWL$rEWL.body
+  s.params$rEWL.wing = measured.EWL$rEWL.wing
 
-  s.data <- measured.EWL[measured.EWL$Species == species[s],]
+  s.data <- measured.EWL[measured.EWL$Species == "lucifugus",]
 
-  df <- data.frame(Species = species[s], Measured.EWL = s.data$EWL, ewl(Ta = s.data$act_temp, pct.rh = 10, t = 1, areaPd = 0, torpid = TRUE, WNS = FALSE, fung.params = fung.params, bat.params = s.params))
+  df <- data.frame(Species = species[s], ID = s.data$batid, Measured.EWL = s.data$EWL, ewl(Ta = s.data$Ta, pct.rh = s.data$pct.rh, t = 1, areaPd = 0, torpid = TRUE, WNS = FALSE, fung.params = fung.params, bat.params = s.params))
 
-  ewl.df <- rbind(ewl.df, df)
-}
+  #ewl.df <- rbind(ewl.df, df)
+#}
 
 #Compare measured and modeled EWL with a t-test to test significant difference
-t.test(ewl.df$Measured.EWL, ewl.df$TotalEWL)
-t.test(ewl.df$Measured.EWL[ewl.df$Species == "MYLU"], ewl.df$TotalEWL[ewl.df$Species == "MYLU"])
+summary(lm(df$Measured.EWL~df$TotalEWL))
+plot(df$TotalEWL, df$Measured.EWL, ylim = c(0,15), xlim = c(0,15))
 
 ewl.df[ewl.df$Species == "MYLU",]
 ################################################################################
@@ -968,6 +1005,13 @@ ewl.df[ewl.df$Species == "MYLU",]
 ################################################################################
 #Read in bat data
 mylu.params = batLoad(bat.params, "MYLU")
+mylu.params$ttormax = 480
+mylu.params$SA.per = 0.50
+mylu.params$SA.body = 39.2632638
+mylu.params$SA.wing = 25.76848
+mylu.params$rEWL.body = 0.11
+mylu.params$rEWL.wing = 0.19
+mylu.params$SA.plagio = 14.94572
 
 #Read in mass data
 mass.data <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Input Files/Mass loss data for Katie.csv")
@@ -999,13 +1043,14 @@ for(i in 2:dim(dates)[2]){
   id <- colnames(d.data)[2]
 
   #Assign parameters
-  i.params = mylu.params
+  i.params = s.params
+  i.params$TMRmin = ifelse(mass.data$Treatment[mass.data$iButton == id] == "control",0.58,0.7)
   i.params$Mass = mass.data$Begin.Mass[mass.data$iButton == id]
 
   #Determine average arousal, cooling, and euthermic time for bat
   arousal <- mean(phase$TimeinPhase[phase$iButtonID == id & phase$Phase.NoCA == "Arousal"])
   cooling <- mean(phase$TimeinPhase[phase$iButtonID == id & phase$Phase.NoCA == "Cooling"])
-  euthermia <- mean(phase$TimeinPhase[phase$iButtonID == id & phase$Phase.NoCA == "Euthermia"])
+  euthermia <- 3
 
   #Determine total time in torpor
   d.data$Date <- as.Date.character(as.character(d.data$Date), format = "%m/%d/%Y")
@@ -1018,14 +1063,17 @@ for(i in 2:dim(dates)[2]){
   arousal.E <- arousalEnergy(Ta = 7, bat.params = i.params)*arousal*length(d.data$Date)
   cooling.E <- coolEnergy(Ta = 7, bat.params = i.params)*cooling*length(d.data$Date)
   euthermia.E <- euthermicEnergy(Ta = 7, bat.params = i.params)*euthermia*length(d.data$Date)
-  torpor.E <- torporEnergy(Ta = 7, bat.params = i.params, q = calcQ(7))*torpor
+  torpor.E <- torporEnergy(Ta = 7, WNS = ifelse(mass.data$Treatment[mass.data$iButton == id] == "control",FALSE,TRUE), bat.params = i.params, q = calcQ(7))*torpor
 
   #Sum all energy and convert to fat loss
-  mass.data$FatConsumed[mass.data$iButton == id] <- ((arousal.E + cooling.E + euthermia.E + torpor.E)*20.1)/(39.3*1000)
+  mass.data$FatConsumed[mass.data$iButton == id] <- ((arousal.E + cooling.E + euthermia.E + torpor.E)*19.7)/(37.1*1000)
 
 }
 
-t.test(mass.data$FatConsumed, mass.data$Weight.Loss)
+mass.data = mass.data[mass.data$Died.Euth == "Euthanized",]
+summary(lm(mass.data$Weight.Loss ~ mass.data$FatConsumed))
+plot(mass.data$FatConsumed, mass.data$Weight.Loss, xlim = c(0,4), ylim = c(0,4))
+
 #
 # #Calculate fat loss per phase
 # for(i in unique(phase$iButtonID)){

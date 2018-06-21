@@ -18,7 +18,7 @@
 #' @export
 torporEnergy <- function(Ta, bat.params, WNS, area, q = calcQ(Ta)){
   with(bat.params,{
-    TMRminpd = mrPd*(area/SA.wing)
+    TMRminpd = TMRmin + (mrPd*(area/SA.wing))
     TMRmin = ifelse(WNS == TRUE, TMRminpd,TMRmin)
     ifelse(Ta > Ttormin, TMRmin*q^((Ta-Ttormin)/10),
            TMRmin + (Ttormin - Ta)*Ct)
