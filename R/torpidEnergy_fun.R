@@ -16,9 +16,10 @@
 #' @seealso \code{\link{ewl}},
 #' @author Katie Haase
 #' @export
-torporEnergy <- function(Ta, bat.params, inf, q = calcQ(Ta)){
+torporEnergy <- function(Ta, bat.params, WNS, area, q = calcQ(Ta)){
   with(bat.params,{
-    TMRmin = ifelse(inf = TRUE, TMRmin*mrPd,TMRmin)
+    TMRminpd = mrPd*(area/SA.wing)
+    TMRmin = ifelse(WNS == TRUE, TMRminpd,TMRmin)
     ifelse(Ta > Ttormin, TMRmin*q^((Ta-Ttormin)/10),
            TMRmin + (Ttormin - Ta)*Ct)
   })

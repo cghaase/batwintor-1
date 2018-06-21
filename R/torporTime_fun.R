@@ -15,7 +15,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
     #Define threshold based on infection status
-    Hd = pct.rh
+    Hd = ifelse(pct.rh==100,99,pct.rh)
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
@@ -24,8 +24,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     GC = 0.0821           #universal gas constant
     Q=calcQ(Ta)
     mrPd = 1.4
-    aPd = 0.21
-    rPd = 1.525
+    aPd = 0.16
 
     #Calculate water vapor pressure differential
     WVP.skin <- ifelse(Ta > Ttormin,
@@ -69,13 +68,13 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                       ttormax/(1+(Ttormin-Ta)*Ct/(TMRmin)))
 
     if(WNS == FALSE){
-      return(ifelse(TEWL == 0, Ta.time, ifelse(Ta.time < EWL.time, Ta.time, EWL.time)))
+      return(ifelse(Ta.time < EWL.time, Ta.time, EWL.time))
     } else if(WNS == TRUE){
-      p.areaPd = areaPd/SA.plagio*100                   #proportion of plagiopatagium surface area covered in Pd growth
+      p.areaPd = areaPd/SA.wing*100                   #proportion of wing surface area covered in Pd growth
 
       #Calculate cutaneous EWL (mg/hr) from wing surface area
-      cEWL.body.pd <- SA.body * (rEWL.body*aPd*p.areaPd) * dWVP
-      cEWL.wing.pd <- SA.wing * (rEWL.wing*aPd*p.areaPd) * dWVP
+      cEWL.body.pd <- SA.body * rEWL.body * dWVP
+      cEWL.wing.pd <- SA.wing * (rEWL.wing+(0.16*p.areaPd)) * dWVP
       cEWL.pd = cEWL.body.pd + cEWL.wing.pd
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
@@ -96,7 +95,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
                            ttormax/Q^((Ta-Ttormin)/10),
                            ttormax/(1+(Ttormin-Ta)*Ct/TMRmin*mrPd))
 
-      return(ifelse(TEWL.pd == 0, Ta.time.pd, ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time)))
+      return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))
     }
   })
 }

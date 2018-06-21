@@ -22,26 +22,26 @@ batDynamic <- function(t,y, params){
                            bat.params = params, fung.param = params)
     tar <- arousalTime(Ta = Tb, bat.params = params)
     tc <- coolTime(Ta = Tb, bat.params = params)
-    tfl <- flyingTime(bat.params = params)
-    tieu <- euthermicTime(bat.params = params) #time inactive euthermic
+    #tfl <- flyingTime(bat.params = params)
+    teu <- euthermicTime(bat.params = params) #time inactive euthermic
     # change in TorporProp (pT)/dt
-    dpTdt <- (pE/tieu + pAr/tar + pC/tc + pFl/tfl)/4 - pT/ttor
+    dpTdt <- (pE/teu + pAr/tar + pC/tc)/3 - pT/ttor
     # change in ArousalProp (pAr)/dt
-    dpAdt <- (pE/tieu + pC/tc + pT/ttor + pFl/tfl)/4 - pAr/tar
+    dpAdt <- (pE/teu + pC/tc + pT/ttor)/3 - pAr/tar
     # change in CoolProp (pC)/dt
-    dpCdt <- (pE/tieu + pAr/tar + pT/ttor + pFl/tfl)/4 - pC/tc
+    dpCdt <- (pE/teu + pAr/tar + pT/ttor)/3 - pC/tc
     # change in EuthermicProp (pE)/dt
-    dpEdt <- (pT/ttor + pAr/tar + pC/tc + pFl/tfl)/4 - pE/tieu
+    dpEdt <- (pT/ttor + pAr/tar + pC/tc)/3 - pE/teu
     # Cange in FlyingProp (pFl)/dt
-    dpFldt <- (pT/ttor + pAr/tar + pC/tc + pE/tieu)/4 - pFl/tfl
+    #dpFldt <- (pT/ttor + pAr/tar + pC/tc + pE/tieu)/4 - pFl/tfl
     # change in EnergyConsumed/dt
-    dJdt  <- Eeu*pE + Etor*pT + Ear*pAr + Ec*pC + Efl*pFl
+    dJdt  <- Eeu*pE + Etor*pT + Ear*pAr + Ec*pC
     # change in precEArousal/dt
-    dpJdt <- Eeu*pE +Ear*pAr + Ec*pC + Efl*pFl
+    dpJdt <- Eeu*pE +Ear*pAr + Ec*pC
     #change in FungalArea/dt
     dFdt  <- growth*pT
 
-    list(c(dpTdt, dpAdt, dpCdt, dpEdt, dpFldt, dJdt, dpJdt, dFdt))
+    list(c(dpTdt, dpAdt, dpCdt, dpEdt, dJdt, dpJdt, dFdt))
   })
 }
 

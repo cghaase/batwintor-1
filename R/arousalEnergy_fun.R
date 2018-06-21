@@ -24,9 +24,10 @@
 arousalEnergy <- function(Ta, bat.params){
 	with(bat.params,{
 		ifelse(Ta > Ttormin,
-					(Mass*(Teu - Ta)*S) + ((Teu - Ta)/WR)*(TMRmin + ((RMR - TMRmin)/2)),
-					(Mass*(Teu - Ttormin)*S) + ((Teu - Ttormin)/WR)*
-					  (TMRmin + ((RMR - TMRmin)/2)))
+					((Teu - Ta)*0.1728*Mass) + (((Teu-Ta)/WR)*(Ceu*(Teu-Ta))),
+					((Teu - Ttormin)*0.1728*Mass) + (((Teu-Ttormin)/WR)*(Ceu*(Teu-Ta)))
+
+					  )
 		})
 }
 

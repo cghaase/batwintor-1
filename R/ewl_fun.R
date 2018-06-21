@@ -24,6 +24,7 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
   with(mod.params,{
 
     #### Constants ####
+    pct.rh = ifelse(pct.rh==100,99.9,pct.rh)
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of o2 extraction efficiency
     a  = 0.611            #constants
@@ -87,8 +88,8 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
       p.areaPd = areaPd/SA.plagio*100
 
       #Calculate cutaneous EWL (mg/hr)
-      cEWL.body.pd <- SA.body * (rEWL.body*aPd*p.areaPd) * dWVP * t
-      cEWL.wing.pd <- SA.wing * (rEWL.wing*aPd*p.areaPd) * dWVP * t
+      cEWL.body.pd <- SA.body * rEWL.body * dWVP * t
+      cEWL.wing.pd <- SA.wing * (rEWL.wing+(aPd*p.areaPd)) * dWVP * t
       cEWL.pd = cEWL.body.pd + cEWL.wing.pd
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
