@@ -48,11 +48,11 @@ hibernationModel <- function(env, bat.params, fung.params){
                     # Energy cost for euthermia
                     Eeu = euthermicEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy costs for flying during euthermia
-                    Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
+                    #Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy cost for torpor
-                    Etor = torporEnergy(Ta = Ta, bat.params = mod.params),
+                    Etor = torporEnergy(Ta = Ta, WNS = inf, bat.params = mod.params),
                     # Energy cost for arousal from torpor
-                    Ear = arousalEnergy(Ta = Ttor, bat.params = mod.params),
+                    Ear = arousalEnergy(Ta = Ttor,  bat.params = mod.params),
                     # Energy cost for cooling from euthermic
                     Ec = coolEnergy(Ta = Ttor, bat.params = mod.params),
                     mod.params)
@@ -61,9 +61,9 @@ hibernationModel <- function(env, bat.params, fung.params){
                                               pAr = 0,
                                               pC = 0,
                                               pE = 0,
-                                              pFl = 0,
+                                              #pFl = 0,
                                               EnergyConsumed = 0,
-                                              EnergyBoutArrousal = 0,
+                                              EnergyBoutArousal = 0,
                                               FungalArea = 0),
                                         # Time to solve across
                                         times = env[[2]],
@@ -77,7 +77,7 @@ hibernationModel <- function(env, bat.params, fung.params){
         }
         # Energy costs for up to that point in the winter
         e.winter <- MaxToCurrent(det.results$EnergyConsumed)
-        ar.winter <- MaxToCurrent(det.results$EnergyBoutArrousal)
+        ar.winter <- MaxToCurrent(det.results$EnergyBoutArousal)
         # Convert units to grams of fat
         fat.consumed <- kcal.to.g(e.winter)
         ar.fat <- kcal.to.g(ar.winter)
@@ -86,19 +86,19 @@ hibernationModel <- function(env, bat.params, fung.params){
         # Proportion of time in torpor
         prop.tor <- MaxToCurrent(det.results$pT)
         prop.ar <- MaxToCurrent(det.results$pAr)
-        prop.fl <- MaxToCurrent(det.results$pFl)
+        #prop.fl <- MaxToCurrent(det.results$pFl)
         Tb <- Tb
         # Creat dataframe of results for intermediate product
         results <- data.table(Ta = rep(Ta,length(env[2])),
                               pct.rh = rep(pct.rh,length(env[2])),
                               cbind(g.fat.consumed = c(0,fat.consumed),
-                                    pEnergyBoutArrousal = c(0, prec.ar),
+                                    pEnergyBoutArousal = c(0, prec.ar),
                                     Pd.growth = c(0,
                                                   MaxToCurrent(det.results$FungalArea)),
                                     time = det.results$time,
                                     Prop.tor = c(1,prop.tor),
                                     Prop.Ar = c(0,prop.ar),
-                                    Prop.Fl = c(0,prop.fl),
+                                    #Prop.Fl = c(0,prop.fl),
                                     Tb = Tb))
         return(results)
         })
@@ -107,14 +107,14 @@ hibernationModel <- function(env, bat.params, fung.params){
       }
     # Create one better dataframe with all pertinent columns
     out.dt <- cbind(out[[1]], n.g.fat.consumed = out[[2]]$g.fat.consumed,
-                    n.pEnergyBoutArrousal = out[[2]]$pEnergyBoutArrousal,
+                    n.pEnergyBoutArousal = out[[2]]$pEnergyBoutArousal,
                     n.Prop.tor = out[[2]]$Prop.tor,
-                    n.Prop.Ar = out[[2]]$Prop.Ar,
-                    n.Prop.Fl = out[[2]]$Prop.Fl)
+                    n.Prop.Ar = out[[2]]$Prop.Ar)
     # Create columns with survival outcomes  based on avaliable fat reserves
+    sub.fat <- kcal.to.g(arousalEnergy(Ta=Ta, bat.params = bat.params) + (24*euthermicEnergy(Ta=Ta, bat.params=bat.params)))
     out.fin <- out.dt %>%
-      mutate(surv.inf = ifelse(((Mass*pFat)-kcal.to.g(arousalEnergy(Ta = Ta, bat.params = bat.params))) >= g.fat.consumed,1,0)) %>%
-      mutate(surv.null = ifelse(((Mass*pFat)-kcal.to.g(arousalEnergy(Ta = Ta, bat.params = bat.params))) >= n.g.fat.consumed,1,0))
+      mutate(surv.inf  = ifelse((Mass*pFat) >= g.fat.consumed+sub.fat,1,0)) %>%
+      mutate(surv.null = ifelse((Mass*pFat) >= n.g.fat.consumed+sub.fat,1,0))
 
       # mutate(surv.inf = ifelse(mass*pFat >= g.fat.consumed,1,0)) %>%
       # mutate(surv.null = ifelse(mass*pFat >= n.g.fat.consumed,1,0))

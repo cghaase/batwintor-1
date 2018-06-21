@@ -24,16 +24,13 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
   with(mod.params,{
 
     #### Constants ####
+    pct.rh = ifelse(pct.rh==100,99.9,pct.rh)
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of o2 extraction efficiency
     a  = 0.611            #constants
     b  = 17.502
     c  = 240.97
     GC = 0.0821           #universal gas constant
-    k  = 10               #Meeh factor
-
-    #### Surface area ####
-    #SA <- k*(mass^(2/3))
 
     #### Water vapor presure ####
     #Calculate water vapor pressure differential
@@ -70,7 +67,9 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
 
     #### EWL ####
     #Calculate cutaneous EWL (mg/hr)
-    cEWL <- SA.wing * rEWL * t * dWVP
+    cEWL.body <- SA.body * rEWL.body * dWVP * t
+    cEWL.wing <- SA.wing * rEWL.wing * dWVP * t
+    cEWL = cEWL.body + cEWL.wing
 
     #Calculate pulmonary EWL (mg/hr)
     vol <- ifelse(torpid == TRUE,
@@ -89,19 +88,18 @@ ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
       p.areaPd = areaPd/SA.plagio*100
 
       #Calculate cutaneous EWL (mg/hr)
-      cEWL.pd <- SA.wing * (rEWL*rPd) * t * dWVP
+      cEWL.body.pd <- SA.body * rEWL.body * dWVP * t
+      cEWL.wing.pd <- SA.wing * (rEWL.wing+(aPd*p.areaPd)) * dWVP * t
+      cEWL.pd = cEWL.body.pd + cEWL.wing.pd
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
       vol.pd <- ifelse(torpid == TRUE,
-                       (TMRmin * t * Mass)/(pO2 * O2.coef * 1000),
+                       (TMRmin * mrPd * t * Mass)/(pO2 * O2.coef * 1000),
                        (RMR * t * Mass)/(pO2 * O2.coef * 1000))
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
       TEWL.pd <- cEWL.pd + pEWL.pd
-
-      #Add increase associated with Pd growth
-      TEWL.pd <- TEWL.pd + (p.areaPd*aPd)
 
       return(data.frame(Ta = Ta, pct.rh = pct.rh, TotalEWL = TEWL.pd, CutaneousEWL = cEWL.pd,
                         PulmonaryEWL = pEWL.pd, PercPdGrowth = p.areaPd))
