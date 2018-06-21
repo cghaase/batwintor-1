@@ -30,23 +30,23 @@
 #' @section Arousal Functions:
 #' The \code{Arousal Functions} are designed to
 #' explane the energry expendatures between bouts of torpor.
-#' \code{\link{arousalTime}} and \code{\link{CalcEnergyArousal}} document
+#' \code{\link{arousalTime}} and \code{\link{arousalEnergy}} document
 #' the return from torpid body temperatures to euthermia. The functions
 #' \code{\link{euthermicEnergy}} describes energy expendature during
 #' euthermia, and the \code{\link{flyingTime}} and
 #' \code{\link{flyingEnergy}} functions describe ammendments made to encourperate
-#' the metabolic costs of flight during arousals. The \code{\link{CalcCoolTime}}
+#' the metabolic costs of flight during arousals. The \code{\link{coolTime}}
 #' and \code{\link{coolEnergy}} functions handle the return from eutheria
 #' to torpid state and complete the arousal cycle.
 #'
 #' @section Model Functions:
 #' The model functions are the heart of the package and are composed of:
 #' \code{\link{buildEnv}}, \code{\link{hibernationModel}}, and
-#' \code{\link{DetModel}}. The \code{\link{buildEnv}} function allows you to create your
+#' \code{\link{batDynamic}}. The \code{\link{buildEnv}} function allows you to create your
 #' the parameter space that your model will run across in the form of
 #' environmental spave and a time vector. The \code{\link{hibernationModel}} takes
 #' the supplied environment, the parameters passed in and formats the data
-#' for the \code{\link{DetMod}} which solves the differential equations.
+#' for the \code{\link{batDynamic}} which solves the differential equations.
 #' \code{\link{hibernationModel}} then formats, and outputs the results for post-processing
 #' and plotting
 #'
@@ -60,7 +60,7 @@
 #' as a distributional range (see \code{\link{getDistribution}}) and a surface
 #' represing the length of witner. The \code{\link{survivalHistogram}} tallies
 #' the cell values within these rasters and plots how the a species median
-#' survival capasity will shift with the introduction of WNS. \code{\link{survialMultiplot}}
+#' survival capasity will shift with the introduction of WNS. \code{\link{survivalMultiplot}}
 #' combines \code{\link{survivalPlotter}} outputs of infected and uninfected along
 #' with \code{\link{survivalHistogram}} to make one nice picture.
 #'

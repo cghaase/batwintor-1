@@ -8,9 +8,9 @@
 
 #' @family Arousal Functions
 #'
-#' @seealso  \code{\link{CalcEnergyArousal}}, \code{\link{CalcCoolTime}},
+#' @seealso  \code{\link{arousalEnergy}}, \code{\link{coolTime}},
 #' \code{\link{coolEnergy}}, \code{\link{euthermicTime}},
-#' \code{\link{CalcEnergyArousal}}, \code{\link{euthermicEnergy}},
+#' \code{\link{euthermicEnergy}},
 #' \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 #' @export
 flyingEnergy <- function(Ta, bat.params){

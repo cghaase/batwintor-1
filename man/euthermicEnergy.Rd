@@ -30,7 +30,7 @@ plot(e, r, xlab = "Temp (C)", ylab = "Energy Expended",
      main = "euthermicEnergy")
 }
 \seealso{
-\code{\link{coolEnergyl}}, \code{\link{CalcCoolTime}},
+\code{\link{coolEnergy}}, \code{\link{coolTime}},
 \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 
 Other Arousal Functions: \code{\link{arousalEnergy}},

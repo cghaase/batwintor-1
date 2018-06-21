@@ -10,7 +10,7 @@
 #'
 #' @family Arousal Functions
 #'
-#' @seealso  \code{\link{coolEnergyl}}, \code{\link{CalcCoolTime}},
+#' @seealso  \code{\link{coolEnergy}}, \code{\link{coolTime}},
 #' \code{\link{flyingEnergy}}, \code{\link{flyingTime}}
 #'
 #' @example ExampleScripts/euthermicEnergy_ex.R

@@ -17,6 +17,8 @@ survivalMultiplot(surv.stk, dist.map, nights, species.name, save.name, ...)
 
 \item{save.name}{optional argument. When a path is passed files will save to that
 location with provided name. If left as defult 'NULL' will print to plot window}
+
+\item{...}{passed to \code{\link[ggplot2]{ggsave}}}
 }
 \description{
 \code{survivalMultiplot} Creates a strip figure containing survival plots for infected
@@ -28,7 +30,7 @@ Strip figures are a combination of \code{\link{survivalPlotter}} and
 the resutlts for a single species in a single function
 }
 \seealso{
-\code{\link{survivalRaster}}; \code{\link{SurvPlotter}}; \code{\link{survivalHistogram}};
+\code{\link{survivalRaster}}; \code{\link{survivalPlotter}}; \code{\link{survivalHistogram}};
 \code{\link{dangerZone}}
 
 Other Plot Functions: \code{\link{dangerZone}},
