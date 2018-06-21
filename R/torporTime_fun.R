@@ -78,7 +78,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       cEWL.pd = cEWL.body.pd + cEWL.wing.pd
 
       #Calculate pulmonary EWL (mg/hr) with increased TMR?
-      vol.pd  <- (TMRmin * mrPd * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
+      vol.pd  <- ((TMRmin + (mrPd*p.areaPd)) * Mass)/(pO2 * O2.coef * 1000) #1000 used to convert L to ml
       pEWL.pd <- vol.pd * sat.def
 
       #Calculate total EWL (TEWL; mg/hr)
@@ -93,7 +93,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
       Ta.time.pd <- ifelse(Ta > Ttormin,
                            ttormax/Q^((Ta-Ttormin)/10),
-                           ttormax/(1+(Ttormin-Ta)*Ct/TMRmin*mrPd))
+                           ttormax/(1+(Ttormin-Ta)*Ct/TMRmin+(mrPd*p.areaPd)))
 
       return(ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time))
     }
