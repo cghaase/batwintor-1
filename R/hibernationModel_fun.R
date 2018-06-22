@@ -49,8 +49,6 @@ hibernationModel <- function(env, bat.params, fung.params){
                     Eeu = euthermicEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy costs for flying during euthermia
                     #Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
-                    # Energy cost for torpor
-                    Etor = torporEnergy(Ta = Ta, WNS = inf, bat.params = mod.params),
                     # Energy cost for arousal from torpor
                     Ear = arousalEnergy(Ta = Ttor,  bat.params = mod.params),
                     # Energy cost for cooling from euthermic
