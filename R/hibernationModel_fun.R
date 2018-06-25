@@ -108,9 +108,11 @@ hibernationModel <- function(env, bat.params, fung.params){
                     n.pEnergyBoutArousal = out[[2]]$pEnergyBoutArousal,
                     n.Prop.tor = out[[2]]$Prop.tor,
                     n.Prop.Ar = out[[2]]$Prop.Ar)
-    # Create columns with survival outcomes  based on avaliable fat reserves
-    sub.fat <- kcal.to.g(arousalEnergy(Ta=Ta, bat.params = bat.params) + (24*euthermicEnergy(Ta=Ta, bat.params=bat.params)))
+
     out.fin <- out.dt %>%
+      # Create columns with survival outcomes  based on avaliable fat reserves
+      mutate(sub.fat = kcal.to.g(arousalEnergy(Ta=Ta, bat.params = mod.params) +
+                                    (24*euthermicEnergy(Ta=Ta, bat.params=mod.params)))) %>%
       mutate(surv.inf  = ifelse((Mass*pFat) >= g.fat.consumed+sub.fat,1,0)) %>%
       mutate(surv.null = ifelse((Mass*pFat) >= n.g.fat.consumed+sub.fat,1,0))
 
