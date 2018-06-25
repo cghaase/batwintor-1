@@ -23,8 +23,6 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
     c  = 240.97
     GC = 0.0821           #universal gas constant
     Q=calcQ(Ta)
-    mrPd = 1.4
-    aPd = 0.16
 
     #Calculate water vapor pressure differential
     WVP.skin <- ifelse(Ta > Ttormin,
