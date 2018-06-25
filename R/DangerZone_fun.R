@@ -30,7 +30,8 @@ dangerZone <-function(mod.df, title, save.name=NULL, ...){
   dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~diff))  +
     scale_fill_gradientn("Difference\n(months)",
                          colors = c("#e66101", "#fdb863","#ffffff", "#b2abd2", "#5e3c99"), #purp low orange hi
-                         limits = c(-8,0)) +
+                         limits = c(-10,0)
+                         ) +
     geom_raster(aes_(fill = ~diff), interpolate = T) +
     scale_x_continuous(expand = c(0,0))+
     scale_y_continuous(expand = c(0,0))+
