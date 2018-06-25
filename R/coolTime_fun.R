@@ -24,8 +24,8 @@
 coolTime <- function(Ta, bat.params){
   with(bat.params,{
     ifelse(Ta > Ttormin,
-          ((Teu-Ta)/((Ceu*(SA.body + SA.wing)*(Teu-Ta))/(0.1728*Mass))),
-           ((Teu-Ttormin)/((Ceu*(SA.body + SA.wing)*(Teu-Ta))/(0.1728*Mass)))
+          ((Teu-Ta)/((Ceu*((10*(Mass^0.67)) + SA.wing)*(Teu-Ta))/(0.1728*Mass))),
+           ((Teu-Ttormin)/((Ceu*((10*(Mass^0.67)) + SA.wing)*(Teu-Ta))/(0.1728*Mass)))
     )
   }
   )
