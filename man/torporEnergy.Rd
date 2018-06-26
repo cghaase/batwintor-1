@@ -4,7 +4,7 @@
 \alias{torporEnergy}
 \title{Calculate energy per time at toprid body temp given ambient temperature}
 \usage{
-torporEnergy(Ta, bat.params, WNS, area, q = calcQ(Ta))
+torporEnergy(Ta, bat.params, WNS, areaPd, q = calcQ(Ta))
 }
 \arguments{
 \item{Ta}{ambient emperature}
@@ -25,10 +25,13 @@ bout of torpor at a ambient temperature
 data("mylu.params")
 
 e <- -10:34 #temperature vector
+a <- seq(from = .001, to = 3, length.out = 45) #area vector
 
-r <- torporEnergy(e, mylu.params)
-
+r <- torporEnergy(Ta = e, WNS = F, areaPd = 0, bat.params = mylu.params)
+r1 <- torporEnergy(Ta = rep(4,45), areaPd = a, WNS = T, bat.params = mylu.params)
 plot(e, r, xlab = "Temp (C)", ylab = "Energy Expended",
+     main = "torporEnergy")
+plot(a, r1, xlab = "Area Infected (cm2^)", ylab = "Energy Expended",
      main = "torporEnergy")
 }
 \seealso{

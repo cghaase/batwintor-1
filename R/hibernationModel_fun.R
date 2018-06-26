@@ -41,18 +41,22 @@ hibernationModel <- function(env, bat.params, fung.params){
         # determine Tb
         Tb <- ifelse(Ttor < Teu, Ttor, Teu)
         # create values that will be fed into the dynamic model
-        values <- c(Tb = Tb, Ttor = Ttor, WNS = inf, pct.rh= pct.rh,
+        values <- c(Tb = Tb, Ta = Ta, Ttor = Ttor, WNS = inf, pct.rh= pct.rh,
                     # Fungal growth area
-                    growth = fungalGrowth(Tb = Tb, fung.params = mod.params)*
+                    growth = fungalGrowth(Tb = Ta, fung.params = mod.params)*
                       scaleFungalGrowth(pct.rh = pct.rh, fung.params = mod.params),
                     # Energy cost for euthermia
                     Eeu = euthermicEnergy(Ta = Tb, bat.params = mod.params),
                     # Energy costs for flying during euthermia
                     #Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy cost for arousal from torpor
+<<<<<<< .merge_file_a05916
                     Ear = arousalEnergy(Ta = Tb,  bat.params = mod.params),
+=======
+                    Ear = arousalEnergy(Ta = Ta,  bat.params = mod.params),
+>>>>>>> .merge_file_a07272
                     # Energy cost for cooling from euthermic
-                    Ec = coolEnergy(Ta = Ttor, bat.params = mod.params),
+                    Ec = coolEnergy(Ta = Ta, bat.params = mod.params),
                     mod.params)
         # Call differential equation model
         det.results <- data.table(lsoda(y = c(pT = 1, # Inital values
@@ -97,7 +101,9 @@ hibernationModel <- function(env, bat.params, fung.params){
                                     Prop.tor = c(1,prop.tor),
                                     Prop.Ar = c(0,prop.ar),
                                     #Prop.Fl = c(0,prop.fl),
-                                    Tb = Tb))
+                                    Tb = Tb,
+                                    ttor = det.results$ttor,
+                                    Etor = det.results$Etor))
         return(results)
         })
       foo <- rbindlist(results)
@@ -115,9 +121,6 @@ hibernationModel <- function(env, bat.params, fung.params){
                                     (24*euthermicEnergy(Ta=Ta, bat.params=mod.params)))) %>%
       mutate(surv.inf  = ifelse((Mass*pFat) >= g.fat.consumed+sub.fat,1,0)) %>%
       mutate(surv.null = ifelse((Mass*pFat) >= n.g.fat.consumed+sub.fat,1,0))
-
-      # mutate(surv.inf = ifelse(mass*pFat >= g.fat.consumed,1,0)) %>%
-      # mutate(surv.null = ifelse(mass*pFat >= n.g.fat.consumed,1,0))
     return(data.table(out.fin))
   })
 }
