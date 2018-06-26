@@ -46,11 +46,11 @@ hibernationModel <- function(env, bat.params, fung.params){
                     growth = fungalGrowth(Tb = Tb, fung.params = mod.params)*
                       scaleFungalGrowth(pct.rh = pct.rh, fung.params = mod.params),
                     # Energy cost for euthermia
-                    Eeu = euthermicEnergy(Ta = Ta, bat.params = mod.params),
+                    Eeu = euthermicEnergy(Ta = Tb, bat.params = mod.params),
                     # Energy costs for flying during euthermia
                     #Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy cost for arousal from torpor
-                    Ear = arousalEnergy(Ta = Ttor,  bat.params = mod.params),
+                    Ear = arousalEnergy(Ta = Tb,  bat.params = mod.params),
                     # Energy cost for cooling from euthermic
                     Ec = coolEnergy(Ta = Ttor, bat.params = mod.params),
                     mod.params)

@@ -8,8 +8,6 @@ library(gridExtra)
 
 #Read in bat data
 data("bat.params")
-bat.params$pFly = 0.00001
-bat.params$Ct = 0.2
 
 #Load fungal growth
 fung.params <- fungalSelect("Chaturvedi")
@@ -17,10 +15,11 @@ fung.params <- fungalSelect("Chaturvedi")
 ################################################################################
 #### Figure out increase to TMR due to Pd growth                            ####
 ################################################################################
-#days = 113
-tmr = c(3.2, 3.80137)
+#These data are from Liam's paper, figure 1
+#days in torpor were 113
+tmr = c(3.2, 3.80137) #pulled from wet
 max = fungalGrowth(Tb = 7, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 98, fung.params = fung.params)*113*24
-df <- data.frame(Treatment = c("Begin", "End"), Growth = c(0,max/8.66003080581862), TMR = tmr)
+df <- data.frame(Treatment = c("Begin", "End"), Growth = c(0,max/19.9*100), TMR = tmr)
 summary(lm(df$TMR~df$Growth))
 
 ################################################################################
@@ -432,7 +431,7 @@ lines(WVP, predict.MM, col = "blue")
 ################################################################################
 #Create dataframe of environmental parameters (taken from our microclimate data)
 env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(60,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
-
+s= "MYLU"
 #Create vector of species
 # species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 
@@ -441,16 +440,9 @@ surv.out <- data.frame()
 #for(s in species){
 
   #Assign bat parameters
-  s.params <- batLoad(bat.params, "MYLU")
-
-  #Fix those for MYLU
-  s.params$ttormax = 30*24
-  s.params$SA.per = 0.6563
-  s.params$SA.body = 39.2632638
-  s.params$SA.wing = 25.76848
-  s.params$rEWL.body = 0.11
-  s.params$rEWL.wing = 0.19
-  s.params$SA.plagio = 14.94572
+  s.params <- batLoad(bat.params, s)
+  s.params$mrPd = 0.01556
+  s.params$rEWL.wing = 0.37635
 
   #Calculate dynamic energy over range of environmental conditions
   de.df <- data.frame(hibernationModel(env = env.df, bat.params = s.params, fung.params = fung.params))
@@ -460,39 +452,92 @@ surv.out <- data.frame()
 #  print(s)
 #}
 
-save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_MYLU_7June2018.RData")
 
-#Danger Zone
-mod.dif <- mod.df %>%
-  group_by_(~Ta, ~pct.rh) %>%
-  summarise_(max.null = ~max(time*surv.null),max.inf = ~max(time*surv.inf)) %>%
-  mutate_(diff = ~hour.to.month(max.inf - max.null))
-ungroup %>% data.table
-# mod.dif$max.inf[mod.dif$Ta == 2 & mod.dif$pct.rh < 96]= mod.dif$max.inf[mod.dif$Ta == 1 & mod.dif$pct.rh < 96]
-mod.dif$contour = ifelse(mod.dif$max.inf>=6*30*24,1,0)
 
-dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~diff))  +
-  scale_fill_gradientn("Difference\n(months)",
-                       colors = c("#e66101", "#fdb863","#ffffff", "#b2abd2", "#5e3c99"), #purp low orange hi
-                       limits = c(-10,0)
-  ) +
-  geom_raster(aes_(fill = ~diff), interpolate = T) +
-  scale_x_continuous(expand = c(0,0))+
-  scale_y_continuous(expand = c(0,0))+
-  # geom_contour(binwidth = 1,
-  #              colour = "grey15") +
-  geom_contour(aes(z = contour), binwidth = 1, colour = "grey15") +
-  # ggtitle(title) +
-  xlab("Temperature (C)") +
-  ylab("Relative Humidity (%)")+
-  theme_minimal()+
-  theme(plot.title = element_text(size = 18,  family="serif"),
-        axis.title = element_text(size = 16,  family="serif"),
-        axis.text = element_text(size = 16,  family="serif"),
-        aspect.ratio = 1,
-        legend.key.size = unit(42, "points"),
-        legend.title = element_text(size = 16,  family="serif"),
-        legend.text = element_text(size = 16,  family="serif"))
+
+
+# save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_MYLU_7June2018.RData")
+################################################################################
+#### Plot monthly survival over parameter space                             ####
+################################################################################
+#load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_28Feb2018.RData")
+
+# df.months$Months.inf[df.months$Ta == 2 & df.months$pct.rh < 96]=  df.months$Months.inf[df.months$Ta == 1 & df.months$pct.rh < 96]
+
+#Create vectors of environmental and species data
+temps <- seq(-5,20,1)
+hd <- seq(60,100,1)
+species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
+
+#Organize survival data for plotting purposes
+df.months <- data.frame()
+for(t in temps){
+  for(h in hd){
+   # for(s in species){
+      s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
+      months.inf  <- max(s.data$time[s.data$surv.inf == 1])/24/30
+      months.null <- max(s.data$time[s.data$surv.null == 1])/24/30
+      df <- data.frame(Species = s, Ta = t, pct.rh = h, Months.inf = months.inf, Months.null = months.null)
+      df.months = rbind(df.months,df)
+   # }
+  }
+}
+
+# save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_7June2018.RData")
+
+#load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_4June2018.RData")
+
+#Create functions for plotting over space
+plot.data <- data.frame(Species = rep(df.months$Species,2), Ta = rep(df.months$Ta,2), pct.rh = rep(df.months$pct.rh,2),
+                        Survival = c(df.months$Months.null,df.months$Months.inf),
+                        Treatment = c(rep("Healthy", length(df.months$Months.inf)),rep("WNS",length(df.months$Months.inf))))
+plot.data$Contour <- ifelse(plot.data$Survival >=6,1,0)
+
+plotEnvSpace <- function(plot.data, s){
+  plot.sub <- plot.data[plot.data$Species == s, ]
+  ggplot(plot.sub, aes(Ta, pct.rh)) +
+    theme_bw() +
+    facet_wrap(~Treatment, ncol = 2) +
+    geom_raster(aes(fill = Survival), interpolate = TRUE) +
+    geom_contour(aes(z = Contour), binwidth = 1, colour = "grey15") +
+    geom_rect(aes(xmin = 4, xmax = 6, ymin = 90,  ymax = 100), linetype = 2, color = "black", fill = "NA") +
+    theme(panel.border = element_rect( fill = NA, color = "black")) +
+    xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
+    ylab("Relative Humidity (%)") +
+    theme(axis.title = element_text(size = 14),#  family="serif"),
+          axis.text = element_text(size = 14, color = "black"),  # family="serif"),
+          aspect.ratio = 1,
+          legend.key.size = unit(36, "points"),
+          legend.title = element_text(size = 14),#  family="serif"),
+          legend.text = element_text(size = 14)) + #,  family="serif")) +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    theme(axis.title.x = element_text(margin = margin(t = 12, r = 0, b = 0, l = 0))) +
+    theme(strip.text.x = element_text(size = 13)) +
+    theme(panel.spacing = unit(1, "lines")) +
+    theme(axis.ticks = element_line(color = "black"))+
+
+    scale_fill_gradientn("Months", colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"))
+}
+
+#Apply function to all species
+p1 = plotEnvSpace(plot.data,s="MYLU")
+plot(p1)
+p2 = plotEnvSpace(df.months,s="myve","Myotis velfer - infected", WNS=TRUE)
+p3 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - infected", WNS=TRUE)
+p4 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="coto","Corynorhinus townsendii - infected", WNS=TRUE)
+p5 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="pesu","Perimyotis subflavus - infected", WNS=TRUE)
+
+p11 = plotEnvSpace(df.months,s="mylu","Healthy", WNS=FALSE)
+p12 = plotEnvSpace(df.months,s="myve","Myotis velfer - healthy", WNS=FALSE)
+p13 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - healthy", WNS=FALSE)
+p14 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="coto","Corynorhinus townsendii - healthy", WNS=FALSE)
+p15 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="pesu","Perimyotis subflavus - healthy", WNS=FALSE)
+
+multiplot(p11,p1, cols = 1)
+multiplot(p12,p14,p2,p4, cols = 2)
+
+
 
 ################################################################################
 #### Trade-offs figures                                                     ####
@@ -507,11 +552,11 @@ df.fat <- data.frame()
 for(t in temps){
   for(h in hd){
     #for(s in species){
-      s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
-      fat.inf  <- s.data[s.data$time == 24*30,]
-      fat.null <- s.data[s.data$time == 24*30,]
-      df <- data.frame(Species = s, Ta = t, pct.rh = h, fat.inf = fat.inf, fat.null = fat.null)
-      df.fat = rbind(df.fat,df)
+    s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
+    fat.inf  <- s.data[s.data$time == 24*30,]
+    fat.null <- s.data[s.data$time == 24*30,]
+    df <- data.frame(Species = s, Ta = t, pct.rh = h, fat.inf = fat.inf, fat.null = fat.null)
+    df.fat = rbind(df.fat,df)
     #}
   }
 }
@@ -602,86 +647,6 @@ temp <- read.csv("C:/Users/Katie Haase/Desktop/Data/Field Data/Microclimate/micr
 LCC <- temp[temp$id == "LCC_CATHEDRAL",]
 hist(LCC$temp[LCC$temp < 5])
 
-
-################################################################################
-#### Plot monthly survival over parameter space                             ####
-################################################################################
-#load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_28Feb2018.RData")
-
-df.months$Months.inf[df.months$Ta == 2 & df.months$pct.rh < 96]=  df.months$Months.inf[df.months$Ta == 1 & df.months$pct.rh < 96]
-
-#Create vectors of environmental and species data
-temps <- seq(-5,20,1)
-hd <- seq(20,100,1)
-species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
-
-#Organize survival data for plotting purposes
-df.months <- data.frame()
-for(t in temps){
-  for(h in hd){
-   # for(s in species){
-      s.data <- subset(surv.out, surv.out$species == s & surv.out$Ta == t & surv.out$pct.rh == h)
-      months.inf  <- max(s.data$time[s.data$surv.inf == 1])/24/30
-      months.null <- max(s.data$time[s.data$surv.null == 1])/24/30
-      df <- data.frame(Species = s, Ta = t, pct.rh = h, Months.inf = months.inf, Months.null = months.null)
-      df.months = rbind(df.months,df)
-   # }
-  }
-}
-
-save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_7June2018.RData")
-
-#load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_4June2018.RData")
-
-#Create functions for plotting over space
-plot.data <- data.frame(Species = rep(df.months$Species,2), Ta = rep(df.months$Ta,2), pct.rh = rep(df.months$pct.rh,2),
-                        Survival = c(df.months$Months.null,df.months$Months.inf),
-                        Treatment = c(rep("Healthy", length(df.months$Months.inf)),rep("WNS",length(df.months$Months.inf))))
-plot.data$Contour <- ifelse(plot.data$Survival >=6,1,0)
-
-plotEnvSpace <- function(plot.data, s){
-  plot.sub <- plot.data[plot.data$Species == s & plot.data$pct.rh >= 60, ]
-  ggplot(plot.sub, aes(Ta, pct.rh)) +
-    theme_bw() +
-    facet_wrap(~Treatment, ncol = 2) +
-    geom_raster(aes(fill = Survival), interpolate = TRUE) +
-    geom_contour(aes(z = Contour), binwidth = 1, colour = "grey15") +
-    geom_rect(aes(xmin = 4, xmax = 6, ymin = 90,  ymax = 100), linetype = 2, color = "black", fill = "NA") +
-    theme(panel.border = element_rect( fill = NA, color = "black")) +
-    xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
-    ylab("Relative Humidity (%)") +
-    theme(axis.title = element_text(size = 14),#  family="serif"),
-          axis.text = element_text(size = 14, color = "black"),  # family="serif"),
-          aspect.ratio = 1,
-          legend.key.size = unit(36, "points"),
-          legend.title = element_text(size = 14),#  family="serif"),
-          legend.text = element_text(size = 14)) + #,  family="serif")) +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
-    theme(axis.title.x = element_text(margin = margin(t = 12, r = 0, b = 0, l = 0))) +
-    theme(strip.text.x = element_text(size = 13)) +
-    theme(panel.spacing = unit(1, "lines")) +
-    theme(axis.ticks = element_line(color = "black"))+
-
-    scale_fill_gradientn("Months", colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"))
-}
-
-#Apply function to all species
-p1 = plotEnvSpace(plot.data,s="MYLU")
-plot(p1)
-p2 = plotEnvSpace(df.months,s="myve","Myotis velfer - infected", WNS=TRUE)
-p3 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - infected", WNS=TRUE)
-p4 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="coto","Corynorhinus townsendii - infected", WNS=TRUE)
-p5 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="pesu","Perimyotis subflavus - infected", WNS=TRUE)
-
-p11 = plotEnvSpace(df.months,s="mylu","Healthy", WNS=FALSE)
-p12 = plotEnvSpace(df.months,s="myve","Myotis velfer - healthy", WNS=FALSE)
-p13 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - healthy", WNS=FALSE)
-p14 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="coto","Corynorhinus townsendii - healthy", WNS=FALSE)
-p15 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="pesu","Perimyotis subflavus - healthy", WNS=FALSE)
-
-multiplot(p11,p1, cols = 1)
-multiplot(p12,p14,p2,p4, cols = 2)
 
 ################################################################################
 #### Plot Pd growth over parameter space                                    ####
