@@ -46,7 +46,7 @@ batDynamic <- function(t,y, params){
     #change in FungalArea/dt
     dFdt  <- growth*pT
 
-    list(c(dpTdt, dpAdt, dpCdt, dpEdt, dJdt, dpJdt, dFdt))
+    list(c(dpTdt, dpAdt, dpCdt, dpEdt, dJdt, dpJdt, dFdt, ttor, Etor))
   })
 }
 

@@ -2,7 +2,7 @@
 data("mylu.params")
 fung <- fungalSelect("Chaturvedi")
 e <- -10:34 #temperature vector
-h <- 56:100 #humidity vector
+h <- rep(95, 45) #humidity vector
 a <- seq(from = .001, to = 3, length.out = 45) #area vector
 
 r <- torporTime(Ta = e, pct.rh = h, areaPd = 0, WNS = F, bat.params = mylu.params, fung.params = fung)
