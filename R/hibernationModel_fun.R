@@ -46,20 +46,12 @@ hibernationModel <- function(env, bat.params, fung.params){
                     growth = fungalGrowth(Tb = Ta, fung.params = mod.params)*
                       scaleFungalGrowth(pct.rh = pct.rh, fung.params = mod.params),
                     # Energy cost for euthermia
-                    Eeu = euthermicEnergy(Ta = Tb, bat.params = mod.params),
+                    Eeu = euthermicEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy costs for flying during euthermia
                     #Efl = flyingEnergy(Ta = Ta, bat.params = mod.params),
                     # Energy cost for arousal from torpor
-
-                    Ear = arousalEnergy(Ta = Tb,  bat.params = mod.params),
-
                     Ear = arousalEnergy(Ta = Ta,  bat.params = mod.params),
-
-                    Ear = arousalEnergy(Ta = Tb,  bat.params = mod.params),
-
-                    Ear = arousalEnergy(Ta = Ta,  bat.params = mod.params),
-
-                                        # Energy cost for cooling from euthermic
+                    # Energy cost for cooling from euthermic
                     Ec = coolEnergy(Ta = Ta, bat.params = mod.params),
                     mod.params)
         # Call differential equation model
@@ -105,9 +97,7 @@ hibernationModel <- function(env, bat.params, fung.params){
                                     Prop.tor = c(1,prop.tor),
                                     Prop.Ar = c(0,prop.ar),
                                     #Prop.Fl = c(0,prop.fl),
-                                    Tb = Tb,
-                                    ttor = det.results$ttor,
-                                    Etor = det.results$Etor))
+                                    Tb = Tb))
         return(results)
         })
       foo <- rbindlist(results)
