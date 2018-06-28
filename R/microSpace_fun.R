@@ -25,7 +25,7 @@ microSpace <- function(mod.df, save.name = NULL, ...){
   dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~Months))  +
     scale_fill_gradientn("Months",
                          colors = c("#e66101", "#fdb863","#ffffff", "#b2abd2", "#5e3c99"), #purp low orange hi
-                         limits = c(0,10)
+                         limits = c(0,12)
     ) +
     geom_raster(aes_(fill = ~Months), interpolate = T) +
     scale_x_continuous(expand = c(0,0))+
