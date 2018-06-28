@@ -1,10 +1,10 @@
 library(batwintor)
 library(ggplot2)
+library(beepr)
 library(data.table)
 library(deSolve)
 library(dplyr)
-library(beepr)
-library(gridExtra)
+
 
 #Read in bat data
 data("bat.params")
@@ -115,35 +115,32 @@ mylu.params <- batLoad(bat.params, "MYLU")
 nspaces=100
 
 #Create a LHS function with the N of columns that matches parameters
-hypercube=randomLHS(n=nspaces, k=29)
+hypercube=randomLHS(n=nspaces, k=26)
 
 #Create range of parameters (k has to equal number listed)
 mins = with(c(as.list(mylu.params),as.list(fung.params)),
             c(   			    ## set mins for each parameters-exclude those not to be varied if any
-              mass = 0.9*7.8,
+              Mass = 0.9*7.8,
               RMR = 0.9*2.6,
-              TMRmin = 0.9*0.0153,
+              TMRmin = 0.9*0.14,
               Teu = 0.9*37,
               Tlc = 0.9*34,
               Ttormin = 0.9*2,
               Ceu = 0.9*0.2638,
-              Ct = 0.9*0.055,
-              S = 0.9*0.1728,
+              Ct = 0.9*0.2,
               ttormax = 0.9*792,
               teu = 0.9*3,
               WR = 0.9*48,
-              CR = 0.9*32.16,
-              rEWL = 0.9*0.1826,
-              mrPd = 0.9*1.4,
-              aPd = 0.9*0.21,
-              rPd = 0.9*1.525,
-              pMass.i = 0.9*0.027,
+              mrPd = 0.9*.01539,
+              aPd = 0.9*0.16,
               pMass = 0.9*0.027,
-              pFly = 0.0001,
+              pMass.i = 0.9*0.027,
               pLean = 0.9*0.532,
               pFat = 0.9*0.216,
-              SA.wing = 0.9*74.8,
-              SA.plagio = 0.9*38.72,
+              SA.wing = 0.9*19.6,
+              SA.plagio = 0.9*8.66,
+              rEWL.body = 0.9*0.1,
+              rEWL.wing = 0.9*0.3278,
               beta1 = 0.9*0.0007751467,
               beta2 = 0.9*0.2699683,
               beta3 = 0.9*19.7309,
@@ -153,30 +150,27 @@ mins = with(c(as.list(mylu.params),as.list(fung.params)),
 
 maxs = with(c(as.list(mylu.params),as.list(fung.params)),
             c( 				    ## set maxs for each parameters-exclude those not to be varied if any
-              mass = 1.1*7.8,
+              Mass = 1.1*7.8,
               RMR = 1.1*2.6,
-              TMRmin = 1.1*0.0153,
+              TMRmin = 1.1*0.14,
               Teu = 1.1*37,
               Tlc = 1.1*34,
               Ttormin = 1.1*2,
               Ceu = 1.1*0.2638,
-              Ct = 1.1*0.055,
-              S = 1.1*0.1728,
+              Ct = 1.1*0.2,
               ttormax = 1.1*792,
               teu = 1.1*3,
               WR = 1.1*48,
-              CR = 1.1*32.16,
-              rEWL = 1.1*0.1826,
-              mrPd = 1.1*1.4,
-              aPd = 1.1*0.21,
-              rPd = 1.1*1.525,
-              pMass.i = 1.1*0.027,
+              mrPd = 1.1*.01539,
+              aPd = 1.1*0.16,
               pMass = 1.1*0.027,
-              pFly = .0001,
+              pMass.i = 1.1*0.027,
               pLean = 1.1*0.532,
               pFat = 1.1*0.216,
-              SA.wing = 1.1*74.8,
-              SA.plagio = 1.1*38.72,
+              SA.wing = 1.1*19.6,
+              SA.plagio = 1.1*8.66,
+              rEWL.body = 1.1*0.1,
+              rEWL.wing = 1.1*0.3278,
               beta1 = 1.1*0.0007751467,
               beta2 = 1.1*0.2699683,
               beta3 = 1.1*19.7309,
@@ -202,22 +196,19 @@ dimnames(hypercubeadj)[[2]]=c(
                               "Ttormin",
                               "Ceu",
                               "Ct",
-                              "S",
                               "ttormax",
                               "teu",
                               "WR",
-                              "CR",
-                              "rEWL",
                               "mrPd",
                               "aPd",
-                              "rPd",
-                              "pMass.i",
                               "pMass",
-                              "pFly",
+                              "pMass.i",
                               "pLean",
                               "pFat",
                               "SA.wing",
                               "SA.plagio",
+                              "rEWL.body",
+                              "rEWL.wing",
                               "beta1",
                               "beta2",
                               "beta3",
@@ -271,17 +262,20 @@ for (i in 1:length(paramset[,1])){
   sen.results.b[i,]<-as.vector(t(res_out.b))
   sen.results.c[i,]<-as.vector(t(res_out.c))
 }
-save(sen.results.a, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv_20March2018.RData")
-save(sen.results.b, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl_20March2018.RData")
-save(sen.results.c, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor_20March2018.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv_20March2018.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl_20March2018.RData")
-load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor_20March2018.RData")
+sen.results.surv = sen.results.a
+sen.results.ewl  = sen.results.b
+sen.results.tbd  = sen.results.c
+save(sen.results.surv, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv_27June2018.RData")
+save(sen.results.ewl, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl_27June2018.RData")
+save(sen.results.tbd, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor_27June2018.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_surv_27June2018.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_ewl_27June2018.RData")
+load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/sen_tor_27June2018.RData")
 
 #Apply function to new model results [removed pFly because it was throwing an error and we don't care about it]
-PRCCresults.a <- prcc(par.mat = paramset[,-20], model.output = sen.results.a[,-20], routine = "blower", par.names = colnames(paramset[,-20]),output.names = seq(1,ncol(sen.results.a[,-20])))
-PRCCresults.b <- prcc(par.mat = paramset[,-20], model.output = sen.results.b[,-20], routine = "blower", par.names = colnames(paramset[,-20]),output.names = seq(1,ncol(sen.results.b[,-20])))
-PRCCresults.c <- prcc(par.mat = paramset[,-20], model.output = sen.results.c[,-20], routine = "blower", par.names = colnames(paramset[,-20]),output.names = seq(1,ncol(sen.results.c[,-20])))
+PRCCresults.a <- prcc(par.mat = paramset, model.output = sen.results.a[,1:32], routine = "blower", par.names = colnames(paramset),output.names = seq(1,ncol(sen.results.a[,1:32])))
+PRCCresults.b <- prcc(par.mat = paramset, model.output = sen.results.b[,1:32], routine = "blower", par.names = colnames(paramset),output.names = seq(1,ncol(sen.results.b[,1:32])))
+PRCCresults.c <- prcc(par.mat = paramset, model.output = sen.results.c[,1:32], routine = "blower", par.names = colnames(paramset),output.names = seq(1,ncol(sen.results.c[,1:32])))
 
 #Reorganize results
 df.a <- PRCCresults.a[[1]][1]
@@ -299,13 +293,11 @@ means.b <- data.frame(rowMeans(df.b))
 means.c <- data.frame(rowMeans(df.c))
 
 #Reorganize df for plotting purposes (ie remove variables that aren't within actual function)
-means.a <- data.frame(means=PRCCresults.a[[1]][c(1:8,10:18,20:25,27:28),1], label = row.names(PRCCresults.a[[1]][c(1:8,10:18,20:25,27:28),]))                             #survival
-#means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,14:17,22:28),1], label = row.names(PRCCresults.a[[1]][c(1,3,14:17,22:28),]))         #ewl
-means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,6,14:18,20,22:25,27,28),1],label = row.names(PRCCresults.b[[1]][c(1,3,6,14:18,20,22:25,27,28),]))     #tbd
-means.b[c(3,8,9),1] <- 0 #putting to 0 for plotting purposes since these parameters aren't used int he EWL model
-means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3,6,14:18,20,22:25,27,28),1],label = row.names(PRCCresults.a[[1]][c(1,3,6,14:18,20,22:25,27,28),]))     #tbd
+means.a <- data.frame(means=PRCCresults.a[[1]][c(1:3,6:10,12:14,16:18,20:23,25:26),1], label = row.names(PRCCresults.a[[1]][c(1:3,6:10,12:14,16:18,20:23,25:26),]))
+means.b <- data.frame(means=PRCCresults.b[[1]][c(1,3,6,12:13,18,20:23,25:26),1],label = row.names(PRCCresults.b[[1]][c(1,3,6,12:13,18,20:23,25:26),]))
+means.c <- data.frame(means=PRCCresults.c[[1]][c(1,3,6,9,12:14,16,18,20:23,25:26),1],label = row.names(PRCCresults.a[[1]][c(1,3,6,9,12:14,16,18,20:23,25:26),]))
+# means.all <- data.frame(rbind(means.b, means.c), Value = c(rep("EWL",length(means.c$means)), rep("TBD",length(means.c$means))))
 
-means.all <- data.frame(rbind(means.b, means.c), Value = c(rep("EWL",length(means.c$means)), rep("TBD",length(means.c$means))))
 #Plot mean with significance
 # install.packages("extrafont")
 # library(extrafont)
@@ -314,93 +306,77 @@ means.all <- data.frame(rbind(means.b, means.c), Value = c(rep("EWL",length(mean
 # fonts()
 # windowsFonts(A = windowsFont("Times New Roman"))
 # op <- par(family = "serif")
-names.a = expression("Body Mass","RMR","TMR"[min],"T"[eu],"T"[lc],"T"[tormin],"C"[eu],"C"[tor],"t"[tormax],"t"[eu],"Warming Rate","Cooling Rate","Rate of EWL",
-          "TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold","% Body Mass as Lean","% Body Mass as Fat",
-          "Wing Surface Area", "Plagiopatagium Surface Area",beta[1],beta[2],mu[1],mu[2])
-names.b = expression("Body Mass","TMR"[min],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd",
-                     "Wing Surface Area", "Plagiopatagium Surface Area", beta[1],beta[2],mu[1],mu[2])
-names.c = expression("Body Mass","TMR"[min],"T"[tormin],"Rate of EWL","TMR increase due to Pd","Total EWL increase due to Pd growth","Rate of EWL increase due to Pd","EWL Threshold","% Body Mass as Lean",
-                     "Wing Surface Area", "Plagiopatagium Surface Area",beta[1],beta[2],mu[1],mu[2])
+names.a = expression("aPd", mu[1], mu[2], "C"[tor], "mrPd", "TMR"[min],
+                     "Total Body Water Threshold", "RMR", beta[2], "t"[tormax],  beta[1], "t"[eu], "rEWL"[body],
+                     "T"[tormin],"C"[eu],"SA"[wing], "rEWL"[wing], "Proportion Lean Mass", "M"[b], "Proportion Fat Mass")
+names.b = expression(beta[1], "mrPd", "aPd",beta[2], mu[1], mu[2], "TMR"[min], "T"[tormin], "M"[b], "rEWL"[body], "SA"[wing], "rEWL"[wing])
+names.c = expression(mu[2], "TMR"[min], beta[2], "Total Body Water Threshold", "t"[tormax], beta[1], mu[1], "aPd", "mrPd", "T"[tormin],
+                     "rEWL"[body], "SA"[wing], "rEWL"[wing], "M"[b], "Proportion Lean Mass")
+
+
 
 t.cutoff=qt(0.05/2,df=100-2)
 sig.cutoffs=c( (-(t.cutoff^2)-sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)),
                (-(t.cutoff^2)+sqrt((t.cutoff^4) + 4*(100-2)*(t.cutoff^2)))/(2*(100-2)))
 
-ggplot(means.a, aes(y =means.a[,1], x=label))+
-  geom_bar(stat='identity',aes(y = means.a[,1], x =label), alpha=.55) +
+ggplot(means.a, aes(y =means.a[,1], x=reorder(label,abs(means.a[,1]))))+
+  geom_bar(stat='identity', alpha=.55) +
   coord_flip() +
   geom_hline(yintercept = sig.cutoffs,linetype = 2, size=1.05) +
   geom_hline(yintercept = 0) +
   theme(panel.border = element_rect( fill = NA)) +
   theme(axis.text = element_text(size=14, color = "black"), axis.title=element_text(size=14)) +
   # theme(text=element_text(family="A")) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  #scale_x_discrete(labels = names.a) +
+  # theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  #       panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  scale_x_discrete(labels = names.a) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
   labs(y = "PRCC") + labs(x = "") + ylim(-1,1)
 
-ggplot(means.b, aes(y =means.b[,1], x=label))+
-  geom_bar(stat='identity',aes(y = means.b[,1], x =label), alpha=.55) +
-  coord_flip() +
-  geom_hline(yintercept = sig.cutoffs,linetype = 2, size=1.05) +
-  geom_hline(yintercept = 0) +
-  theme(panel.border = element_rect( fill = NA)) +
-  theme(axis.text = element_text(size=14, color = "black"), axis.title=element_text(size=14)) +
-  #theme(text=element_text(family="A")) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
-  scale_x_discrete(limits = means.b$label, labels = names.b) +
-  labs(y = "PRCC") + labs(x = "") + ylim(-1,1)
-
-ggplot(means.c, aes(y =means.c[,1], x=label))+
-  geom_bar(stat='identity',aes(y = means.c[,1], x =label), alpha=.55) +
+ggplot(means.b, aes(y =means.b[,1], x=reorder(label,abs(means.b[,1]))))+
+  geom_bar(stat='identity', alpha=.55) +
   coord_flip() +
   geom_hline(yintercept = sig.cutoffs,linetype = 2, size=1.05) +
   geom_hline(yintercept = 0) +
   theme(panel.border = element_rect( fill = NA)) +
   theme(axis.text = element_text(size=14, color = "black"), axis.title=element_text(size=14)) +
   # theme(text=element_text(family="A")) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  scale_x_discrete(limits = means.c$label, labels = names.c) +
+  # theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  #       panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  scale_x_discrete(labels = names.b) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
   labs(y = "PRCC") + labs(x = "") + ylim(-1,1)
 
-ggplot(means.all, aes(y =means.all[,1], x=label))+
-  theme_bw() +
-  facet_wrap(~Value, ncol = 2) +
-  geom_bar(stat='identity',aes(y = means.all[,1], x =label), alpha=.55) +
+ggplot(means.c, aes(y =means.c[,1], x=reorder(label,abs(means.c[,1]))))+
+  geom_bar(stat='identity', alpha=.55) +
   coord_flip() +
   geom_hline(yintercept = sig.cutoffs,linetype = 2, size=1.05) +
   geom_hline(yintercept = 0) +
   theme(panel.border = element_rect( fill = NA)) +
   theme(axis.text = element_text(size=14, color = "black"), axis.title=element_text(size=14)) +
   # theme(text=element_text(family="A")) +
-  theme(strip.text.x = element_text(size = 13)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  scale_x_discrete(limits = means.c$label, labels = names.c) +
+  # theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  #       panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  scale_x_discrete(labels = names.c) +
   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
   labs(y = "PRCC") + labs(x = "") + ylim(-1,1)
 
-
-
-# barplot(means.a[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-#         names.arg= names.a, horiz=TRUE, col = ifelse(means.a > sig.cutoffs[1] & means.a < sig.cutoffs[2], "grey85", "steelblue3"), main = "Survival")
-# abline(v=sig.cutoffs,lty=2,col="red")
-# abline(v=0,lty=1,col="black")
-#
-# barplot(means.b[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-#         names.arg= names.b, horiz=TRUE, col = ifelse(means.b > sig.cutoffs[1] & means.b < sig.cutoffs[2], "grey85", "steelblue3"), main = "Total Evaporative Water Loss")
-# abline(v=sig.cutoffs,lty=2,col="red")
-# abline(v=0,lty=1,col="black")
-#
-# barplot(means.c[,1], xlim = c(-1,1),las=1,xlab="PRCC",cex.lab=1.5,
-#         names.arg= names.c, horiz=TRUE, col = ifelse(means.c > sig.cutoffs[1] & means.c < sig.cutoffs[2], "grey85", "steelblue3"), main = "Torpor Bout Duration")
-# abline(v=sig.cutoffs,lty=2,col="red")
-# abline(v=0,lty=1,col="black")
+# ggplot(means.all, aes(y =means.all[,1], x=label))+
+#   theme_bw() +
+#   facet_wrap(~Value, ncol = 2) +
+#   geom_bar(stat='identity',aes(y = means.all[,1], x =label), alpha=.55) +
+#   coord_flip() +
+#   geom_hline(yintercept = sig.cutoffs,linetype = 2, size=1.05) +
+#   geom_hline(yintercept = 0) +
+#   theme(panel.border = element_rect( fill = NA)) +
+#   theme(axis.text = element_text(size=14, color = "black"), axis.title=element_text(size=14)) +
+#   # theme(text=element_text(family="A")) +
+#   theme(strip.text.x = element_text(size = 13)) +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+#   scale_x_discrete(limits = means.c$label, labels = names.c) +
+#   theme(axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0)))+
+#   labs(y = "PRCC") + labs(x = "") + ylim(-1,1)
 
 ################################################################################
 #### Fit other functions to fungal growth (use original functions)          ####
@@ -431,38 +407,29 @@ lines(WVP, predict.MM, col = "blue")
 ################################################################################
 #Create dataframe of environmental parameters (taken from our microclimate data)
 env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(60,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
-s= "MYLU"
+
 #Create vector of species
 # species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 
 #Run model over parameter space per species
 surv.out <- data.frame()
 #for(s in species){
-
+s= "MYLU"
   #Assign bat parameters
   s.params <- batLoad(bat.params, s)
-  s.params$mrPd = 0.01556
-  s.params$rEWL.wing = 0.37635
 
   #Calculate dynamic energy over range of environmental conditions
-  de.df <- data.frame(hibernationModel(env = env.df, bat.params = s.params, fung.params = fung.params))
+  de.df <- data.frame(hibernationModel(env = env.df, bat.params = batLoad(bat.params, "LANO"), fung.params = fung.params))
 
   #Append to data frame and remove parameter names
   surv.out <- rbind(surv.out, data.frame(species=rep(s,dim(de.df)[1]),de.df))
 #  print(s)
 #}
-
-
-
-
-
-# save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_MYLU_7June2018.RData")
+save(surv.out, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/survResults_MYLU_27June2018.RData")
 ################################################################################
 #### Plot monthly survival over parameter space                             ####
 ################################################################################
 #load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_28Feb2018.RData")
-
-# df.months$Months.inf[df.months$Ta == 2 & df.months$pct.rh < 96]=  df.months$Months.inf[df.months$Ta == 1 & df.months$pct.rh < 96]
 
 #Create vectors of environmental and species data
 temps <- seq(-5,20,1)
@@ -483,7 +450,7 @@ for(t in temps){
   }
 }
 
-# save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_7June2018.RData")
+save(df.months, file = "C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_27June2018.RData")
 
 #load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/months4plot_MYLU_4June2018.RData")
 
@@ -492,6 +459,7 @@ plot.data <- data.frame(Species = rep(df.months$Species,2), Ta = rep(df.months$T
                         Survival = c(df.months$Months.null,df.months$Months.inf),
                         Treatment = c(rep("Healthy", length(df.months$Months.inf)),rep("WNS",length(df.months$Months.inf))))
 plot.data$Contour <- ifelse(plot.data$Survival >=6,1,0)
+plot.data$WVP <- rh2wvp(plot.data$pct.rh, plot.data$Ta)
 
 plotEnvSpace <- function(plot.data, s){
   plot.sub <- plot.data[plot.data$Species == s, ]
@@ -516,13 +484,11 @@ plotEnvSpace <- function(plot.data, s){
     theme(strip.text.x = element_text(size = 13)) +
     theme(panel.spacing = unit(1, "lines")) +
     theme(axis.ticks = element_line(color = "black"))+
-
     scale_fill_gradientn("Months", colours = c("dodgerblue4","cadetblue1", "lightgoldenrod1"))
 }
 
 #Apply function to all species
-p1 = plotEnvSpace(plot.data,s="MYLU")
-plot(p1)
+p1 = plotEnvSpace(plot.data,s="LANO"); plot(p1)
 p2 = plotEnvSpace(df.months,s="myve","Myotis velfer - infected", WNS=TRUE)
 p3 = plotEnvSpace(df.months,s="epfu","Eptesicus fuscus - infected", WNS=TRUE)
 p4 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="coto","Corynorhinus townsendii - infected", WNS=TRUE)
@@ -537,14 +503,12 @@ p15 = plotEnvSpace(df.months[df.months$pct.rh>60,],s="pesu","Perimyotis subflavu
 multiplot(p11,p1, cols = 1)
 multiplot(p12,p14,p2,p4, cols = 2)
 
-
-
 ################################################################################
 #### Trade-offs figures                                                     ####
 ################################################################################
 #Create vectors of environmental and species data
 temps <- seq(-5,20,1)
-hd <- seq(20,100,1)
+hd <- seq(60,100,1)
 species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
 
 #Pull fat after one month
@@ -585,12 +549,12 @@ plot(df.days$Ta[df.days$pct.rh == 99], df.days$days.inf[df.days$pct.rh == 99], c
 lines(df.days$Ta[df.days$pct.rh == 99], df.days$days.inf[df.days$pct.rh == 99], lty = 2, lwd =2, col = "blue")
 lines(df.days$Ta[df.days$pct.rh == 85], df.days$days.inf[df.days$pct.rh == 85], lty = 2, lwd =2)
 
-ggplot(df.days[df.days$pct.rh == 100,], aes(x = Ta, y = days.null)) +
+ggplot(df.days[df.days$pct.rh == 99,], aes(x = Ta, y = days.null)) +
   #theme_classic() +
   geom_line(aes(x = Ta, y = days.null),  size = 1, color = "blue") +
   geom_line(aes(x = Ta, y = days.inf), linetype = 2, size = 1, color = "blue") +
-  geom_line(data = df.days[df.days$pct.rh == 80,], aes(x = Ta, y = days.null), size = 1) +
-  geom_line(data = df.days[df.days$pct.rh == 80,], aes(x = Ta, y = days.inf), linetype = 2, size = 1) +
+  geom_line(data = df.days[df.days$pct.rh == 90,], aes(x = Ta, y = days.null), size = 1) +
+  geom_line(data = df.days[df.days$pct.rh == 90,], aes(x = Ta, y = days.inf), linetype = 2, size = 1) +
   theme(panel.border = element_rect( fill = NA, color = "black")) +
   xlab(expression(paste("Temperature (",degree,phantom(),C,")"))) +
   ylab("Survival (days until fat consumed)") +
@@ -711,7 +675,7 @@ plot(p)
 #### Plot EWL and torpor duration over parameter space                      ####
 ################################################################################
 #Create dataframe of environmental parameters (taken from our microclimate data)
-env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(20,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
+env.df  <- buildEnv(temp = c(-5,20), pct.rh = c(60,100), range.res.temp = 1, range.res.rh = 1, twinter = 12, winter.res = 24)
 
 #Create vector of species
 species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
@@ -723,15 +687,6 @@ species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
  # s.params <- batLoad(bat.params, s)
 
   s.params <- batLoad(bat.params, "MYLU")
-
-  #Fix those for MYLU
-  s.params$ttormax = 480
-  s.params$SA.per = 0.6563
-  s.params$SA.body = 39.2632638
-  s.params$SA.wing = 25.76848
-  s.params$rEWL.body = 0.11
-  s.params$rEWL.wing = 0.19
-  s.params$SA.plagio = s.params$SA.wing*.58
 
   s.out = data.frame()
 
@@ -751,7 +706,7 @@ species <- c("MYLU", "MYVE", "COTO", "EPFU", "PESU")
     s.out <- rbind(s.out, data.frame(Species = s, Time = t, Ta = ewl.inf$Ta, pct.rh = ewl.inf$pct.rh, areaPd = areaPd, TotalEWL.inf = ewl.inf$TotalEWL, CEWL.inf = ewl.inf$CutaneousEWL, PEWL.inf = ewl.inf$PulmonaryEWL,
                         TBD.inf = tbd.inf, TotalEWL.null = ewl.null$TotalEWL, CEWL.null = ewl.null$CutaneousEWL, PEWL.null = ewl.null$PulmonaryEWL, TBD.null = tbd.null))
   }
-  save(s.out, file = paste("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_mylu_7June2018.RData", sep = ""))
+  save(s.out, file = paste("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_mylu_27June2018.RData", sep = ""))
 #}
 
 load("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Output Data/ewl&tbd_MYLU_26April2018.RData")
@@ -819,7 +774,7 @@ plot.TBD <- s.out[s.out$Time == 24*30,]
 plot.TBD <- data.frame(Ta = rep(plot.TBD$Ta,2), pct.rh = rep(plot.TBD$pct.rh,2), TBD = c(plot.TBD$TBD.null, plot.TBD$TBD.inf), Treatment = c(rep("Healthy", length(plot.TBD$Ta)), rep("WNS", length(plot.TBD$Ta))))
 plot.TBD$TBD <- plot.TBD$TBD/24
 plot.TBD$Contour <- ifelse(plot.TBD$TBD <= 7, 7, ifelse(plot.TBD$TBD <= 14,14,30))
-plot.TBD <- plot.TBD[plot.TBD$pct.rh >= 60,]
+plot.TBD <- plot.TBD[plot.TBD$pct.rh >= 60 & plot.TBD$pct.rh <=99,]
 
 ggplot(plot.TBD, aes(Ta, pct.rh, z = Contour)) +
   theme_bw() +
@@ -883,8 +838,10 @@ temp.data <- read.csv("offload_data.csv", header=TRUE)
 temp.data$Date.Time <- as.POSIXct(strptime(temp.data$Date.Time, format = "%m/%d/%Y %H:%M"))
 temp.data <- temp.data[temp.data$Phase != "Ignore",]
 
+temp.data$death <- mass.data$Died.Euth[match(temp.data$iButtonID, mass.data$iButton)]
+
 #Cut to cumulative temperature data (amount of time within each phase)
-temp.times <- subset(temp.data, temp.data$Subset.NoCA > 0 & temp.data$Phase != "Ignore")
+temp.times <- subset(temp.data, temp.data$Subset > 0 & temp.data$Phase != "Ignore")
 
 #Assign first date to each file (in order to calculate Pd growth)
 for(i in unique(temp.times$iButtonID)){
@@ -896,28 +853,29 @@ temp.times$First.Date <- as.POSIXct(temp.times$First.Date, origin =  "1970-01-01
 temp.times$diff.time <- as.numeric(difftime(temp.times$Date.Time, temp.times$First.Date , units = "hours"))
 
 #Change time in phase to hours
-temp.times$TimeinPhase = temp.times$Subset.NoCA/60
+temp.times$TimeinPhase = temp.times$Subset/60
 
 #Subset to torpor only
 tor.data <- temp.times[temp.times$Phase == "Torpor" & temp.times$TimeinPhase > 24,]
 
 #Read in bat parameter files
 mylu.params <- batLoad(bat.params, species = "MYLU")
-mylu.params$ttormax = 16*24
-mylu.params$rEWL.body = .1
-mylu.params$rEWL.wing = .19
-mylu.params$pMass.i = 0.045
+mylu.params$ttormax = 20*24
+mylu.params$TMRmin = 0.082008
 
 #Calculate torpor bout duration
 for(i in 1:nrow(tor.data)){
   mylu.params$Mass = tor.data$Mass[i]
-  mylu.params$SA.body = 10*(mylu.params$Mass^0.67)
-  mylu.params$SA.wing = mylu.params$SA.body*0.6563
-  tor.data$areaPd[i] = tor.data$diff.time[i]*fungalGrowth(Tb = 7, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 99, fung.params = fung.params)
-  EWL <- ewl(Ta = 7, pct.rh = 99, t = tor.data$TimeinPhase[i], areaPd = tor.data$areaPd[i], fung.params = fung.params, bat.params = mylu.params, torpid = TRUE,  WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE))
-  tor.data$TotalEWL[i] = EWL$TotalEWL
-  tor.data$TBD.EWL[i]   <- torporTime(Ta = 7, pct.rh = 99, areaPd = tor.data$areaPd[i], WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE), fung.params = fung.params, bat.params = mylu.params)
+  tor.data$areaPd[i] = tor.data$diff.time[i]*fungalGrowth(Tb = 5, fung.params = fung.params, t.min = 0)*scaleFungalGrowth(pct.rh = 99, fung.params = fung.params)
+  #EWL <- ewl(Ta = 5, pct.rh = 99, t = tor.data$TimeinPhase[i], areaPd = tor.data$areaPd[i], fung.params = fung.params, bat.params = mylu.params, torpid = TRUE,  WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE))
+  #tor.data$TotalEWL[i] = EWL$TotalEWL
+  tor.data$TBD.EWL[i]   <- torporTime(Ta = 5, pct.rh = 99, areaPd = tor.data$areaPd[i], WNS = ifelse(tor.data$Bat.Type[i] == "fungus", TRUE, FALSE), fung.params = fung.params, bat.params = mylu.params)
 }
+
+tor.data = tor.data[tor.data$death == "Euthanized" & tor.data$TBD.EWL < 220,]
+
+plot(tor.data$TBD.EWL[tor.data$Bat.Type == "fungus"], tor.data$TimeinPhase[tor.data$Bat.Type == "fungus"], pch = 16, xlim = c(0,400), ylim = c(0,400))
+
 
 summary(tor.data[tor.data$Bat.Type == "control",])
 summary(tor.data[tor.data$Bat.Type == "fungus",])
@@ -925,8 +883,6 @@ summary(tor.data[tor.data$Bat.Type == "fungus",])
 #Repeated measures ANOVA to test for difference
 df <- data.frame(ID=rep(tor.data$iButtonID,2), Time=c(tor.data$TimeinPhase, tor.data$TBD.EWL), Treatment=c(rep("Measured", length(tor.data$iButtonID)), rep("Modeled", length(tor.data$iButtonID))))
 summary(aov(Time ~ Treatment + Error(ID/Treatment), data=df))
-
-summary(lm(df$Time~df$Treatment*df$ID))
 
 
 ################################################################################
@@ -937,15 +893,13 @@ measured.EWL <- read.csv("C:/Users/Katie Haase/Desktop/R Code/EnergeticModel/Inp
 measured.EWL <- measured.EWL[measured.EWL$Treatment == "dry" & is.na(measured.EWL$EWL) == FALSE  & measured.EWL$pct.rh<.20 & measured.EWL$pct.rh>0.01 & measured.EWL$Ta <10,]
 measured.EWL <- measured.EWL[measured.EWL$batid != "MYLU28",]
 
-
 #Determine species
 species <- c("MYVE","PESU","COTO","EPFU","MYLU")
-#bat.params$rEWL = (bat.params$rEWL*(10*(bat.params$mass^0.67)))/bat.params$SA.wing
 
 #Calculate EWL for each individual measurement
-#ewl.df <- data.frame()
-#for(s in 1:5){
-  s.params <- batLoad(bat.params, species = species[s])
+ewl.df <- data.frame()
+for(s in species){
+  s.params <- batLoad(bat.params, species = s)
   s.params$TMRmin = measured.EWL$TMRO2.g
   s.params$Mass = measured.EWL$Mass
   s.params$SA.body = measured.EWL$SA.body
@@ -957,14 +911,12 @@ species <- c("MYVE","PESU","COTO","EPFU","MYLU")
 
   df <- data.frame(Species = species[s], ID = s.data$batid, Measured.EWL = s.data$EWL, ewl(Ta = s.data$Ta, pct.rh = s.data$pct.rh, t = 1, areaPd = 0, torpid = TRUE, WNS = FALSE, fung.params = fung.params, bat.params = s.params))
 
-  #ewl.df <- rbind(ewl.df, df)
-#}
+  ewl.df <- rbind(ewl.df, df)
+}
 
 #Compare measured and modeled EWL with a t-test to test significant difference
 summary(lm(df$Measured.EWL~df$TotalEWL))
-plot(df$TotalEWL, df$Measured.EWL, ylim = c(0,15), xlim = c(0,15))
 
-ewl.df[ewl.df$Species == "MYLU",]
 ################################################################################
 #### Validate survival model with Liam's/Jonasson's data                    ####
 ################################################################################
@@ -1215,4 +1167,9 @@ prcc = function( par.mat, model.output, routine = "blower",
   else{ return("Error: Calculation type is invalid. Must be either 'blower' or 'regression'") }
 
 }
-``
+
+#### WVP ####
+rh2wvp <- function(pct.rh, Ta){
+  wvp = (pct.rh*0.01)*(0.61 * exp((17.50 * Ta)/(Ta + 240.97)))
+  return(wvp)
+}

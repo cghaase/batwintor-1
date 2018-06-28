@@ -15,7 +15,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
     #Define threshold based on infection status
-    Hd = pct.rh
+    Hd = ifelse(pct.rh==100,99,pct.rh)
     pO2     = 0.2095      #volumetric proportion of oxygen in air
     O2.coef = 0.15        #coefficient of oxygen extraction efficiency from air for bat's respiratory system
     a  = 0.611            #constants
@@ -89,7 +89,7 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
       Ta.time.pd <- ifelse(Ta > Ttormin,
                            ttormax/Q^((Ta-Ttormin)/10),
-                           ttormax/(1+(Ttormin-Ta)*Ct/(TMRmin+(mrPd*p.areaPd))))
+                           ttormax/(1+(Ttormin-Ta)*Ct/(TMRmin)))
 
       return(ifelse(TEWL == 0, Ta.time.pd, ifelse(Ta.time.pd < Pd.time, Ta.time.pd, Pd.time)))
     }
