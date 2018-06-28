@@ -25,7 +25,7 @@ dangerZone <-function(mod.df, title, save.name=NULL, ...){
     group_by_(~Ta, ~pct.rh) %>%
     summarise_(max.null = ~max(time*surv.null),max.inf = ~max(time*surv.inf)) %>%
     mutate_(diff = ~hour.to.month(max.inf - max.null))
-  ungroup %>% data.table
+
 
   dz <- ggplot(mod.dif, aes_(~Ta, ~pct.rh, z = ~diff))  +
     scale_fill_gradientn("Difference\n(months)",
