@@ -92,9 +92,9 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
 
       Ta.time.pd <- ifelse(areaPd>0,
                            ifelse(Ta > Ttormin,
-                                  (ttormax/Q^((Ta-Ttormin))/10)/(areaPd/(SA.wing+(10*(Mass^0.67)))),
-                                  (ttormax/(1+(Ttormin-Ta)*(Ct/TMRmin)))),
-                           ifelse(Ta > Ttormin,
+                                  (ttormax/(Q^((Ta-Ttormin)/10)))/areaPd,
+                                  (ttormax/(1+(Ttormin-Ta)*(Ct/TMRmin)))/areaPd),
+                           ifelse(Ta >= Ttormin,
                                   ttormax/Q^((Ta-Ttormin)/10),
                                   ttormax/(1+(Ttormin-Ta)*Ct/(TMRmin))))
 
