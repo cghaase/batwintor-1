@@ -97,9 +97,7 @@ hibernationModel <- function(env, bat.params, fung.params){
                                     Prop.tor = c(1,prop.tor),
                                     Prop.Ar = c(0,prop.ar),
                                     #Prop.Fl = c(0,prop.fl),
-                                    Tb = Tb,
-                                    ttor = det.results$ttor,
-                                    Etor = det.results$Etor))
+                                    Tb = Tb))
         return(results)
         })
       foo <- rbindlist(results)
@@ -114,7 +112,7 @@ hibernationModel <- function(env, bat.params, fung.params){
     out.fin <- out.dt %>%
       # Create columns with survival outcomes  based on avaliable fat reserves
       mutate(sub.fat = kcal.to.g(arousalEnergy(Ta=Ta, bat.params = mod.params) +
-                                    (24*euthermicEnergy(Ta=Ta, bat.params=mod.params)))) %>%
+                                   (24*euthermicEnergy(Ta=Ta, bat.params=mod.params)))) %>%
       mutate(surv.inf  = ifelse((Mass*pFat) >= g.fat.consumed+sub.fat,1,0)) %>%
       mutate(surv.null = ifelse((Mass*pFat) >= n.g.fat.consumed+sub.fat,1,0))
     return(data.table(out.fin))

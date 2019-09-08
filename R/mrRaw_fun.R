@@ -32,7 +32,7 @@ mrRaw <- function(x, species.option){
   for(i in 1:length(temp)){
     sp.df.t <- filter_(sp.df, ~Ta == temp[i])
     sp.spEM <- mixtools::spEMsymloc(sp.df.t$VO2.ml.h.g, mu0=quantile(sp.df.t$VO2.ml.h.g,
-                                                           c(.25,.75)),stochastic=TRUE)
+                                                                     c(.25,.75)),stochastic=TRUE)
     sp.x.temp[i,] <- c(temp[i], sp.spEM$muhat[1], mean(sp.df.t$mass),
                        nrow(sp.df.t))
     sp.l[[i]] <- sp.spEM #; names(sp.l[[i]]) <- paste0(sp,".",sp.df.t$Ta[i])
@@ -42,7 +42,7 @@ mrRaw <- function(x, species.option){
                         TMRmin = min(ddf$MR),
                         Ttormin = ddf[which(ddf$MR == min(ddf$MR)),]$Ta,
                         Mass = weighted.mean(ddf$mass, sapply(ddf$n, FUN =
-                                                    function(x){x/max(ddf$n)})))
+                                                                function(x){x/max(ddf$n)})))
 
   out <- list(df = dat.out, spEM = sp.l)
   class(out) <- c("mrRaw")
