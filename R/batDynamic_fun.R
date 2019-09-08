@@ -20,7 +20,7 @@ batDynamic <- function(t,y, params){
   with(c(as.list(y),params),{
     # time in torpor
     ttor <- torporTime(Ta = Ta, pct.rh = pct.rh, areaPd = FungalArea, WNS = WNS,
-                           bat.params = params, fung.param = params)
+                       bat.params = params, fung.param = params)
     # energy cost for torpor
     Etor = torporEnergy(Ta = Ta, WNS = WNS, areaPd = FungalArea,
                         bat.params = params)

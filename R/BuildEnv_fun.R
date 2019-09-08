@@ -47,7 +47,7 @@ buildEnv <- function(temp, pct.rh, range.res.temp = 1, range.res.rh = 1,  twinte
   Ta <- seq(from = min(temp.range), to = max(temp.range), by = range.res.temp)
   pct.rh <- seq(from = min(pct.rh.range), to = max(pct.rh.range), by = range.res.rh)
   env <- expand.grid(Ta,pct.rh);names(env) <- c("Ta", "pct.rh")
-  ifelse(twinter > 12,
+  ifelse(twinter >= 15,
          twin <- seq(from=0, to = day.to.hour(twinter), by = winter.res),
          twin <- seq(from=0, month.to.hour(twinter), by = winter.res))
   cat("The ENV proposed will consist of ", nrow(env)*length(twin) ," calculations.

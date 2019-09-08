@@ -22,12 +22,12 @@
 #' @export
 
 arousalEnergy <- function(Ta, bat.params){
-	with(bat.params,{
-		ifelse(Ta > Ttormin,
-					((Teu - Ta)*0.1728*Mass) + (((Teu-Ta)/WR)*(Ceu*(Teu-Ta))),
-					((Teu - Ttormin)*0.1728*Mass) + (((Teu-Ttormin)/WR)*(Ceu*(Teu-Ta)))
+  with(bat.params,{
+    ifelse(Ta > Ttormin,
+           ((Teu - Ta)*0.1728*Mass) + (((Teu-Ta)/WR)*(Ceu*(Teu-Ta))),
+           ((Teu - Ttormin)*0.1728*Mass) + (((Teu-Ttormin)/WR)*(Ceu*(Teu-Ta)))
 
-					  )
-		})
+    )
+  })
 }
 

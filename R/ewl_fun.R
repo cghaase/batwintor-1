@@ -19,7 +19,7 @@
 #' @author Katie Haase
 #' @export
 ewl <- function(Ta, pct.rh, t, areaPd, fung.params, bat.params,
-                    torpid = TRUE, WNS = c(TRUE,FALSE)){
+                torpid = TRUE, WNS = c(TRUE,FALSE)){
   mod.params <- as.list(c(bat.params, fung.params))
   with(mod.params,{
 
