@@ -90,8 +90,8 @@ torporTime <- function(Ta, pct.rh, areaPd, WNS, bat.params, fung.params){
 
       #Calculate torpor time as a function of Ta (without EWL) with increased TMR
 
-      Ta.time.pd <- ifelse(areaPd>0,
-                           ifelse(Ta > Ttormin,
+      Ta.time.pd <- ifelse(areaPd>1,
+                           ifelse(Ta >= Ttormin,
                                   (ttormax/(Q^((Ta-Ttormin)/10)))/areaPd,
                                   (ttormax/(1+(Ttormin-Ta)*(Ct/TMRmin)))/areaPd),
                            ifelse(Ta >= Ttormin,
